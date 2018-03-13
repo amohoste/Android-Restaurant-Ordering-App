@@ -4,3 +4,4 @@
 - [tests](https://docs.google.com/document/d/1QfTcul57CWqtoFI0D6Ya8jI8BKZsubjuvodAa6nB6Nk/edit)
 - [prototype](https://projects.invisionapp.com/share/CVG13640375XW4#/screens/284460274)
 - [usability dashboard](/UsabilityDashboard.pdf)
+- [verslag](https://docs.google.com/document/d/1QfTcul57CWqtoFI0D6Ya8jI8BKZsubjuvodAa6nB6Nk/edit?usp=sharing)
