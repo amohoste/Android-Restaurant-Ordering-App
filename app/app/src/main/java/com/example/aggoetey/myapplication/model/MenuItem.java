@@ -15,9 +15,16 @@ public class MenuItem {
     // een korte uitleg over het gerecht
     public final String description;
 
-    public MenuItem(String title, int price, String description) {
+    /**
+     * Een categorie is hier gewoon een string. Eventueel later nog een klasse van maken.
+     * Door een string te gebruiken versimpelt er vanalles.
+     */
+    public final String category;
+
+    public MenuItem(String title, int price, String description, String category) {
         this.title = title;
         this.price = price;
         this.description = description;
+        this.category = category;
     }
 }
