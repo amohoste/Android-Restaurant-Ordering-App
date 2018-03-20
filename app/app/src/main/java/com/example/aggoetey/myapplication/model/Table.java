@@ -10,9 +10,11 @@ public class Table {
 
     // bv tafel 13, tafel aan het raam, ronde tafel
     private String nickName;
+    private Tab tab;
 
     public Table(String nickName) {
         this.nickName = nickName;
+        this.tab = new Tab();
     }
 
     public String getNickName() {
@@ -21,5 +23,9 @@ public class Table {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Tab getTab() {
+        return tab;
     }
 }
