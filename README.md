@@ -1,4 +1,8 @@
 # project-1718-groep-1
+## Issue met Template
+- [task](https://github.ugent.be/SELab1/project-1718-groep-1/issues/new?template=task.md)
+- [User Story](https://github.ugent.be/SELab1/project-1718-groep-1/issues/new?template=user-story.md)
+
 ## Link naar alle bestanden
 - [backlog](https://docs.google.com/spreadsheets/d/1kQ_HD2QRPjROSTdwoaTNldk9pZmP97cPmHkNTXkwS_8/edit#gid=0)
 - [tests](https://docs.google.com/document/d/1QfTcul57CWqtoFI0D6Ya8jI8BKZsubjuvodAa6nB6Nk/edit)
