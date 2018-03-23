@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
+
 /**
  * Created by aggoetey on 3/20/18.
  *

@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.loaders.MenuItemLoader;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -15,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
+
+        MenuItemLoader loader = new MenuItemLoader();
+
+        ArrayList<com.example.aggoetey.myapplication.model.MenuItem> e = loader.fromJSONFile("java/com.example.aggoetey.myapplication/json_menuitem_examples/coca_cola.json");
+        System.out.println("test");
     }
 
     /**
