@@ -1,7 +1,9 @@
 package com.example.aggoetey.myapplication.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by aggoetey on 3/20/18.
@@ -10,9 +12,23 @@ import java.util.List;
  */
 
 public class Tab {
-    private List<Order> orderList = new ArrayList<>();
+    private Set<Order> payedOrders = new HashSet<>();
+    private Set<Order> orderedOrders = new HashSet<>();
 
-    public List<Order> getOrderList() {
-        return orderList;
+    public Set<Order> getPayedOrders() {
+        return payedOrders;
+    }
+
+    public Set<Order> getOrderedOrders() {
+        return orderedOrders;
+    }
+
+    public void addOrder(Order order){
+        orderedOrders.add(order);
+    }
+
+    public void payOrder(Order order){
+        orderedOrders.remove(order);
+        payedOrders.add(order);
     }
 }
