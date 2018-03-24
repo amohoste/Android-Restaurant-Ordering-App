@@ -29,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        FragmentManager manager = getSupportFragmentManager();
+                        TabListFragment tabFragment = new TabListFragment();
                         switch (item.getItemId()){
                             case R.id.action_discover:
                                 break;
                             case R.id.action_menu:
+                                manager.beginTransaction().remove(manager.findFragmentById(R.id.fragment_place)).commit();
                                 break;
                             case R.id.action_pay:
-                                FragmentManager manager = getSupportFragmentManager();
-                                manager.beginTransaction().replace(R.id.fragment_place, new TabListFragment()).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
                                 break;
                         }
 
