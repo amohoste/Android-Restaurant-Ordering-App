@@ -28,5 +28,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.aggoetey.myapplication.TabListFragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
 
 </android.support.constraint.ConstraintLayout>

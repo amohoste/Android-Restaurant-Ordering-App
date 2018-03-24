@@ -6,4 +6,20 @@
     <string name="discover_text">Hier kan je ontdekken wat er allemaal te doen is in de wereld.</string>
     <string name="menu_text">Bekijk hier een mooi menu.</string>
     <string name="pay_text">Bekijk hier wat je allemaal al besteld hebt.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="Planets">
+        <item>Sun</item>
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
+
 </resources>
