@@ -2,9 +2,11 @@ package com.example.aggoetey.myapplication;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,16 +29,14 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        TextView t = findViewById(R.id.test_text);
                         switch (item.getItemId()){
                             case R.id.action_discover:
-                                t.setText(getResources().getText(R.string.discover_text));
                                 break;
                             case R.id.action_menu:
-                                t.setText(getResources().getText(R.string.menu_text));
                                 break;
                             case R.id.action_pay:
-                                t.setText(getResources().getText(R.string.pay_text));
+                                FragmentManager manager = getSupportFragmentManager();
+                                manager.beginTransaction().replace(R.id.fragment_place, new TabListFragment()).commit();
                                 break;
                         }
 
