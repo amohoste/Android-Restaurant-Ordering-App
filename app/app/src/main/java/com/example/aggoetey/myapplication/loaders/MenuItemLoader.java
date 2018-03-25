@@ -1,5 +1,7 @@
 package com.example.aggoetey.myapplication.loaders;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.JsonReader;
 
 import com.example.aggoetey.myapplication.model.Menu;
@@ -19,7 +21,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-
 /**
  * Created by Dries on 23/03/2018.
  */
@@ -42,24 +43,8 @@ public class MenuItemLoader {
     }
 
 
-    public ArrayList<MenuItem> fromJSONArray(String array) {
-        try {
-            JSONArray jsonarray = new JSONArray(array);
-            ArrayList<MenuItem> result = new ArrayList<>();
-            for (int i=0; i < jsonarray.length(); i++) {
-                JSONObject item = jsonarray.getJSONObject(i);
-                result.add(new MenuItem(item.getString("title"), item.getInt("price"),
-                        item.getString("description"), item.getString("category")));
-            }
-            return result;
-        } catch (org.json.JSONException e) {
-            System.out.println(e);
-            return null;
-        }
-    }
-
-    public ArrayList<MenuItem> fromJSONFile(String path) {
-        return fromJSONArray(usingBufferedReader(path));
+    public MenuItem fromJSONFile(String path) {
+        return fromJSONString(usingBufferedReader(path));
     }
 
     private static String usingBufferedReader(String filePath)
@@ -80,5 +65,4 @@ public class MenuItemLoader {
         }
         return contentBuilder.toString();
     }
-
 }

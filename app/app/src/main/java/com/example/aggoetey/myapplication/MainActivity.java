@@ -20,10 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
         enableBottomNavigation();
 
-        MenuItemLoader loader = new MenuItemLoader();
-
-        ArrayList<com.example.aggoetey.myapplication.model.MenuItem> e = loader.fromJSONFile("java/com.example.aggoetey.myapplication/json_menuitem_examples/coca_cola.json");
-        System.out.println("test");
     }
 
     /**
