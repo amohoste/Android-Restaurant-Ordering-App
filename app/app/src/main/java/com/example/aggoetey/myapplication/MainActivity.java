@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.Menu.MenuItemListActivity;
 import com.example.aggoetey.myapplication.loaders.MenuItemLoader;
+import com.example.aggoetey.myapplication.model.Menu;
 
 import java.util.ArrayList;
 
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                                 t.setText(getResources().getText(R.string.discover_text));
                                 break;
                             case R.id.action_menu:
-                                t.setText(getResources().getText(R.string.menu_text));
+                                startMenuListActivity();
                                 break;
                             case R.id.action_pay:
                                 t.setText(getResources().getText(R.string.pay_text));
@@ -49,5 +52,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void startMenuListActivity() {
+        Intent in = new Intent(this, MenuItemListActivity.class);
+        startActivity(in);
     }
 }

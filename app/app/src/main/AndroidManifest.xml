@@ -16,6 +16,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Menu.MenuItemListActivity"
+            android:label="@string/title_menuitem_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Menu.MenuItemDetailActivity"
+            android:label="@string/title_menuitem_detail"
+            android:parentActivityName=".Menu.MenuItemListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.aggoetey.myapplication.Menu.MenuItemListActivity" />
+        </activity>
     </application>
 
 </manifest>
