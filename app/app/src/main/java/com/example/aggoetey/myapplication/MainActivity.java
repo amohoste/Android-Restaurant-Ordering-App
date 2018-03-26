@@ -1,20 +1,23 @@
 package com.example.aggoetey.myapplication;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-import com.example.aggoetey.myapplication.Menu.MenuItemListActivity;
+import com.example.aggoetey.myapplication.menu.MenuFragment;
+import com.example.aggoetey.myapplication.tab.TabFragment;
+
 import com.example.aggoetey.myapplication.loaders.MenuItemLoader;
 import com.example.aggoetey.myapplication.model.Menu;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener {
 
 
     private Menu current_menu;
@@ -38,16 +41,17 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        TextView t = findViewById(R.id.test_text);
+                        FragmentManager manager = getSupportFragmentManager();
+                        TabFragment tabFragment = new TabFragment();
+                        MenuFragment menuFragment = new MenuFragment();
                         switch (item.getItemId()){
                             case R.id.action_discover:
-                                t.setText(getResources().getText(R.string.discover_text));
                                 break;
                             case R.id.action_menu:
-                                startMenuListActivity();
+                                manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
                                 break;
                             case R.id.action_pay:
-                                t.setText(getResources().getText(R.string.pay_text));
+                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
                                 break;
                         }
 
@@ -57,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void startMenuListActivity() {
-        Intent in = new Intent(this, MenuItemListActivity.class);
-        in.putExtra("menuitemslist", current_menu.getMenuItemList());
-        startActivity(in);
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

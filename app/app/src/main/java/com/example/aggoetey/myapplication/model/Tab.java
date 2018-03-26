@@ -3,6 +3,7 @@ package com.example.aggoetey.myapplication.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Set;
  * Een tab is een lijst met orders die nog betaald moeten worden door een bepaalde tafel.
  */
 
-public class Tab {
+public class Tab extends Observable {
     private Set<Order> payedOrders = new HashSet<>();
     private Set<Order> orderedOrders = new HashSet<>();
 
@@ -25,10 +26,14 @@ public class Tab {
 
     public void addOrder(Order order){
         orderedOrders.add(order);
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public void payOrder(Order order){
         orderedOrders.remove(order);
         payedOrders.add(order);
+        this.setChanged();
+        this.notifyObservers();
     }
 }
