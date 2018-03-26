@@ -29,6 +29,13 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
 
         enableBottomNavigation();
 
+        current_menu = new Menu();
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
     }
 
     /**
@@ -43,12 +50,11 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
                         TabFragment tabFragment = new TabFragment();
-                        MenuFragment menuFragment = new MenuFragment();
                         switch (item.getItemId()){
                             case R.id.action_discover:
                                 break;
                             case R.id.action_menu:
-                                manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(current_menu)).commit();
                                 break;
                             case R.id.action_pay:
                                 manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();

@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Dit is een model voor een Menu.
  */
 
-public class Menu {
+public class Menu implements Serializable {
     private ArrayList<MenuItem> menuItemList = new ArrayList<>();
 
     /**
