@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
@@ -34,6 +35,14 @@ public class TabFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        int prijs = 0;
+        for (OrderItem order : orders) {
+            prijs += order.getMenuItem().price;
+        }
+
+        TextView total = view.findViewById(R.id.total);
+        total.setText(String.valueOf(prijs));
 
         return view;
     }
