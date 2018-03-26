@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Order;
-import com.example.aggoetey.myapplication.model.OrderItem;
 
 import java.util.List;
 
@@ -43,19 +42,19 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
         private Order order;
 
-        private TextView title;
+        private TextView number;
         private TextView price;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.order, parent, false));
 //            itemView.setOnClickListener(this);
-            title = (TextView) itemView.findViewById(R.id.title);
+            number = (TextView) itemView.findViewById(R.id.title);
             price = (TextView) itemView.findViewById(R.id.price);
         }
 
         public void bind(Order order){
             this.order = order;
-            title.setText("hoeveelste");
+            number.setText(number.getContext().getString(R.string.tab_order_position, getAdapterPosition() + 1));
             price.setText(String.valueOf(this.order.getPrice()));
         }
     }
