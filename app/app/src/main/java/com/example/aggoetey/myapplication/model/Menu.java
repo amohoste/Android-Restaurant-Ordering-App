@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class Menu {
-    private List<MenuItem> menuItemList = new ArrayList<>();
+    private ArrayList<MenuItem> menuItemList = new ArrayList<>();
 
     /**
      * Voeg een MenuItem toe aan het menu
@@ -19,7 +19,7 @@ public class Menu {
         menuItemList.add(menuItem);
     }
 
-    public List<MenuItem> getMenuItemList() {
+    public ArrayList<MenuItem> getMenuItemList() {
         return menuItemList;
     }
 }

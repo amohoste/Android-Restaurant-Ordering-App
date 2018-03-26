@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private Menu current_menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startMenuListActivity() {
         Intent in = new Intent(this, MenuItemListActivity.class);
+        in.putExtra("menuitemslist", current_menu.getMenuItemList());
         startActivity(in);
     }
 }

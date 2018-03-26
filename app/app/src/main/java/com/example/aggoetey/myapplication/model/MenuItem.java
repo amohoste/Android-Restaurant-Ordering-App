@@ -16,6 +16,8 @@ public class MenuItem {
     // een korte uitleg over het gerecht
     public final String description;
 
+    public String id;
+
     /**
      * Een categorie is hier gewoon een string. Eventueel later nog een klasse van maken.
      * Door een string te gebruiken versimpelt er vanalles.
