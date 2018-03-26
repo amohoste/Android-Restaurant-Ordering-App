@@ -2,12 +2,10 @@ package com.example.aggoetey.myapplication.tab;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.model.Order;
 import com.example.aggoetey.myapplication.model.OrderItem;
 
 import java.util.List;
@@ -57,7 +55,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
         public void bind(OrderItem orderItem){
             this.orderItem = orderItem;
             title.setText(orderItem.getMenuItem().title);
-            price.setText(orderItem.getMenuItem().price);
+            price.setText(String.valueOf(orderItem.getMenuItem().price));
         }
     }
 }

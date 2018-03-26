@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.aggoetey.myapplication.tab.TabListFragment;
+import com.example.aggoetey.myapplication.tab.TabFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
-                        TabListFragment tabFragment = new TabListFragment();
+                        TabFragment tabFragment = new TabFragment();
                         switch (item.getItemId()){
                             case R.id.action_discover:
                                 break;
