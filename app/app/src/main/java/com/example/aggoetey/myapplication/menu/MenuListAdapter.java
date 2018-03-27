@@ -48,12 +48,12 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         public MenuItemHolder(View itemView) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.menu_recycler_title_view);
-            //mPriceTextView = (TextView) itemView.findViewById(R.id.menu_recycler_price_view);
+            mPriceTextView = (TextView) itemView.findViewById(R.id.menu_recycler_price_view);
         }
 
         public void bind(MenuItem menuItem) {
             mTitleTextView.setText(menuItem.title);
-           // mPriceTextView.setText(menuItem.price);
+            mPriceTextView.setText(Integer.toString(menuItem.price));
         }
     }
 }
