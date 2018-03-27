@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
@@ -43,17 +44,17 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
-        private TextView mPriceTextView;
+        private Button mOrderButton;
 
         public MenuItemHolder(View itemView) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.menu_recycler_title_view);
-            mPriceTextView = (TextView) itemView.findViewById(R.id.menu_recycler_price_view);
+            mOrderButton = (Button) itemView.findViewById(R.id.menu_recycler_price_order_button);
         }
 
         public void bind(MenuItem menuItem) {
             mTitleTextView.setText(menuItem.title);
-            mPriceTextView.setText(Integer.toString(menuItem.price));
+            mOrderButton.setText("€ " + Integer.toString(menuItem.price));
         }
     }
 }

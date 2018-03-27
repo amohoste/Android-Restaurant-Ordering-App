@@ -34,7 +34,6 @@ public class MenuFragment extends Fragment {
     private RecyclerView mMenuRecyclerView;
     private MenuListAdapter mAdapter;
 
-
     public MenuFragment() {
         // Required empty public constructor
     }
@@ -83,13 +82,6 @@ public class MenuFragment extends Fragment {
         mMenuRecyclerView.setAdapter(mAdapter);
 
         return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
