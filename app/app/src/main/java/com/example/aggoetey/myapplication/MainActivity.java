@@ -1,12 +1,17 @@
 package com.example.aggoetey.myapplication;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
+import com.example.aggoetey.myapplication.tab.TabAdapter;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
                         TabFragment tabFragment = new TabFragment();
-                        switch (item.getItemId()){
+                        switch (item.getItemId()) {
                             case R.id.action_discover:
                                 break;
                             case R.id.action_menu:
@@ -47,4 +52,5 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
+
 }
