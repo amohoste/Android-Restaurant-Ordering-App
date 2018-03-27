@@ -9,16 +9,39 @@
 
     <TextView
         android:id="@+id/menu_recycler_title_view"
-        android:layout_width="286dp"
+        android:layout_width="262dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingLeft="10dp"
         android:textAlignment="viewStart" />
 
     <Button
-        android:id="@+id/menu_recycler_price_order_button"
+        android:id="@+id/menu_recycler_decrement_ordercount_button"
+        android:layout_width="34dp"
+        android:layout_height="22dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_button"
+        android:text="-"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold" />/>
+
+    <TextView
+        android:id="@+id/menu_recycler_item_count_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="0"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/menu_recycler_increment_ordercount_button"
+        android:layout_width="28dp"
+        android:layout_height="23dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_button"
+        android:text="+" />
 
 </LinearLayout>

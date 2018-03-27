@@ -44,17 +44,20 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
-        private Button mOrderButton;
+        private Button mOrderIncrementButton;
+        private Button mOrderDecrementButton;
+        private TextView mOrderCountTextView;
 
         public MenuItemHolder(View itemView) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.menu_recycler_title_view);
-            mOrderButton = (Button) itemView.findViewById(R.id.menu_recycler_price_order_button);
+            mOrderIncrementButton = (Button) itemView.findViewById(R.id.menu_recycler_increment_ordercount_button);
+            mOrderDecrementButton = (Button) itemView.findViewById(R.id.menu_recycler_decrement_ordercount_button);
+            mOrderCountTextView = (TextView) itemView.findViewById(R.id.menu_recycler_item_count_view);
         }
 
         public void bind(MenuItem menuItem) {
-            mTitleTextView.setText(menuItem.title);
-            mOrderButton.setText("€ " + Integer.toString(menuItem.price));
+            mTitleTextView.setText(menuItem.title + " (€" + Integer.toString(menuItem.price) +")");
         }
     }
 }
