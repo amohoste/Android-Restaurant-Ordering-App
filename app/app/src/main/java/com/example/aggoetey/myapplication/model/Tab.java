@@ -37,7 +37,7 @@ public class Tab extends Observable {
      * Begin een nieuw order, dit cancelt de vorige order indien nog niet afgerond
      */
     public Tab beginOrder(){
-        currentOrder = new Order();
+        currentOrder = new Order(amountOfOrders);
         return this;
     }
 
@@ -55,6 +55,7 @@ public class Tab extends Observable {
     public Tab commitOrder(){
         this.orderedOrders.add(currentOrder);
         currentOrder = null;
+        amountOfOrders ++;
         return this;
     }
 
@@ -68,8 +69,15 @@ public class Tab extends Observable {
     public static class Order{
 
         private List<OrderItem> orderItems = new ArrayList<>();
+        private int orderNumber;
 
-        private Order(){}
+        private Order(int orderNumber){
+            this.orderNumber = orderNumber;
+        }
+
+        public int getOrderNumber() {
+            return orderNumber;
+        }
 
         public List<OrderItem> getOrderItems() {
             return orderItems;

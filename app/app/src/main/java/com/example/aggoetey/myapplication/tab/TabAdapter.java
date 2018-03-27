@@ -54,7 +54,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
         public void bind(Tab.Order order){
             this.order = order;
-            number.setText(number.getContext().getString(R.string.tab_order_position, getAdapterPosition() + 1));
+            number.setText(number.getContext().getString(R.string.tab_order_position, this.order.getOrderNumber()));
             price.setText(String.valueOf(this.order.getPrice()));
         }
     }
