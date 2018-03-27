@@ -1,7 +1,5 @@
 package com.example.aggoetey.myapplication.tab;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,15 +13,11 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
-import com.example.aggoetey.myapplication.model.Order;
-import com.example.aggoetey.myapplication.model.OrderItem;
 import com.example.aggoetey.myapplication.model.Tab;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class TabFragment extends Fragment {
 
@@ -31,19 +25,21 @@ public class TabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Tab tab = TabSingleton.getInstance().getTab();
-        tab.addOrder(new Order(Arrays.asList(
-                new OrderItem("notitie", new MenuItem("spaghetti", 13, "tettne", "ca")),
-                new OrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca"))
-        )));
-        tab.addOrder(new Order(Arrays.asList(
-                new OrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca")),
-                new OrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca"))
-        )));
+        Tab tab = Tab.getInstance();
+        tab.beginOrder()
+                .addOrderItem("notitie", new MenuItem("spaghetti", 13, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca"))
+                .commitOrder();
+
+        tab.beginOrder()
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca"))
+                .commitOrder();
+
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tabRecyclerView);
 
-        List<Order> orders = new ArrayList<>(tab.getOrderedOrders());
+        List<Tab.Order> orders = new ArrayList<>(tab.getOrderedOrders());
         TabAdapter tabAdapter = new TabAdapter(orders);
         recyclerView.setAdapter(tabAdapter);
 
@@ -51,7 +47,7 @@ public class TabFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         int prijs = 0;
-        for (Order order : orders) {
+        for (Tab.Order order : orders) {
             prijs += order.getPrice();
         }
 
@@ -67,18 +63,18 @@ public class TabFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test", String.valueOf(TabSingleton.getInstance().getTab().getOrderedOrders().size()));
+                Log.d("test", String.valueOf(Tab.getInstance().getOrderedOrders().size()));
                 payOrders();
                 tabAdapter.notifyDataSetChanged();
-                Log.d("test", String.valueOf(TabSingleton.getInstance().getTab().getOrderedOrders().size()));
+                Log.d("test", String.valueOf(Tab.getInstance().getOrderedOrders().size()));
             }
         });
     }
 
     private void payOrders() {
-        List<Order> orderedOrders = new ArrayList<>(TabSingleton.getInstance().getTab().getOrderedOrders());
-            for (Order orderedOrder : orderedOrders) {
-                TabSingleton.getInstance().getTab().payOrder(orderedOrder);
-            }
+        List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
+        for (Tab.Order orderedOrder : orderedOrders) {
+            Tab.getInstance().payOrder(orderedOrder);
         }
+    }
 }

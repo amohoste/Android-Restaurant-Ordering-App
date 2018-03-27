@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.model.Order;
+import com.example.aggoetey.myapplication.model.Tab;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import java.util.List;
 
 public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
-    private List<Order> orders;
+    private List<Tab.Order> orders;
 
-    public TabAdapter(List<Order> orders){
+    public TabAdapter(List<Tab.Order> orders){
         this.orders = orders;
     }
 
@@ -40,7 +40,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private Order order;
+        private Tab.Order order;
 
         private TextView number;
         private TextView price;
@@ -52,7 +52,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
             price = (TextView) itemView.findViewById(R.id.price);
         }
 
-        public void bind(Order order){
+        public void bind(Tab.Order order){
             this.order = order;
             number.setText(number.getContext().getString(R.string.tab_order_position, getAdapterPosition() + 1));
             price.setText(String.valueOf(this.order.getPrice()));
