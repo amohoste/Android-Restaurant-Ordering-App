@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/menu_recycler_title_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="277dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:paddingLeft="10dp"
         android:text="TextView"
         android:textAlignment="viewStart" />
 
     <TextView
         android:id="@+id/menu_recycler_price_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:paddingRight="10dp"
         android:text="TextView"
         android:textAlignment="viewEnd" />
 </LinearLayout>
