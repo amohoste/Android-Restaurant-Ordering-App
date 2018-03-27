@@ -9,5 +9,6 @@
 
 
     <string name="tab_order_position">Order # %1$d</string>
+    <string name="tab_view_pay">Pay</string>
 
 </resources>
