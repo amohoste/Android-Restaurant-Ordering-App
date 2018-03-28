@@ -14,6 +14,10 @@ import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.tab.TabAdapter;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
+import com.example.aggoetey.myapplication.loaders.MenuItemLoader;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
+
     }
 
     /**

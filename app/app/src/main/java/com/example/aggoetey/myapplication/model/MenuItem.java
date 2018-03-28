@@ -2,6 +2,7 @@ package com.example.aggoetey.myapplication.model;
 
 import java.io.Serializable;
 
+
 /**
  * Created by aggoetey on 3/20/18.
  *
