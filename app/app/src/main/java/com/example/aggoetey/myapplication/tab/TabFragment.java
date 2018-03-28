@@ -1,25 +1,25 @@
 package com.example.aggoetey.myapplication.tab;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Tab;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class TabFragment extends Fragment {
+public class TabFragment extends Fragment implements TabAdapter.OnOrderClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +41,7 @@ public class TabFragment extends Fragment {
 
         List<Tab.Order> orders = new ArrayList<>(tab.getOrderedOrders());
         TabAdapter tabAdapter = new TabAdapter(orders);
+        tabAdapter.setOrderClickListener(this);
         recyclerView.setAdapter(tabAdapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -63,10 +64,7 @@ public class TabFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test", String.valueOf(Tab.getInstance().getOrderedOrders().size()));
                 payOrders();
-                tabAdapter.notifyDataSetChanged();
-                Log.d("test", String.valueOf(Tab.getInstance().getOrderedOrders().size()));
             }
         });
     }
@@ -76,5 +74,12 @@ public class TabFragment extends Fragment {
         for (Tab.Order orderedOrder : orderedOrders) {
             Tab.getInstance().payOrder(orderedOrder);
         }
+    }
+
+    @Override
+    public void onOrderClick(Tab.Order order) {
+        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+        intent.putExtra(OrderDetailActivity.ORDER_KEY, order);
+        startActivity(intent);
     }
 }

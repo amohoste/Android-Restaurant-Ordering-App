@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.model.Tab;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,11 +60,20 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
             mOrderIncrementButton = (Button) itemView.findViewById(R.id.menu_recycler_increment_ordercount_button);
             mOrderDecrementButton = (Button) itemView.findViewById(R.id.menu_recycler_decrement_ordercount_button);
             mOrderCountTextView = (TextView) itemView.findViewById(R.id.menu_recycler_item_count_view);
+        }
+
+        public void bind(final MenuItem menuItem) {
+            itemTitle = menuItem.title;
+            mTitleTextView.setText(menuItem.title + " (€" + Integer.toString(menuItem.price) +")");
+            if (orderCountMap.containsKey(menuItem.title)) {
+               setNewOrderCount();
+            }
 
             mOrderIncrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     changeOrderCount(1);
+                    Tab.getInstance().addOrderItem("", menuItem);
                 }
             });
 
@@ -71,16 +81,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 @Override
                 public void onClick(View view) {
                     changeOrderCount(-1);
+                    Tab.getInstance().removeOrderItem(menuItem);
                 }
             });
-        }
-
-        public void bind(MenuItem menuItem) {
-            itemTitle = menuItem.title;
-            mTitleTextView.setText(menuItem.title + " (€" + Integer.toString(menuItem.price) +")");
-            if (orderCountMap.containsKey(menuItem.title)) {
-               setNewOrderCount();
-            }
         }
 
         public void changeOrderCount(int i) {

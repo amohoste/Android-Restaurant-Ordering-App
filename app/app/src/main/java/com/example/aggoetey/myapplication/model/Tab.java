@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -22,6 +23,7 @@ public class Tab extends Observable {
     public List<Order> getPayedOrders() {
         return payedOrders;
     }
+
     public List<Order> getOrderedOrders() {
         return orderedOrders;
     }
@@ -36,7 +38,7 @@ public class Tab extends Observable {
     /**
      * Begin een nieuw order, dit cancelt de vorige order indien nog niet afgerond
      */
-    public Tab beginOrder(){
+    public Tab beginOrder() {
         currentOrder = new Order(amountOfOrders);
         return this;
     }
@@ -44,18 +46,35 @@ public class Tab extends Observable {
     /**
      * Voeg een orderItem toe aan de huidige order
      */
-    public Tab addOrderItem(String note, MenuItem menuItem){
+    public Tab addOrderItem(String note, MenuItem menuItem) {
         currentOrder.addOrderItem(note, menuItem);
+        return this;
+    }
+
+    /**
+     * Verwijder een orderItem aan de hand van een MenuItem
+     */
+    public Tab removeOrderItem(MenuItem menuItem) {
+        currentOrder.removeOrderItem(menuItem);
+        return this;
+    }
+
+    /**
+     * Verwijder een orderitem aan de hand van een OrderItem
+     */
+
+    public Tab removeOrderItem(Order.OrderItem orderItem) {
+        currentOrder.removeOrderItem(orderItem);
         return this;
     }
 
     /**
      * Hiermee wordt de order effectief geplaatst
      */
-    public Tab commitOrder(){
+    public Tab commitOrder() {
         this.orderedOrders.add(currentOrder);
         currentOrder = null;
-        amountOfOrders ++;
+        amountOfOrders++;
         return this;
     }
 
@@ -66,12 +85,12 @@ public class Tab extends Observable {
         this.notifyObservers();
     }
 
-    public static class Order{
+    public static class Order implements Serializable {
 
         private List<OrderItem> orderItems = new ArrayList<>();
         private int orderNumber;
 
-        private Order(int orderNumber){
+        private Order(int orderNumber) {
             this.orderNumber = orderNumber;
         }
 
@@ -83,12 +102,33 @@ public class Tab extends Observable {
             return orderItems;
         }
 
-        public void addOrderItem (String note, MenuItem menuItem){
+        public void addOrderItem(String note, MenuItem menuItem) {
             this.orderItems.add(new OrderItem(note, menuItem));
         }
 
-        public void removeOrderItem(OrderItem orderItem){
+        public void removeOrderItem(OrderItem orderItem) {
             this.orderItems.remove(orderItem);
+        }
+
+        /**
+         * Lukt niet in 1 lijntje omdat we geen lambda's kunne gebruiken...
+         *
+         * @param menuItem
+         */
+        public void removeOrderItem(MenuItem menuItem) {
+//            orderItems.removeIf(orderItem -> orderItem.getMenuItem().equals(menuItem));
+            OrderItem toDelete = null;
+
+            // Pass 1 - collect delete candidates
+            for (OrderItem orderItem: orderItems) {
+                if (orderItem.getMenuItem().equals(menuItem)) {
+                    toDelete = orderItem;
+                    break;
+                }
+            }
+            if(toDelete != null) {
+                orderItems.remove(toDelete);
+            }
         }
 
         public int getPrice() {
@@ -99,7 +139,7 @@ public class Tab extends Observable {
             return prijs;
         }
 
-        public static class OrderItem {
+        public static class OrderItem implements Serializable {
             private String note;
             private MenuItem menuItem;
 

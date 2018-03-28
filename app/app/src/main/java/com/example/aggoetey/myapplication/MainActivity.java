@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
-import com.example.aggoetey.myapplication.loaders.MenuItemLoader;
 import com.example.aggoetey.myapplication.model.Menu;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
                         TabFragment tabFragment = new TabFragment();
-                        switch (item.getItemId()){
+                        switch (item.getItemId()) {
                             case R.id.action_discover:
                                 break;
                             case R.id.action_menu:
