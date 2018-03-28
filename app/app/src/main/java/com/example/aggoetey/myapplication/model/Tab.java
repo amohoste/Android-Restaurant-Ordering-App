@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -66,7 +67,7 @@ public class Tab extends Observable {
         this.notifyObservers();
     }
 
-    public static class Order{
+    public static class Order implements Serializable{
 
         private List<OrderItem> orderItems = new ArrayList<>();
         private int orderNumber;
@@ -99,7 +100,7 @@ public class Tab extends Observable {
             return prijs;
         }
 
-        public static class OrderItem {
+        public static class OrderItem implements Serializable {
             private String note;
             private MenuItem menuItem;
 

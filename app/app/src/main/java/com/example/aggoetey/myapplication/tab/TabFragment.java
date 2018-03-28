@@ -79,6 +79,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     @Override
     public void onOrderClick(Tab.Order order) {
         Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+        intent.putExtra(OrderDetailActivity.ORDER_KEY, order);
         startActivity(intent);
     }
 }
