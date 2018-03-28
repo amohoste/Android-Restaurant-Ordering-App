@@ -14,7 +14,6 @@ public class Table {
 
     public Table(String nickName) {
         this.nickName = nickName;
-        this.tab = new Tab();
     }
 
     public String getNickName() {

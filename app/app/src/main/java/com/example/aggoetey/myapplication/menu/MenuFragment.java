@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Menu;
-import com.example.aggoetey.myapplication.model.Order;
 
 /**
  * Created by Dries on 26/03/2018.

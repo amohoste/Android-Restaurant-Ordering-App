@@ -9,8 +9,6 @@
     <string name="title_menuitem_list">MenuItems</string>
     <string name="title_menuitem_detail">MenuItem Detail</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="Planets">
         <item>Sun</item>
@@ -23,4 +21,7 @@
         <item>Uranus</item>
         <item>Neptune</item>
     </string-array>
+    <string name="tab_order_position">Order # %1$d</string>
+    <string name="tab_view_pay">Pay</string>
+
 </resources>
