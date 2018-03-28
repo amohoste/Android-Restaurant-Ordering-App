@@ -1,11 +1,18 @@
 package com.example.aggoetey.myapplication;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
+import com.example.aggoetey.myapplication.tab.TabAdapter;
+import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.loaders.MenuItemLoader;
 
@@ -32,16 +39,16 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        TextView t = findViewById(R.id.test_text);
-                        switch (item.getItemId()){
+                        FragmentManager manager = getSupportFragmentManager();
+                        TabFragment tabFragment = new TabFragment();
+                        switch (item.getItemId()) {
                             case R.id.action_discover:
-                                t.setText(getResources().getText(R.string.discover_text));
                                 break;
                             case R.id.action_menu:
-                                t.setText(getResources().getText(R.string.menu_text));
+                                manager.beginTransaction().remove(manager.findFragmentById(R.id.fragment_place)).commit();
                                 break;
                             case R.id.action_pay:
-                                t.setText(getResources().getText(R.string.pay_text));
+                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
                                 break;
                         }
 
@@ -50,4 +57,5 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
+
 }
