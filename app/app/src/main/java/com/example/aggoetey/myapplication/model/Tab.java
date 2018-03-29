@@ -17,7 +17,6 @@ public class Tab extends Observable {
 
     private List<Order> payedOrders = new ArrayList<>();
     private List<Order> orderedOrders = new ArrayList<>();
-    private Order currentOrder;
     private int amountOfOrders = 0;
 
     public List<Order> getPayedOrders() {
@@ -38,44 +37,18 @@ public class Tab extends Observable {
     /**
      * Begin een nieuw order, dit cancelt de vorige order indien nog niet afgerond
      */
-    public Tab beginOrder() {
-        currentOrder = new Order(amountOfOrders);
-        return this;
+    public Order newOrder() {
+        return new Order();
     }
 
-    /**
-     * Voeg een orderItem toe aan de huidige order
-     */
-    public Tab addOrderItem(String note, MenuItem menuItem) {
-        currentOrder.addOrderItem(note, menuItem);
-        return this;
-    }
-
-    /**
-     * Verwijder een orderItem aan de hand van een MenuItem
-     */
-    public Tab removeOrderItem(MenuItem menuItem) {
-        currentOrder.removeOrderItem(menuItem);
-        return this;
-    }
-
-    /**
-     * Verwijder een orderitem aan de hand van een OrderItem
-     */
-
-    public Tab removeOrderItem(Order.OrderItem orderItem) {
-        currentOrder.removeOrderItem(orderItem);
-        return this;
-    }
 
     /**
      * Hiermee wordt de order effectief geplaatst
      */
-    public Tab commitOrder() {
-        this.orderedOrders.add(currentOrder);
-        currentOrder = null;
+    public void commitOrder(Order order) {
+        this.orderedOrders.add(order);
+        order.setOrderNumber(amountOfOrders);
         amountOfOrders++;
-        return this;
     }
 
     public void payOrder(Order order) {
@@ -90,30 +63,42 @@ public class Tab extends Observable {
         private List<OrderItem> orderItems = new ArrayList<>();
         private int orderNumber;
 
-        private Order(int orderNumber) {
-            this.orderNumber = orderNumber;
+        private Order() {
         }
 
         public int getOrderNumber() {
             return orderNumber;
         }
 
+        private void setOrderNumber(int orderNumber) {
+            this.orderNumber = orderNumber;
+        }
+
         public List<OrderItem> getOrderItems() {
             return orderItems;
         }
 
-        public void addOrderItem(String note, MenuItem menuItem) {
+        /**
+         * Voeg een orderItem toe aan de huidige order
+         */
+        public Order addOrderItem(String note, MenuItem menuItem) {
             this.orderItems.add(new OrderItem(note, menuItem));
+            return this;
         }
 
-        public void removeOrderItem(OrderItem orderItem) {
+        /**
+         * Verwijder een orderItem aan de hand van een OrderItem
+         */
+        public Order removeOrderItem(OrderItem orderItem) {
             this.orderItems.remove(orderItem);
+            return this;
         }
 
         /**
          * Lukt niet in 1 lijntje omdat we geen lambda's kunne gebruiken...
          *
-         * @param menuItem
+         * Verwijder een orderitem aan de hand van een OrderItem
+         *
          */
         public void removeOrderItem(MenuItem menuItem) {
 //            orderItems.removeIf(orderItem -> orderItem.getMenuItem().equals(menuItem));
