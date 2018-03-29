@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by aggoetey on 3/20/18.
@@ -58,12 +59,17 @@ public class Tab extends Observable {
         this.notifyObservers();
     }
 
-    public static class Order implements Serializable {
+    public static class Order extends Observable implements Serializable {
 
         private List<OrderItem> orderItems = new ArrayList<>();
         private int orderNumber;
+        private List<Observer> listeners = new ArrayList<>();
 
         private Order() {
+        }
+
+        public void addObserver(Observer o) {
+            listeners.add(o);
         }
 
         public int getOrderNumber() {

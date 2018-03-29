@@ -10,11 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Menu;
+import com.example.aggoetey.myapplication.model.Tab;
 
 /**
  * Created by Dries on 26/03/2018.
@@ -33,7 +35,9 @@ public class MenuFragment extends Fragment {
 
     private Menu menu;
 
+    private Tab.Order currentOrder;
     private RecyclerView mMenuRecyclerView;
+    private Button mMenuOrderButton;
     private MenuListAdapter mAdapter;
 
     public MenuFragment() {
@@ -61,27 +65,33 @@ public class MenuFragment extends Fragment {
         if (getArguments() != null) {
             menu = (Menu) getArguments().getSerializable(ARG_MENU);
         }
+        currentOrder = Tab.getInstance().newOrder();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
         mMenuRecyclerView = (RecyclerView) v.findViewById(R.id.menu_recycler_view);
+        mMenuOrderButton = (Button) v.findViewById(R.id.menu_order_button);
+
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        //mMenuRecyclerView.setLayoutManager(mLayoutManager);
-
-        //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mMenuRecyclerView.getContext(),
-        //        mLayoutManager.getOrientation());
-        //mMenuRecyclerView.addItemDecoration(dividerItemDecoration);
-
-
-        mAdapter = new MenuListAdapter(menu.getMenuItemList());
+        mAdapter = new MenuListAdapter(currentOrder, menu.getMenuItemList());
 
         mMenuRecyclerView.setAdapter(mAdapter);
+
+        mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentOrder.getOrderItems().size() != 0) {
+                    Tab.getInstance().commitOrder(currentOrder);
+                    currentOrder = Tab.getInstance().newOrder();
+                    mAdapter.setCurrentOrder(currentOrder);
+                }
+            }
+        });
 
         return v;
     }

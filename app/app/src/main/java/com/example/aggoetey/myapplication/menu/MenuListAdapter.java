@@ -22,10 +22,16 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     private List<MenuItem> items;
     private HashMap<String, Integer> orderCountMap;
+    private Tab.Order currentOrder;
 
-    public MenuListAdapter(List<MenuItem> items) {
+    public MenuListAdapter(Tab.Order currentOrder, List<MenuItem> items) {
+        this.currentOrder = currentOrder;
         this.items = items;
         orderCountMap = new HashMap<>();
+    }
+
+    public void setCurrentOrder(Tab.Order currentOrder) {
+        this.currentOrder = currentOrder;
     }
 
     @Override
@@ -73,25 +79,27 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 @Override
                 public void onClick(View view) {
                     changeOrderCount(1);
-                    Tab.getInstance().addOrderItem("", menuItem);
-                }
+                    currentOrder.addOrderItem("", menuItem);
+            }
             });
 
             mOrderDecrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    changeOrderCount(-1);
-                    Tab.getInstance().removeOrderItem(menuItem);
+                    if (changeOrderCount(-1) >= 0) {
+                        currentOrder.removeOrderItem(menuItem);
+                    }
                 }
             });
         }
 
-        public void changeOrderCount(int i) {
+        public int changeOrderCount(int i) {
             int c = i + (orderCountMap.containsKey(itemTitle) ? orderCountMap.get(itemTitle) : 0);
             if (c >= 0) {
                 orderCountMap.put(itemTitle, c);
                 setNewOrderCount();
             }
+            return c;
         }
 
         public void setNewOrderCount() {
