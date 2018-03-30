@@ -37,7 +37,6 @@ public class MenuFragment extends Fragment {
 
     private Tab.Order currentOrder;
     private RecyclerView mMenuRecyclerView;
-    private Button mMenuOrderButton;
     private MenuListAdapter mAdapter;
 
     public MenuFragment() {
@@ -74,24 +73,12 @@ public class MenuFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
         mMenuRecyclerView = (RecyclerView) v.findViewById(R.id.menu_recycler_view);
-        mMenuOrderButton = (Button) v.findViewById(R.id.menu_order_button);
 
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAdapter = new MenuListAdapter(currentOrder, menu.getMenuItemList());
 
         mMenuRecyclerView.setAdapter(mAdapter);
-
-        mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentOrder.getOrderItems().size() != 0) {
-                    Tab.getInstance().commitOrder(currentOrder);
-                    currentOrder = Tab.getInstance().newOrder();
-                    mAdapter.setCurrentOrder(currentOrder);
-                }
-            }
-        });
 
         return v;
     }
