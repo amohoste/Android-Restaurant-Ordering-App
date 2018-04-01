@@ -87,7 +87,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
             prijs += order.getPrice();
         }
 
-        total.setText(String.valueOf(prijs));
+        total.setText(getContext().getString(R.string.total_price, prijs));
     }
 
     private void setTabAdapter(){
