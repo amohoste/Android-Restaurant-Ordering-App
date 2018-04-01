@@ -95,18 +95,20 @@ public class MenuFragment extends Fragment {
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Tab tab = Tab.getInstance();
-                tab.commitOrder(currentOrder);
-                currentOrder = tab.newOrder();
+                if (currentOrder.getOrderItems().size() > 0) {
+                    Tab tab = Tab.getInstance();
+                    tab.commitOrder(currentOrder);
+                    currentOrder = tab.newOrder();
 
-                mAdapter.setCurrentOrder(currentOrder);
-                mAdapter.resetOrderCountMap();
-                int start = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                int stop = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                for (int i = start; i <= stop; i++) {
-                    View itemview = mMenuRecyclerView.getLayoutManager().findViewByPosition(i);
-                    TextView itemCount = (TextView) itemview.findViewById(R.id.menu_recycler_item_count_view);
-                    itemCount.setText("0");
+                    mAdapter.setCurrentOrder(currentOrder);
+                    mAdapter.resetOrderCountMap();
+                    int start = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    int stop = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    for (int i = start; i <= stop; i++) {
+                        View itemview = mMenuRecyclerView.getLayoutManager().findViewByPosition(i);
+                        TextView itemCount = (TextView) itemview.findViewById(R.id.menu_recycler_item_count_view);
+                        itemCount.setText("0");
+                    }
                 }
             }
         });
