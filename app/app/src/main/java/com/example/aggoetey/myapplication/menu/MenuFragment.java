@@ -101,6 +101,8 @@ public class MenuFragment extends Fragment {
                     tab.commitOrder(currentOrder);
                     currentOrder = tab.newOrder();
 
+                    mMenuOrderButton.setText("order");
+
                     mAdapter.setCurrentOrder(currentOrder);
                     mAdapter.resetOrderCountMap();
                     int start = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();

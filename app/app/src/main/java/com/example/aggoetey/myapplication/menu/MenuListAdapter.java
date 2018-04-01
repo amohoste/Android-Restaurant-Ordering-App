@@ -86,6 +86,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 public void onClick(View view) {
                     changeOrderCount(1);
                     currentOrder.addOrderItem("", menuItem);
+                    orderButton.setText("ORDER (€" + currentOrder.getPrice() + ")");
+                    orderButton.setVisibility(View.VISIBLE);
+                    orderButton.setAlpha(1.0f);
             }
             });
 
@@ -94,6 +97,10 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 public void onClick(View view) {
                     if (changeOrderCount(-1) >= 0) {
                         currentOrder.removeOrderItem(menuItem);
+                        orderButton.setText("ORDER (€" + currentOrder.getPrice() + ")");
+                        if (currentOrder.getOrderItems().size() == 0) {
+                            orderButton.setAlpha(0.2f);
+                        }
                     }
                 }
             });
