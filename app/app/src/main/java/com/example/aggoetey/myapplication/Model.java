@@ -19,4 +19,10 @@ public abstract class Model {
         this.listeners.remove(listener);
     }
 
+    protected void fireInvalidationEvent(){
+        for (Listener listener : listeners) {
+            listener.invalidated();
+        }
+    }
+
 }
