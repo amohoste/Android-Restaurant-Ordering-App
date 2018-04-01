@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
@@ -19,7 +21,10 @@ import com.example.aggoetey.myapplication.model.Tab;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabFragment extends Fragment implements TabAdapter.OnOrderClickListener{
+public class TabFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener{
+
+    TabAdapter tabAdapter;
+    RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,18 +39,12 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
                 .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca")));
 
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tabRecyclerView);
+        recyclerView = view.findViewById(R.id.tabRecyclerView);
 
-        List<Tab.Order> orders = new ArrayList<>(tab.getOrderedOrders());
-        TabAdapter tabAdapter = new TabAdapter(orders);
-        tabAdapter.setOrderClickListener(this);
-        recyclerView.setAdapter(tabAdapter);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        setTabAdapter();
 
         int prijs = 0;
-        for (Tab.Order order : orders) {
+        for (Tab.Order order : tab.getOrderedOrders()) {
             prijs += order.getPrice();
         }
 
@@ -53,6 +52,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
         total.setText(String.valueOf(prijs));
 
         registerPayButtonListener((Button) view.findViewById(R.id.pay_button), tabAdapter);
+        tab.addListener(this);
 
         return view;
     }
@@ -78,5 +78,24 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
         Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
         intent.putExtra(OrderDetailActivity.ORDER_KEY, order);
         startActivity(intent);
+    }
+
+    @Override
+    public void invalidated() {
+        setTabAdapter();
+    }
+
+    private void setTabAdapter(){
+        Tab tab = Tab.getInstance();
+        List<Tab.Order> orders = new ArrayList<>(tab.getOrderedOrders());
+        tabAdapter = new TabAdapter(orders);
+        tabAdapter.setOrderClickListener(this);
+        recyclerView.setAdapter(tabAdapter);
+
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        tabAdapter.notifyDataSetChanged();
+
     }
 }
