@@ -5,12 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class MenuFragment extends Fragment {
     private Tab.Order currentOrder;
     private RecyclerView mMenuRecyclerView;
     private MenuListAdapter mAdapter;
+    private Button mMenuOrderButton;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -49,7 +52,6 @@ public class MenuFragment extends Fragment {
      *
      * @return A new instance of fragment MenuFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MenuFragment newInstance(Menu menu) {
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
@@ -80,6 +82,26 @@ public class MenuFragment extends Fragment {
 
         mMenuRecyclerView.setAdapter(mAdapter);
 
+        mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
+
+        mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Tab tab = Tab.getInstance();
+                tab.commitOrder(currentOrder);
+                currentOrder = tab.newOrder();
+
+                mAdapter.setCurrentOrder(currentOrder);
+                mAdapter.resetOrderCountMap();
+                int start = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int stop = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                for (int i = start; i <= stop; i++) {
+                    View itemview = mMenuRecyclerView.getLayoutManager().findViewByPosition(i);
+                    TextView itemCount = (TextView) itemview.findViewById(R.id.menu_recycler_item_count_view);
+                    itemCount.setText("0");
+                }
+            }
+        });
         return v;
     }
 

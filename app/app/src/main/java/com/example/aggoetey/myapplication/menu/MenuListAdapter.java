@@ -34,6 +34,10 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         this.currentOrder = currentOrder;
     }
 
+    public void resetOrderCountMap() {
+        orderCountMap = new HashMap<>();
+    }
+
     @Override
     public MenuItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -106,5 +110,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
             mOrderCountTextView.setText(Integer.toString(orderCountMap.get(itemTitle)));
         }
 
+        public void setNewOrderCount(int i) {
+            mOrderCountTextView.setText(Integer.toString(i));
+        }
     }
 }
