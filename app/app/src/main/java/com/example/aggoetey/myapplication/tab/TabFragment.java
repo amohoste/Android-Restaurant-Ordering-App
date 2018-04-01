@@ -25,6 +25,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
 
     TabAdapter tabAdapter;
     RecyclerView recyclerView;
+    TextView total;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,16 +41,10 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
 
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
         recyclerView = view.findViewById(R.id.tabRecyclerView);
+        total = view.findViewById(R.id.total);
 
         setTabAdapter();
-
-        int prijs = 0;
-        for (Tab.Order order : tab.getOrderedOrders()) {
-            prijs += order.getPrice();
-        }
-
-        TextView total = view.findViewById(R.id.total);
-        total.setText(String.valueOf(prijs));
+        calculatePrice();
 
         registerPayButtonListener((Button) view.findViewById(R.id.pay_button), tabAdapter);
         tab.addListener(this);
@@ -83,6 +78,16 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     @Override
     public void invalidated() {
         setTabAdapter();
+        calculatePrice();
+    }
+
+    private void calculatePrice(){
+        int prijs = 0;
+        for (Tab.Order order : Tab.getInstance().getOrderedOrders()) {
+            prijs += order.getPrice();
+        }
+
+        total.setText(String.valueOf(prijs));
     }
 
     private void setTabAdapter(){
