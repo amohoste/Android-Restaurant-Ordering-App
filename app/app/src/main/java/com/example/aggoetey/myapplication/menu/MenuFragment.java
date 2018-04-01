@@ -101,7 +101,8 @@ public class MenuFragment extends Fragment {
                     tab.commitOrder(currentOrder);
                     currentOrder = tab.newOrder();
 
-                    mMenuOrderButton.setText("order");
+                    mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
+                    mMenuOrderButton.setAlpha(0.2f);
 
                     mAdapter.setCurrentOrder(currentOrder);
                     mAdapter.resetOrderCountMap();
@@ -112,6 +113,7 @@ public class MenuFragment extends Fragment {
                         TextView itemCount = (TextView) itemview.findViewById(R.id.menu_recycler_item_count_view);
                         itemCount.setText("0");
                     }
+
                 }
             }
         });

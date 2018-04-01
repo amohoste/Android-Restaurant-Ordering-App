@@ -87,7 +87,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 public void onClick(View view) {
                     changeOrderCount(1);
                     currentOrder.addOrderItem("", menuItem);
-                    orderButton.setText("ORDER (€" + currentOrder.getPrice() + ")");
+                    setOrderButtonText(view);
                     orderButton.setVisibility(View.VISIBLE);
                     orderButton.setAlpha(1.0f);
             }
@@ -98,7 +98,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 public void onClick(View view) {
                     if (changeOrderCount(-1) >= 0) {
                         currentOrder.removeOrderItem(menuItem);
-                        orderButton.setText("ORDER (€" + currentOrder.getPrice() + ")");
+                        setOrderButtonText(view);
                         if (currentOrder.getOrderItems().size() == 0) {
                             orderButton.setAlpha(0.2f);
                         }
@@ -107,7 +107,15 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
             });
         }
 
-        public int changeOrderCount(int i) {
+        private void setOrderButtonText(View v) {
+            if (currentOrder.getOrderItems().size() > 0) {
+                orderButton.setText(v.getResources().getString(R.string.menu_view_order_button) + " (€" + currentOrder.getPrice() + ")");
+            } else {
+                orderButton.setText(v.getResources().getString(R.string.menu_view_order_button));
+            }
+        }
+
+        private int changeOrderCount(int i) {
             int c = i + (orderCountMap.containsKey(itemTitle) ? orderCountMap.get(itemTitle) : 0);
             if (c >= 0) {
                 orderCountMap.put(itemTitle, c);
@@ -116,11 +124,11 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
             return c;
         }
 
-        public void setNewOrderCount() {
+        private void setNewOrderCount() {
             mOrderCountTextView.setText(Integer.toString(orderCountMap.get(itemTitle)));
         }
 
-        public void setNewOrderCount(int i) {
+        private void setNewOrderCount(int i) {
             mOrderCountTextView.setText(Integer.toString(i));
         }
     }

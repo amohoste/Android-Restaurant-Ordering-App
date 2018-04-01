@@ -9,6 +9,7 @@
     <string name="title_menuitem_list">MenuItems</string>
     <string name="title_menuitem_detail">MenuItem Detail</string>
 
+    <string name="menu_view_order_button">Order</string>
 
     <string-array name="Planets">
         <item>Sun</item>
