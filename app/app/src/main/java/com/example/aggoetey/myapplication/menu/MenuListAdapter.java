@@ -23,11 +23,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
     private List<MenuItem> items;
     private HashMap<String, Integer> orderCountMap;
     private Tab.Order currentOrder;
+    private Button orderButton;
 
-    public MenuListAdapter(Tab.Order currentOrder, List<MenuItem> items) {
+    public MenuListAdapter(Tab.Order currentOrder, List<MenuItem> items, Button orderButton) {
         this.currentOrder = currentOrder;
         this.items = items;
         orderCountMap = new HashMap<>();
+        this.orderButton = orderButton;
     }
 
     public void setCurrentOrder(Tab.Order currentOrder) {

@@ -83,14 +83,15 @@ public class MenuFragment extends Fragment {
 
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new MenuListAdapter(currentOrder, restaurant.getMenu().getMenuItemList());
 
-        mMenuRecyclerView.setAdapter(mAdapter);
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(restaurant.getTitle());
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
+
+        mAdapter = new MenuListAdapter(currentOrder, restaurant.getMenu().getMenuItemList());
+        mMenuRecyclerView.setAdapter(mAdapter);
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
