@@ -26,15 +26,12 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
                              Bundle savedInstanceState) {
 
         Tab tab = Tab.getInstance();
-        tab.beginOrder()
-                .addOrderItem("notitie", new MenuItem("spaghetti", 13, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca"))
-                .commitOrder();
+        tab.commitOrder(tab.newOrder().addOrderItem("notitie", new MenuItem("spaghetti", 13, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca")));
 
-        tab.beginOrder()
+        tab.commitOrder(tab.newOrder()
                 .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca"))
-                .commitOrder();
+                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca")));
 
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tabRecyclerView);
