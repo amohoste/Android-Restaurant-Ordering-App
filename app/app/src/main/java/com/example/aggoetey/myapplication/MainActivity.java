@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.menu.MenuFragment;
+import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
@@ -18,8 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener {
 
-
-    private Menu current_menu;
+    private Restaurant restaurant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
 
         enableBottomNavigation();
 
-        current_menu = new Menu();
+
+        Menu current_menu = new Menu();
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
@@ -36,6 +37,22 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+
+        restaurant = new Restaurant("Chez Cyka Blyat", current_menu);
     }
 
     /**
@@ -54,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                             case R.id.action_discover:
                                 break;
                             case R.id.action_menu:
-                                manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(current_menu)).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(restaurant)).commit();
                                 break;
                             case R.id.action_pay:
                                 manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();

@@ -1,8 +1,5 @@
 package com.example.aggoetey.myapplication.model;
 
-import java.io.Serializable;
-
-
 /**
  * Created by aggoetey on 3/20/18.
  *
@@ -10,7 +7,7 @@ import java.io.Serializable;
  * Hier vind je info over de prijs, de naam, korte inhoud.
  */
 
-public class MenuItem implements Serializable {
+public class MenuItem {
     // Titel van het gerecht
     public final String title;
     // prijs van het gerecht

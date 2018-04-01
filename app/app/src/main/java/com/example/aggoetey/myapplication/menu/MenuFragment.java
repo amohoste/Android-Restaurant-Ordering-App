@@ -18,7 +18,10 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Menu;
+import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by Dries on 26/03/2018.
@@ -31,15 +34,17 @@ import com.example.aggoetey.myapplication.model.Tab;
  * create an instance of this fragment.
  */
 public class MenuFragment extends Fragment {
-    private static final String ARG_MENU = "menu";
+    private static final String ARG_RESTAURANT = "restaurant";
 
     private OnFragmentInteractionListener mListener;
 
-    private Menu menu;
+    private Restaurant restaurant;
 
     private Tab.Order currentOrder;
     private RecyclerView mMenuRecyclerView;
     private MenuListAdapter mAdapter;
+
+    private TextView mMenuRestaurantNameView;
     private Button mMenuOrderButton;
 
     public MenuFragment() {
@@ -52,10 +57,10 @@ public class MenuFragment extends Fragment {
      *
      * @return A new instance of fragment MenuFragment.
      */
-    public static MenuFragment newInstance(Menu menu) {
+    public static MenuFragment newInstance(Restaurant restaurant) {
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_MENU, menu);
+        args.putSerializable(ARG_RESTAURANT, restaurant);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +69,7 @@ public class MenuFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            menu = (Menu) getArguments().getSerializable(ARG_MENU);
+            restaurant = (Restaurant) getArguments().getSerializable(ARG_RESTAURANT);
         }
         currentOrder = Tab.getInstance().newOrder();
     }
@@ -78,9 +83,12 @@ public class MenuFragment extends Fragment {
 
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new MenuListAdapter(currentOrder, menu.getMenuItemList());
+        mAdapter = new MenuListAdapter(currentOrder, restaurant.getMenu().getMenuItemList());
 
         mMenuRecyclerView.setAdapter(mAdapter);
+
+        mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
+        mMenuRestaurantNameView.setText(restaurant.getTitle());
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
 
