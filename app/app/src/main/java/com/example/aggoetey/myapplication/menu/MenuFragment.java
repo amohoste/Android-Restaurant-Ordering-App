@@ -90,7 +90,7 @@ public class MenuFragment extends Fragment {
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
 
-        mAdapter = new MenuListAdapter(currentOrder, restaurant.getMenu().getMenuItemList());
+        mAdapter = new MenuListAdapter(currentOrder, restaurant.getMenu().getMenuItemList(), mMenuOrderButton);
         mMenuRecyclerView.setAdapter(mAdapter);
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
