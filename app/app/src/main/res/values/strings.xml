@@ -12,4 +12,6 @@
     <string name="tab_view_pay">Pay</string>
     <string name="total_price">Totale prijs: %1$d euro.</string>
 
+    <string name="price_order">Prijs order: %1$d euro.</string>
+
 </resources>

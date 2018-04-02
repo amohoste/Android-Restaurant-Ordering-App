@@ -31,12 +31,13 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         Tab.Order order = (Tab.Order) (getIntent().getExtras().getSerializable(ORDER_KEY));
 
-        mOrderNr.setText(String.valueOf(order.getOrderNumber()));
-        mPrice.setText(String.valueOf(order.getPrice()));
+        if(order != null) {
+            mOrderNr.setText(mOrderNr.getContext().getString(R.string.tab_order_position, order.getOrderNumber()));
+            mPrice.setText(mPrice.getContext().getString(R.string.price_order, order.getPrice()));
+        }
 
         mOrderItems.setAdapter(new OrderItemAdapter(order));
         mOrderItems.setLayoutManager(new LinearLayoutManager(this));
-
 
     }
 }
