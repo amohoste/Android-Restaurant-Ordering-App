@@ -23,6 +23,8 @@ import com.example.aggoetey.myapplication.model.Tab;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+
 /**
  * Created by Dries on 26/03/2018.
  *
@@ -39,8 +41,9 @@ public class MenuFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private Restaurant restaurant;
-
+    private HashMap<String, Integer> orderCountMap;
     private Tab.Order currentOrder;
+
     private RecyclerView mMenuRecyclerView;
     private MenuListAdapter mAdapter;
 
@@ -68,10 +71,13 @@ public class MenuFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
             restaurant = (Restaurant) getArguments().getSerializable(ARG_RESTAURANT);
         }
+
         currentOrder = Tab.getInstance().newOrder();
+        orderCountMap = new HashMap<>();
     }
 
     @Override
@@ -83,14 +89,16 @@ public class MenuFragment extends Fragment {
 
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
-
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(restaurant.getTitle());
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
 
-        mAdapter = new MenuListAdapter(currentOrder, restaurant.getMenu().getMenuItemList(), mMenuOrderButton);
+
+        setOrderButtonText();
+
+
+        mAdapter = new MenuListAdapter(this);
         mMenuRecyclerView.setAdapter(mAdapter);
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
@@ -102,22 +110,59 @@ public class MenuFragment extends Fragment {
                     currentOrder = tab.newOrder();
 
                     mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
-                    mMenuOrderButton.setAlpha(0.2f);
+                    mMenuOrderButton.setEnabled(false);
 
-                    mAdapter.setCurrentOrder(currentOrder);
-                    mAdapter.resetOrderCountMap();
-                    int start = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                    int stop = ((LinearLayoutManager) mMenuRecyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                    for (int i = start; i <= stop; i++) {
-                        View itemview = mMenuRecyclerView.getLayoutManager().findViewByPosition(i);
-                        TextView itemCount = (TextView) itemview.findViewById(R.id.menu_recycler_item_count_view);
-                        itemCount.setText("0");
-                    }
+                    resetOrderCountMap();
 
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         });
+
         return v;
+    }
+
+    public void resetOrderCountMap() {
+        orderCountMap.clear();
+    }
+
+    public void disableOrderButton() {
+        if (mMenuOrderButton.isEnabled()) {
+            mMenuOrderButton.setEnabled(false);
+            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
+        }
+    }
+
+    public void enableOrderButton() {
+        if (!mMenuOrderButton.isEnabled()) {
+            mMenuOrderButton.setEnabled(true);
+            setOrderButtonText();
+        }
+    }
+
+
+    public Tab.Order getCurrentOrder() {
+        return currentOrder;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public HashMap<String, Integer> getOrderCountMap() {
+        return orderCountMap;
+    }
+
+    public Button getmMenuOrderButton() {
+        return mMenuOrderButton;
+    }
+
+    public void setOrderButtonText() {
+        if (currentOrder.getOrderItems().size() > 0) {
+            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + currentOrder.getPrice() + ")");
+        } else {
+            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
+        }
     }
 
     @Override

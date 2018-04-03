@@ -21,24 +21,10 @@ import java.util.List;
 
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder>{
 
-    private List<MenuItem> items;
-    private HashMap<String, Integer> orderCountMap;
-    private Tab.Order currentOrder;
-    private Button orderButton;
+    private MenuFragment menuFragment;
 
-    public MenuListAdapter(Tab.Order currentOrder, List<MenuItem> items, Button orderButton) {
-        this.currentOrder = currentOrder;
-        this.items = items;
-        orderCountMap = new HashMap<>();
-        this.orderButton = orderButton;
-    }
-
-    public void setCurrentOrder(Tab.Order currentOrder) {
-        this.currentOrder = currentOrder;
-    }
-
-    public void resetOrderCountMap() {
-        orderCountMap = new HashMap<>();
+    public MenuListAdapter(MenuFragment menuFragment) {
+        this.menuFragment = menuFragment;
     }
 
     @Override
@@ -50,12 +36,12 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     @Override
     public void onBindViewHolder(MenuItemHolder holder, int position) {
-        holder.bind(items.get(position));
+        holder.bind(menuFragment.getRestaurant().getMenu().getMenuItemList().get(position));
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return menuFragment.getRestaurant().getMenu().getMenuItemList().size();
     }
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {
@@ -64,7 +50,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         private Button mOrderDecrementButton;
         private TextView mOrderCountTextView;
 
-        private String itemTitle;
+        private String itemID;
 
 
         public MenuItemHolder(View itemView) {
@@ -76,9 +62,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         public void bind(final MenuItem menuItem) {
-            itemTitle = menuItem.title;
+            itemID = menuItem.id;
             mTitleTextView.setText(menuItem.title + " (€" + Integer.toString(menuItem.price) +")");
-            if (orderCountMap.containsKey(menuItem.title)) {
+            if (menuFragment.getOrderCountMap().containsKey(menuItem.id)) {
                setNewOrderCount();
             }
 
@@ -86,10 +72,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 @Override
                 public void onClick(View view) {
                     changeOrderCount(1);
-                    currentOrder.addOrderItem("", menuItem);
-                    setOrderButtonText(view);
-                    orderButton.setVisibility(View.VISIBLE);
-                    orderButton.setAlpha(1.0f);
+                    menuFragment.getCurrentOrder().addOrderItem("", menuItem);
+                    menuFragment.setOrderButtonText();
+                    menuFragment.enableOrderButton();
             }
             });
 
@@ -97,39 +82,28 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
                 @Override
                 public void onClick(View view) {
                     if (changeOrderCount(-1) >= 0) {
-                        currentOrder.removeOrderItem(menuItem);
-                        setOrderButtonText(view);
-                        if (currentOrder.getOrderItems().size() == 0) {
-                            orderButton.setAlpha(0.2f);
+                        menuFragment.getCurrentOrder().removeOrderItem(menuItem);
+                        menuFragment.setOrderButtonText();
+                        if (menuFragment.getCurrentOrder().getOrderItems().size() == 0) {
+                            menuFragment.disableOrderButton();
                         }
                     }
                 }
             });
         }
 
-        private void setOrderButtonText(View v) {
-            if (currentOrder.getOrderItems().size() > 0) {
-                orderButton.setText(v.getResources().getString(R.string.menu_view_order_button) + " (€" + currentOrder.getPrice() + ")");
-            } else {
-                orderButton.setText(v.getResources().getString(R.string.menu_view_order_button));
-            }
-        }
 
         private int changeOrderCount(int i) {
-            int c = i + (orderCountMap.containsKey(itemTitle) ? orderCountMap.get(itemTitle) : 0);
+            int c = i + (menuFragment.getOrderCountMap().containsKey(itemID) ? menuFragment.getOrderCountMap().get(itemID) : 0);
             if (c >= 0) {
-                orderCountMap.put(itemTitle, c);
+                menuFragment.getOrderCountMap().put(itemID, c);
                 setNewOrderCount();
             }
             return c;
         }
 
         private void setNewOrderCount() {
-            mOrderCountTextView.setText(Integer.toString(orderCountMap.get(itemTitle)));
-        }
-
-        private void setNewOrderCount(int i) {
-            mOrderCountTextView.setText(Integer.toString(i));
+            mOrderCountTextView.setText(Integer.toString(menuFragment.getOrderCountMap().get(itemID)));
         }
     }
 }

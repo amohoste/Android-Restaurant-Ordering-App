@@ -1,5 +1,7 @@
 package com.example.aggoetey.myapplication.model;
 
+import java.util.UUID;
+
 /**
  * Created by aggoetey on 3/20/18.
  *
@@ -28,5 +30,6 @@ public class MenuItem {
         this.price = price;
         this.description = description;
         this.category = category;
+        this.id = UUID.randomUUID().toString();
     }
 }
