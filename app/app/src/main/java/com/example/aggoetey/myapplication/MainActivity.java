@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
-                        TabFragment tabFragment = new TabFragment();
                         switch (item.getItemId()) {
                             case R.id.action_discover:
                                 break;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                                 manager.beginTransaction().remove(manager.findFragmentById(R.id.fragment_place)).commit();
                                 break;
                             case R.id.action_pay:
-                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, new PayFragment()).commit();
                                 break;
                         }
 
