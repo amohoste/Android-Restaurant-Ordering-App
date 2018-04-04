@@ -17,6 +17,7 @@ import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +28,14 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     RecyclerView recyclerView;
     TextView total;
 
+    Fragment orderDetailFragment;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        orderDetailFragment = getChildFragmentManager().findFragmentById(R.id.order_fragment);
+
 
         Tab tab = Tab.getInstance();
         tab.commitOrder(tab.newOrder().addOrderItem("notitie", new MenuItem("spaghetti", 13, "tettne", "ca"))
@@ -70,8 +76,12 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
 
     @Override
     public void onOrderClick(Tab.Order order) {
+
         Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-        intent.putExtra(OrderDetailActivity.ORDER_KEY, order);
+        intent.putExtra(OrderDetailFragment.ORDER_KEY, order);
+
+
+
         startActivity(intent);
     }
 

@@ -60,7 +60,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
         private TextView price;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
-            super(inflater.inflate(R.layout.order, parent, false));
+            super(inflater.inflate(R.layout.order_detail_fragment, parent, false));
             itemView.setOnClickListener(this);
             number = (TextView) itemView.findViewById(R.id.title);
             price = (TextView) itemView.findViewById(R.id.price);
@@ -74,7 +74,6 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), order.getPrice() + "clicked!", Toast.LENGTH_SHORT).show();
             if (mListener != null)
                 mListener.onOrderClick(order);
         }
