@@ -2,6 +2,8 @@ package com.example.aggoetey.myapplication.orderdetail;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private TextView mOrderNr;
     private TextView mPrice;
+    private RecyclerView mOrderItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +27,17 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         mOrderNr = findViewById(R.id.order_nr);
         mPrice = findViewById(R.id.price);
+        mOrderItems = findViewById(R.id.orderItems);
 
         Tab.Order order = (Tab.Order) (getIntent().getExtras().getSerializable(ORDER_KEY));
 
-        mOrderNr.setText(String.valueOf(order.getOrderNumber()));
-        mPrice.setText(String.valueOf(order.getPrice()));
+        if(order != null) {
+            mOrderNr.setText(mOrderNr.getContext().getString(R.string.tab_order_position, order.getOrderNumber()));
+            mPrice.setText(mPrice.getContext().getString(R.string.price_order, order.getPrice()));
+        }
+
+        mOrderItems.setAdapter(new OrderItemAdapter(order));
+        mOrderItems.setLayoutManager(new LinearLayoutManager(this));
+
     }
 }
