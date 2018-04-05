@@ -6,8 +6,22 @@
     <string name="discover_text">Hier kan je ontdekken wat er allemaal te doen is in de wereld.</string>
     <string name="menu_text">Bekijk hier een mooi menu.</string>
     <string name="pay_text">Bekijk hier wat je allemaal al besteld hebt.</string>
+    <string name="title_menuitem_list">MenuItems</string>
+    <string name="title_menuitem_detail">MenuItem Detail</string>
 
+    <string name="menu_view_order_button">Order</string>
 
+    <string-array name="Planets">
+        <item>Sun</item>
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
     <string name="tab_order_position">Order # %1$d</string>
     <string name="tab_view_pay">Pay</string>
     <string name="total_price">Totale prijs: %1$d euro.</string>
