@@ -10,10 +10,6 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
-import com.example.aggoetey.myapplication.model.Tab;
-
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Dries on 26/03/2018.

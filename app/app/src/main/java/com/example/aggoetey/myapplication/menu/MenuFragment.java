@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
-
-import org.w3c.dom.Text;
+import com.example.aggoetey.myapplication.utils.UIUtility;
 
 import java.util.HashMap;
 
@@ -46,6 +41,7 @@ public class MenuFragment extends Fragment {
 
     private RecyclerView mMenuRecyclerView;
     private MenuListAdapter mAdapter;
+    private MenuCardsAdapter menuCardsAdapter;
 
     private TextView mMenuRestaurantNameView;
     private Button mMenuOrderButton;
@@ -80,6 +76,7 @@ public class MenuFragment extends Fragment {
         orderCountMap = new HashMap<>();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,7 +84,9 @@ public class MenuFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
         mMenuRecyclerView = (RecyclerView) v.findViewById(R.id.menu_recycler_view);
 
-        mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mMenuRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),
+                UIUtility.calculateNoOfColumns(this.getContext(), R.dimen.card_width)));
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(restaurant.getTitle());
@@ -99,7 +98,9 @@ public class MenuFragment extends Fragment {
 
 
         mAdapter = new MenuListAdapter(this);
-        mMenuRecyclerView.setAdapter(mAdapter);
+
+        menuCardsAdapter = new MenuCardsAdapter(this);
+        mMenuRecyclerView.setAdapter(menuCardsAdapter);
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -30,7 +30,6 @@
                 android:value="com.example.aggoetey.myapplication.Menu.MenuItemListActivity" />
         </activity>
         <activity android:name=".orderdetail.OrderDetailActivity" />
-        <activity android:name=".menu.MenuActivity"></activity>
     </application>
 
 </manifest>
