@@ -94,9 +94,11 @@ public class MenuFragment extends Fragment {
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
 
+        if (currentOrder.getOrderItems().size() > 0) {
+            enableOrderButton();
+        }
 
         setOrderButtonText();
-
 
         mAdapter = new MenuListAdapter(this);
         mMenuRecyclerView.setAdapter(mAdapter);
