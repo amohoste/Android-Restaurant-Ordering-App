@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(restaurant)).commit();
                                 break;
                             case R.id.action_pay:
-                                manager.beginTransaction().replace(R.id.fragment_place, new PayFragment()).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
                                 break;
                         }
 
@@ -95,9 +95,10 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         restaurant = new Restaurant("Chez Cyka Blyat", current_menu);
     }
 
+
     @Override
     public void onOrderSelected(Tab.Order order) {
-        if (findViewById(R.id.order_detail_fragment) == null) {
+        if (findViewById(R.id.order_detail_fragment_container) == null) {
             // portrait
             Intent intent = new Intent(this, OrderDetailActivity.class);
             intent.putExtra(OrderDetailFragment.ORDER_KEY, order);
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         } else {
             // landscape
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.order_detail_fragment, OrderDetailFragment.newInstance(order))
+                    .replace(R.id.order_detail_fragment_container, OrderDetailFragment.newInstance(order))
                     .commit();
         }
     }

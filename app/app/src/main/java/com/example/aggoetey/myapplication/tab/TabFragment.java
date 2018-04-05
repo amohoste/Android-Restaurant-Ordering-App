@@ -1,13 +1,10 @@
 package com.example.aggoetey.myapplication.tab;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telecom.Call;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.Listener;
-import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,5 +109,9 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
         recyclerView.setLayoutManager(layoutManager);
         tabAdapter.notifyDataSetChanged();
 
+    }
+
+    public static TabFragment newInstance(){
+        return new TabFragment();
     }
 }

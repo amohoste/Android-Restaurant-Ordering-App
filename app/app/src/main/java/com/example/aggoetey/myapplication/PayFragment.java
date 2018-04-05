@@ -1,22 +1,49 @@
 package com.example.aggoetey.myapplication;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class PayFragment extends Fragment {
+import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
+import com.example.aggoetey.myapplication.tab.TabFragment;
+
+public class PayFragment extends Fragment  {
+
+    public PayFragment() {
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.pay_fragment, parent, false);
+
+        View v = inflater.inflate(R.layout.pay_fragment, parent, false);
+
+        getChildFragmentManager().beginTransaction().replace(R.id.tab_fragment_container, TabFragment.newInstance()).commit();
+        if (getActivity().findViewById(R.id.order_detail_fragment_container) != null) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.order_detail_fragment_container, OrderDetailFragment.newInstance(null))
+                    .commit();
+        }
+
+        return v;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+    public static PayFragment newInstance() {
+        return new PayFragment();
+    }
+
+
+
 }
