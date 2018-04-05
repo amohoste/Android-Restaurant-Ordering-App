@@ -60,7 +60,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
         private TextView price;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
-            super(inflater.inflate(R.layout.order, parent, false));
+            super(inflater.inflate(R.layout.order_item, parent, false));
             itemView.setOnClickListener(this);
             number = (TextView) itemView.findViewById(R.id.title);
             price = (TextView) itemView.findViewById(R.id.price);
@@ -69,12 +69,11 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
         public void bind(Tab.Order order) {
             this.order = order;
             number.setText(number.getContext().getString(R.string.tab_order_position, this.order.getOrderNumber()));
-            price.setText(String.valueOf(this.order.getPrice()));
+            price.setText(price.getContext().getString(R.string.price_order_short, this.order.getPrice()));
         }
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), order.getPrice() + "clicked!", Toast.LENGTH_SHORT).show();
             if (mListener != null)
                 mListener.onOrderClick(order);
         }

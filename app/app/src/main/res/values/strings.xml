@@ -6,12 +6,18 @@
     <string name="discover_text">Hier kan je ontdekken wat er allemaal te doen is in de wereld.</string>
     <string name="menu_text">Bekijk hier een mooi menu.</string>
     <string name="pay_text">Bekijk hier wat je allemaal al besteld hebt.</string>
+    <string name="title_menuitem_list">MenuItems</string>
+    <string name="title_menuitem_detail">MenuItem Detail</string>
 
+    <string name="menu_view_order_button">Order</string>
 
     <string name="tab_order_position">Order # %1$d</string>
     <string name="tab_view_pay">Pay</string>
     <string name="total_price">Totale prijs: %1$d euro.</string>
 
     <string name="price_order">Prijs order: %1$d euro.</string>
+    <string name="price_order_short">€%1$d</string>
+    <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
+
 
 </resources>
