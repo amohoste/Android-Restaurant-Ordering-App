@@ -11,13 +11,16 @@ import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.model.Restaurant;
+import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
 
     private Restaurant restaurant;
 
@@ -43,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
-                        TabFragment tabFragment = new TabFragment();
                         switch (item.getItemId()) {
                             case R.id.action_discover:
                                 break;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(restaurant)).commit();
                                 break;
                             case R.id.action_pay:
-                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
                                 break;
                         }
 
@@ -91,5 +93,25 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
 
         restaurant = new Restaurant("Chez Cyka Blyat", current_menu);
+    }
+
+
+    /**
+     * Bij het selecteren van een order de juiste actie doen
+     * @param order
+     */
+    @Override
+    public void onOrderSelected(Tab.Order order) {
+        if (findViewById(R.id.order_detail_fragment_container) == null) {
+            // portrait
+            Intent intent = new Intent(this, OrderDetailActivity.class);
+            intent.putExtra(OrderDetailFragment.ORDER_KEY, order);
+            startActivity(intent);
+        } else {
+            // landscape
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.order_detail_fragment_container, OrderDetailFragment.newInstance(order))
+                    .commit();
+        }
     }
 }
