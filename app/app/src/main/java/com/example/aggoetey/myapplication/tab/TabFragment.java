@@ -28,61 +28,12 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     RecyclerView recyclerView;
     TextView total;
 
-    Fragment orderDetailFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        orderDetailFragment = getChildFragmentManager().findFragmentById(R.id.order_fragment);
-
-
         Tab tab = Tab.getInstance();
-        tab.commitOrder(tab.newOrder().addOrderItem("notitie", new MenuItem("spaghetti", 13, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca")));
-
-        tab.commitOrder(tab.newOrder()
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
-                .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca")));
 
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
         recyclerView = view.findViewById(R.id.tabRecyclerView);
