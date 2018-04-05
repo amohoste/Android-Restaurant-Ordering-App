@@ -28,4 +28,8 @@
 
     <string name="price_order">Prijs order: %1$d euro.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="grid_view">Grid view</string>
+
 </resources>
