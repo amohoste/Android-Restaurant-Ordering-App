@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
     }
 
 
+    /**
+     * Bij het selecteren van een order de juiste actie doen
+     * @param order
+     */
     @Override
     public void onOrderSelected(Tab.Order order) {
         if (findViewById(R.id.order_detail_fragment_container) == null) {

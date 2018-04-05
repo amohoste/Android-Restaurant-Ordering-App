@@ -17,5 +17,7 @@
 
     <string name="price_order">Prijs order: %1$d euro.</string>
     <string name="price_order_short">€%1$d</string>
+    <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
+
 
 </resources>

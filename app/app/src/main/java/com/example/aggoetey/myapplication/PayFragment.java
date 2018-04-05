@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.orderdetail.NoOrderSelectedFragment;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
@@ -26,9 +27,9 @@ public class PayFragment extends Fragment  {
         View v = inflater.inflate(R.layout.pay_fragment, parent, false);
 
         getChildFragmentManager().beginTransaction().replace(R.id.tab_fragment_container, TabFragment.newInstance()).commit();
-        if (getActivity().findViewById(R.id.order_detail_fragment_container) != null) {
+        if (v.findViewById(R.id.order_detail_fragment_container) != null) {
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.order_detail_fragment_container, OrderDetailFragment.newInstance(null))
+                    .replace(R.id.order_detail_fragment_container, NoOrderSelectedFragment.newInstance())
                     .commit();
         }
 
