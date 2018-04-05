@@ -22,7 +22,7 @@ import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener{
+public class TabFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener {
 
     TabAdapter tabAdapter;
     RecyclerView recyclerView;
@@ -42,6 +42,45 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
                 .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca")));
 
         tab.commitOrder(tab.newOrder()
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
+                .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
                 .addOrderItem("notitie", new MenuItem("spaghetti", 18, "tettne", "ca"))
                 .addOrderItem("notitie", new MenuItem("lasagna", 15, "tettne", "ca")));
 
@@ -81,7 +120,6 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
         intent.putExtra(OrderDetailFragment.ORDER_KEY, order);
 
 
-
         startActivity(intent);
     }
 
@@ -91,7 +129,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
         calculatePrice();
     }
 
-    private void calculatePrice(){
+    private void calculatePrice() {
         int prijs = 0;
         for (Tab.Order order : Tab.getInstance().getOrderedOrders()) {
             prijs += order.getPrice();
@@ -100,7 +138,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
         total.setText(total.getContext().getString(R.string.total_price, prijs));
     }
 
-    private void setTabAdapter(){
+    private void setTabAdapter() {
         Tab tab = Tab.getInstance();
         List<Tab.Order> orders = new ArrayList<>(tab.getOrderedOrders());
         tabAdapter = new TabAdapter(orders);
