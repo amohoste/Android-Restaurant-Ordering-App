@@ -11,13 +11,16 @@ import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.model.Restaurant;
+import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
+import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
 
     private Restaurant restaurant;
 
@@ -90,5 +93,20 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
 
         restaurant = new Restaurant("Chez Cyka Blyat", current_menu);
+    }
+
+    @Override
+    public void onOrderSelected(Tab.Order order) {
+        if (findViewById(R.id.order_detail_fragment) == null) {
+            // portrait
+            Intent intent = new Intent(this, OrderDetailActivity.class);
+            intent.putExtra(OrderDetailFragment.ORDER_KEY, order);
+            startActivity(intent);
+        } else {
+            // landscape
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.order_detail_fragment, OrderDetailFragment.newInstance(order))
+                    .commit();
+        }
     }
 }

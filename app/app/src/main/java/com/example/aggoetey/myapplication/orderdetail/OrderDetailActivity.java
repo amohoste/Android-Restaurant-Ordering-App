@@ -5,6 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.model.Tab;
+
+import static com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment.ORDER_KEY;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
@@ -15,11 +18,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order);
 
         FragmentManager manager = getSupportFragmentManager();
-        OrderDetailFragment orderDetailFragment = new OrderDetailFragment();
+        OrderDetailFragment orderDetailFragment = OrderDetailFragment.newInstance((Tab.Order) getIntent().getSerializableExtra(ORDER_KEY));
         manager.beginTransaction().replace(R.id.order_fragment, orderDetailFragment).commit();
-
-        // fragment zijn argumenten meegeven
-        orderDetailFragment.setArguments(getIntent().getExtras());
-
     }
 }

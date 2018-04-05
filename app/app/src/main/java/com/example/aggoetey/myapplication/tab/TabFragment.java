@@ -1,10 +1,12 @@
 package com.example.aggoetey.myapplication.tab;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,23 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     RecyclerView recyclerView;
     TextView total;
 
+    private Callbacks callbacks;
+
+    public interface Callbacks {
+        void onOrderSelected(Tab.Order order);
+    }
+
+    @Override
+    public void onAttach(Activity act){
+        super.onAttach(act);
+        callbacks = (Callbacks) act;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        callbacks = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,12 +85,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
 
     @Override
     public void onOrderClick(Tab.Order order) {
-
-        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-        intent.putExtra(OrderDetailFragment.ORDER_KEY, order);
-
-
-        startActivity(intent);
+        callbacks.onOrderSelected(order);
     }
 
     @Override

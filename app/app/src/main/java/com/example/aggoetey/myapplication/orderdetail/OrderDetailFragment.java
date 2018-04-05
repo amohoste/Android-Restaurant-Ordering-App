@@ -21,6 +21,8 @@ public class OrderDetailFragment extends Fragment {
     private TextView mPrice;
     private RecyclerView mOrderItems;
 
+    public OrderDetailFragment(){}
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, Bundle savedInstanceState) {
@@ -51,5 +53,19 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment OrderDetailFragment.
+     */
+    public static OrderDetailFragment newInstance(Tab.Order order) {
+        OrderDetailFragment fragment = new OrderDetailFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ORDER_KEY, order);
+        fragment.setArguments(args);
+        return fragment;
     }
 }
