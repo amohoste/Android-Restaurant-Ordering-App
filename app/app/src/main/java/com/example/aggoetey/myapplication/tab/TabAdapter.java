@@ -60,7 +60,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
         private TextView price;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
-            super(inflater.inflate(R.layout.order_detail_fragment, parent, false));
+            super(inflater.inflate(R.layout.order_item, parent, false));
             itemView.setOnClickListener(this);
             number = (TextView) itemView.findViewById(R.id.title);
             price = (TextView) itemView.findViewById(R.id.price);

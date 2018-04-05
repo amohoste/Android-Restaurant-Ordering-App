@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.orderdetail;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +10,18 @@ import android.widget.TextView;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 
+import java.util.List;
+
 /**
  * Created by aggoetey on 3/29/18.
  */
 
 public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.ViewHolder>{
 
-    private Tab.Order order;
+    private List<Tab.Order.OrderItem> orderItemList;
 
-    public OrderItemAdapter(Tab.Order order) {
-        this.order = order;
+    public OrderItemAdapter(List<Tab.Order.OrderItem> orderItems) {
+        this.orderItemList = orderItems;
     }
 
     @Override
@@ -29,12 +32,12 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
     //Zet de inhoud van een ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(order.getOrderItems().get(position));
+        holder.bind(orderItemList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return order.getOrderItems().size();
+        return orderItemList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -45,12 +48,13 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         private TextView price;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
-            super(inflater.inflate(R.layout.order_item, parent, false));
+            super(inflater.inflate(R.layout.order_item_item, parent, false));
             name = (TextView) itemView.findViewById(R.id.name);
             price = (TextView) itemView.findViewById(R.id.price);
         }
 
         public void bind(Tab.Order.OrderItem orderItem) {
+            Log.d("binding", "binding");
             this.orderItem = orderItem;
             name.setText(orderItem.getMenuItem().title);
             price.setText(String.valueOf(this.orderItem.getMenuItem().price));

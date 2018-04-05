@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,11 +40,9 @@ public class OrderDetailFragment extends Fragment {
             if (order != null) {
                 mOrderNr.setText(mOrderNr.getContext().getString(R.string.tab_order_position, order.getOrderNumber()));
                 mPrice.setText(mPrice.getContext().getString(R.string.price_order, order.getPrice()));
+                mOrderItems.setAdapter(new OrderItemAdapter(order.getOrderItems()));
+                mOrderItems.setLayoutManager(new LinearLayoutManager(getContext()));
             }
-
-
-            mOrderItems.setAdapter(new OrderItemAdapter(order));
-            mOrderItems.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
         return view;
