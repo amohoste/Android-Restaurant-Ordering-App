@@ -11,21 +11,11 @@
 
     <string name="menu_view_order_button">Order</string>
 
-    <string-array name="Planets">
-        <item>Sun</item>
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
-    </string-array>
     <string name="tab_order_position">Order # %1$d</string>
     <string name="tab_view_pay">Pay</string>
     <string name="total_price">Totale prijs: %1$d euro.</string>
 
     <string name="price_order">Prijs order: %1$d euro.</string>
+    <string name="price_order_short">€%1$d</string>
 
 </resources>
