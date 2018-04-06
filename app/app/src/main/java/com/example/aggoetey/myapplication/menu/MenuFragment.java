@@ -3,7 +3,9 @@ package com.example.aggoetey.myapplication.menu;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +27,7 @@ import com.example.aggoetey.myapplication.model.Tab;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeSet;
@@ -39,17 +42,18 @@ import java.util.TreeSet;
  * Use the {@link MenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MenuFragment extends Fragment {
+public class MenuFragment extends Fragment implements Serializable {
     private static final String ARG_RESTAURANT = "restaurant";
 
     private OnFragmentInteractionListener mListener;
 
     private Restaurant restaurant;
     private HashMap<String, Integer> orderCountMap;
+    private TreeSet<String> categoriesSet;
+    private HashSet<MenuListAdapter> mAdapters;
     private Tab.Order currentOrder;
 
-    private RecyclerView mMenuRecyclerView;
-    private MenuListAdapter mAdapter;
+
 
     private TextView mMenuRestaurantNameView;
     private Button mMenuOrderButton;
@@ -82,6 +86,8 @@ public class MenuFragment extends Fragment {
 
         currentOrder = Tab.getInstance().newOrder();
         orderCountMap = new HashMap<>();
+        categoriesSet = new TreeSet<>();
+        mAdapters = new HashSet<>();
     }
 
     @Override
@@ -89,9 +95,6 @@ public class MenuFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
-        mMenuRecyclerView = (RecyclerView) v.findViewById(R.id.menu_recycler_view);
-
-        mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(restaurant.getTitle());
@@ -104,8 +107,18 @@ public class MenuFragment extends Fragment {
 
         setOrderButtonText();
 
-        mAdapter = new MenuListAdapter(this);
-        mMenuRecyclerView.setAdapter(mAdapter);
+
+        // Get all used categories and sort them alphabetically
+        for (MenuItem item: restaurant.getMenu().getMenuItemList()) {
+            categoriesSet.add(item.category);
+        }
+
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpager);
+        viewPager.setAdapter(new MenuFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), categoriesSet, this));
+
+        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +133,9 @@ public class MenuFragment extends Fragment {
 
                     resetOrderCountMap();
 
-                    mAdapter.notifyDataSetChanged();
+                    for (MenuListAdapter adapter: mAdapters) {
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
         });

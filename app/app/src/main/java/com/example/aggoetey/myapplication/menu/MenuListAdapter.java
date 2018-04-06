@@ -22,9 +22,11 @@ import java.util.List;
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder>{
 
     private MenuFragment menuFragment;
+    private String category;
 
-    public MenuListAdapter(MenuFragment menuFragment) {
+    public MenuListAdapter(MenuFragment menuFragment, String category) {
         this.menuFragment = menuFragment;
+        this.category = category;
     }
 
     @Override
@@ -36,12 +38,12 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     @Override
     public void onBindViewHolder(MenuItemHolder holder, int position) {
-        holder.bind(menuFragment.getRestaurant().getMenu().getMenuItemList().get(position));
+        holder.bind(menuFragment.getRestaurant().getMenu().getMenuItemList(category).get(position));
     }
 
     @Override
     public int getItemCount() {
-        return menuFragment.getRestaurant().getMenu().getMenuItemList().size();
+        return menuFragment.getRestaurant().getMenu().getMenuItemList(category).size();
     }
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {
