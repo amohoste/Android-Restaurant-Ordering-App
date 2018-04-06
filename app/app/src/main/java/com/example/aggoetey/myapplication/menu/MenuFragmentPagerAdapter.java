@@ -29,6 +29,7 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter {
         return menuPageFragment;
     }
 
+
     @Override
     public int getCount() {
         return tabTitles.length;

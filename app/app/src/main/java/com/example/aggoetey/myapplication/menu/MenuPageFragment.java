@@ -56,13 +56,6 @@ public class MenuPageFragment extends Fragment {
         super.onStop();
         menuInfo.clearAdapters();
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateViewType(mMenuPageRecyclerView);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,12 +65,6 @@ public class MenuPageFragment extends Fragment {
         updateViewType(mMenuPageRecyclerView);
 
         return view;
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        updateViewType(mMenuPageRecyclerView);
     }
 
     @Override
