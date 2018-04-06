@@ -13,20 +13,20 @@ import java.util.TreeSet;
 
 public class MenuFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private Context context;
     private String tabTitles[];
-    private MenuFragment menuFragment;
+    private MenuInfo menuInfo;
 
-    public MenuFragmentPagerAdapter(FragmentManager fm, Context context, TreeSet<String> categories, MenuFragment menuFragment) {
+    public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo) {
         super(fm);
-        this.context = context;
-        tabTitles = categories.toArray(new String[categories.size()]);
-        this.menuFragment = menuFragment;
+        tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
+                new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
+        this.menuInfo = menuInfo;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return MenuPageFragment.newInstance(position + 1, getPageTitle(position).toString(), menuFragment);
+        MenuPageFragment menuPageFragment = MenuPageFragment.newInstance(position + 1, getPageTitle(position).toString(), menuInfo);
+        return menuPageFragment;
     }
 
     @Override

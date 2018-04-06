@@ -17,20 +17,20 @@ import com.example.aggoetey.myapplication.R;
 
 public class MenuPageFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String ARG_MENU_FRAMGENT = "ARG_MENU_FRAGMENT";
+    public static final String ARG_MENU_INFO = "ARG_MENU_INFO";
     public static final String ARG_MENU_CATEGORY = "ARG_MENU_CATEGORY";
 
     private MenuListAdapter mAdapter;
-    private MenuFragment menuFragment;
+    private MenuInfo menuInfo;
     private int mPage;
     private String category;
     private RecyclerView mMenuPageRecyclerView;
 
-    public static MenuPageFragment newInstance(int page, String category, MenuFragment menuFragment) {
+    public static MenuPageFragment newInstance(int page, String category, MenuInfo menuInfo) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         args.putString(ARG_MENU_CATEGORY, category);
-        args.putSerializable(ARG_MENU_FRAMGENT, menuFragment);
+        args.putSerializable(ARG_MENU_INFO, menuInfo);
         MenuPageFragment fragment = new MenuPageFragment();
         fragment.setArguments(args);
         return fragment;
@@ -41,7 +41,7 @@ public class MenuPageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mPage = getArguments().getInt(ARG_PAGE);
         category = getArguments().getString(ARG_MENU_CATEGORY);
-        menuFragment = (MenuFragment) getArguments().getSerializable(ARG_MENU_FRAMGENT);
+        menuInfo = (MenuInfo) getArguments().getSerializable(ARG_MENU_INFO);
     }
 
     @Override
@@ -52,8 +52,8 @@ public class MenuPageFragment extends Fragment {
 
         mMenuPageRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new MenuListAdapter(menuFragment, category);
-        menuFragment.addAdapter(mAdapter);
+        mAdapter = new MenuListAdapter(menuInfo, category);
+        menuInfo.addAdapter(mAdapter);
         mMenuPageRecyclerView.setAdapter(mAdapter);
 
         return view;

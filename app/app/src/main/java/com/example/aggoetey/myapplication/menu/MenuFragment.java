@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.MenuItem;
@@ -42,21 +43,15 @@ import java.util.TreeSet;
  * Use the {@link MenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MenuFragment extends Fragment implements Serializable {
-    private static final String ARG_RESTAURANT = "restaurant";
+public class MenuFragment extends Fragment implements Listener {
+    private static final String ARG_MENUINFO = "menuinfo";
 
     private OnFragmentInteractionListener mListener;
 
-    private Restaurant restaurant;
-    private HashMap<String, Integer> orderCountMap;
-    private TreeSet<String> categoriesSet;
-    private HashSet<MenuListAdapter> mAdapters;
-    private Tab.Order currentOrder;
+    private MenuInfo menuInfo;
 
     private ViewPager viewPager;
-
-
-
+    private TabLayout tabLayout;
     private TextView mMenuRestaurantNameView;
     private Button mMenuOrderButton;
 
@@ -70,10 +65,10 @@ public class MenuFragment extends Fragment implements Serializable {
      *
      * @return A new instance of fragment MenuFragment.
      */
-    public static MenuFragment newInstance(Restaurant restaurant) {
+    public static MenuFragment newInstance(MenuInfo menuInfo) {
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_RESTAURANT, restaurant);
+        args.putSerializable(ARG_MENUINFO, menuInfo);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,15 +76,10 @@ public class MenuFragment extends Fragment implements Serializable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         if (getArguments() != null) {
-            restaurant = (Restaurant) getArguments().getSerializable(ARG_RESTAURANT);
+            menuInfo = (MenuInfo) getArguments().getSerializable(ARG_MENUINFO);
+            menuInfo.getCurrentOrder().addListener(this);
         }
-
-        currentOrder = Tab.getInstance().newOrder();
-        orderCountMap = new HashMap<>();
-        categoriesSet = new TreeSet<>();
-        mAdapters = new HashSet<>();
     }
 
     @Override
@@ -99,95 +89,42 @@ public class MenuFragment extends Fragment implements Serializable {
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
-        mMenuRestaurantNameView.setText(restaurant.getTitle());
+        mMenuRestaurantNameView.setText(menuInfo.getRestaurant().getTitle());
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
 
-        if (currentOrder.getOrderItems().size() > 0) {
-            enableOrderButton();
-        }
-
-        setOrderButtonText();
-
-
-        // Get all used categories and sort them alphabetically
-        for (MenuItem item: restaurant.getMenu().getMenuItemList()) {
-            categoriesSet.add(item.category);
-        }
+        setOrderButtonProperties();
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new MenuFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), categoriesSet, this));
+        viewPager.setAdapter(new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo));
 
-        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
+        tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentOrder.getOrderItems().size() > 0) {
-                    Tab tab = Tab.getInstance();
-                    tab.commitOrder(currentOrder);
-                    currentOrder = tab.newOrder();
-
-                    mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
-                    mMenuOrderButton.setEnabled(false);
-
-                    resetOrderCountMap();
-
-                    for (MenuListAdapter adapter: mAdapters) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
+                menuInfo.commitOrder();
+                setOrderButtonProperties();
             }
         });
 
         return v;
     }
 
-    public void resetOrderCountMap() {
-        orderCountMap.clear();
-    }
-
-    public void disableOrderButton() {
-        if (mMenuOrderButton.isEnabled()) {
-            mMenuOrderButton.setEnabled(false);
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
-        }
-    }
-
-    public void enableOrderButton() {
-        if (!mMenuOrderButton.isEnabled()) {
-            mMenuOrderButton.setEnabled(true);
-            setOrderButtonText();
-        }
-    }
-
-    public void addAdapter(MenuListAdapter adapter) {
-        mAdapters.add(adapter);
-    }
-
-    public Tab.Order getCurrentOrder() {
-        return currentOrder;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public HashMap<String, Integer> getOrderCountMap() {
-        return orderCountMap;
-    }
-
     public Button getmMenuOrderButton() {
         return mMenuOrderButton;
     }
 
-    public void setOrderButtonText() {
-        if (currentOrder.getOrderItems().size() > 0) {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + currentOrder.getPrice() + ")");
+    public void setOrderButtonProperties() {
+        if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
+            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
+            mMenuOrderButton.setEnabled(true);
         } else {
             mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
+            mMenuOrderButton.setEnabled(false);
         }
     }
 
@@ -206,6 +143,12 @@ public class MenuFragment extends Fragment implements Serializable {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        menuInfo.getCurrentOrder().removeListener(this);
+    }
+
+    @Override
+    public void invalidated() {
+        setOrderButtonProperties();
     }
 
     /**
