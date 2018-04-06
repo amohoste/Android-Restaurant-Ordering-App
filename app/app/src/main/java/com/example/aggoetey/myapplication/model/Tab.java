@@ -1,5 +1,7 @@
 package com.example.aggoetey.myapplication.model;
 
+import com.example.aggoetey.myapplication.Model;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.Observer;
  * Een tab is een lijst met orders die nog betaald moeten worden door een bepaalde tafel.
  */
 
-public class Tab extends Observable {
+public class Tab extends Model {
 
     private static final Tab ourInstance = new Tab();
 
@@ -55,8 +57,7 @@ public class Tab extends Observable {
     public void payOrder(Order order) {
         orderedOrders.remove(order);
         payedOrders.add(order);
-        this.setChanged();
-        this.notifyObservers();
+        fireInvalidationEvent();
     }
 
     public static class Order extends Observable implements Serializable {
