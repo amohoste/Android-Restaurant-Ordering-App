@@ -19,6 +19,14 @@ public abstract class Model {
         this.listeners.remove(listener);
     }
 
+    public List<Listener> getListeners() {
+        return listeners;
+    }
+
+    public void setListeners(List<Listener> listeners) {
+        this.listeners = listeners;
+    }
+
     protected void fireInvalidationEvent(){
         for (Listener listener : listeners) {
             listener.invalidated();

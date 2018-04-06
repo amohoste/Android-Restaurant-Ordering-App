@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +17,15 @@ import com.example.aggoetey.myapplication.model.MenuItem;
  */
 
 public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> {
-    private MenuFragment mMenuFragment;
+    private MenuInfo menuInfo;
+    private String category;
     private  int mExpandedPosition = -1;
     private  int mPreviousPosition = -1;
 
+    public MenuCardsAdapter(MenuInfo menuInfo, String category){
+        this.menuInfo = menuInfo;
+        this.category = category;
 
-    public MenuCardsAdapter(MenuFragment menuFragment){
-        this.mMenuFragment = menuFragment;
     }
 
     @Override
@@ -59,12 +62,12 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         });
 
 
-        holder.bind(mMenuFragment.getRestaurant().getMenu().getMenuItemList().get(position));
+        holder.bind(menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mMenuFragment.getRestaurant().getMenu().getMenuItemList().size();
+        return menuInfo.getRestaurant().getMenu().getMenuItemList(category).size();
     }
 
 
@@ -73,9 +76,14 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
     public class  MenuCardHolder extends RecyclerView.ViewHolder{
 
         private TextView mDescriptionTextView;
+        private TextView mPriceTextView;
         private TextView mNameTextView;
         private ImageView mDishImageView;
         private ImageView mDivider;
+        private Button mOrderIncrementButton;
+        private Button mOrderDecrementButton;
+        private TextView mOrderCountTextView;
+
 
         public MenuCardHolder(View itemView) {
             super(itemView);
@@ -83,16 +91,43 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
             mNameTextView = itemView.findViewById(R.id.menu_item_name);
             mDishImageView = itemView.findViewById(R.id.menu_item_image);
             mDivider = itemView.findViewById(R.id.menu_item_desc_divider);
+            mPriceTextView = itemView.findViewById(R.id.menu_item_price);
+            mOrderIncrementButton = itemView.findViewById(R.id.menu_cards_increment_ordercount_button);
+            mOrderDecrementButton = itemView.findViewById(R.id.menu_cards_decrement_ordercount_button);
+            mOrderCountTextView = itemView.findViewById(R.id.menu_cards_item_count_view);
 
         }
 
-        public void bind(MenuItem item){
+        public void bind(final MenuItem item){
 
             mDescriptionTextView.setText(item.description);
             mNameTextView.setText(item.title);
+            mPriceTextView.setText(String.format("€ %d", item.price));
+
+            mOrderIncrementButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    menuInfo.addOrderItem(item);
+                    setNewOrderCount(item.id);
+                }
+            });
+
+            mOrderDecrementButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (menuInfo.removeOrderItem(item)) {
+                        setNewOrderCount(item.id);
+                    }
+                }
+            });
+
             // TEMPORARY IMAGE
             mDishImageView.setImageResource(R.drawable.kimchi1);
 
+        }
+
+        private void setNewOrderCount(String itemID) {
+            mOrderCountTextView.setText(menuInfo.getOrderCount(itemID));
         }
     }
 }

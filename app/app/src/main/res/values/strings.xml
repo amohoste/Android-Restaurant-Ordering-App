@@ -23,9 +23,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="grid_view">Grid view</string>
-    <string name="menu_description">Description of a dish</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus a ante malesuada, laoreet quam at, cursus ligula. Sed placerat, turpis eget tincidunt egestas, ipsum nunc dignissim nulla, ac porta lacus enim id velit. Vivamus pretium ornare lorem vel lobortis. Maecenas ac purus quis enim egestas laoreet.</string>
     <string name="menu_image_description">Image of dish</string>
     <string name="menu_item_name">Dish Name</string>
     <string name="card_more">more</string>
+    <string name="add_note_button">Add Note</string>
+    <string name="list_view">List View</string>
 
 </resources>

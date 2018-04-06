@@ -60,17 +60,12 @@ public class Tab extends Model {
         fireInvalidationEvent();
     }
 
-    public static class Order extends Observable implements Serializable {
+    public static class Order extends Model implements Serializable {
 
         private List<OrderItem> orderItems = new ArrayList<>();
         private int orderNumber;
-        private List<Observer> listeners = new ArrayList<>();
 
         private Order() {
-        }
-
-        public void addObserver(Observer o) {
-            listeners.add(o);
         }
 
         public int getOrderNumber() {
@@ -90,6 +85,7 @@ public class Tab extends Model {
          */
         public Order addOrderItem(String note, MenuItem menuItem) {
             this.orderItems.add(new OrderItem(note, menuItem));
+            fireInvalidationEvent();
             return this;
         }
 
@@ -98,11 +94,12 @@ public class Tab extends Model {
          */
         public Order removeOrderItem(OrderItem orderItem) {
             this.orderItems.remove(orderItem);
+            fireInvalidationEvent();
             return this;
         }
 
         /**
-         * Lukt niet in 1 lijntje omdat we geen lambda's kunne gebruiken...
+         * Lukt niet in 1 lijntje omdat we geen lambda's kunnen gebruiken...
          *
          * Verwijder een orderitem aan de hand van een OrderItem
          *
@@ -120,6 +117,7 @@ public class Tab extends Model {
             }
             if(toDelete != null) {
                 orderItems.remove(toDelete);
+                fireInvalidationEvent();
             }
         }
 
