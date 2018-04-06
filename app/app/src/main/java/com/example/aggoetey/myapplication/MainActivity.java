@@ -15,9 +15,10 @@ import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, Serializable {
 
     private Restaurant restaurant;
 

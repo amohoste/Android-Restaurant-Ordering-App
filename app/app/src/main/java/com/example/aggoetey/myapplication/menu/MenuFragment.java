@@ -53,6 +53,8 @@ public class MenuFragment extends Fragment implements Serializable {
     private HashSet<MenuListAdapter> mAdapters;
     private Tab.Order currentOrder;
 
+    private ViewPager viewPager;
+
 
 
     private TextView mMenuRestaurantNameView;
@@ -114,7 +116,7 @@ public class MenuFragment extends Fragment implements Serializable {
         }
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpager);
+        viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         viewPager.setAdapter(new MenuFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), categoriesSet, this));
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
@@ -161,6 +163,9 @@ public class MenuFragment extends Fragment implements Serializable {
         }
     }
 
+    public void addAdapter(MenuListAdapter adapter) {
+        mAdapters.add(adapter);
+    }
 
     public Tab.Order getCurrentOrder() {
         return currentOrder;

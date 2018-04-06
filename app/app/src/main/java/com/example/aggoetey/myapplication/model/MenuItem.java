@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -9,7 +10,7 @@ import java.util.UUID;
  * Hier vind je info over de prijs, de naam, korte inhoud.
  */
 
-public class MenuItem {
+public class MenuItem implements Serializable {
     // Titel van het gerecht
     public final String title;
     // prijs van het gerecht

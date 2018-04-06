@@ -53,6 +53,7 @@ public class MenuPageFragment extends Fragment {
         mMenuPageRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAdapter = new MenuListAdapter(menuFragment, category);
+        menuFragment.addAdapter(mAdapter);
         mMenuPageRecyclerView.setAdapter(mAdapter);
 
         return view;
