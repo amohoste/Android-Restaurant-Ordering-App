@@ -25,11 +25,17 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks, AmoryVerplaatsDit {
 
+    MenuFragment menuFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        if (savedInstanceState != null) {
+            menuFragment = (MenuFragment) getSupportFragmentManager().getFragment(savedInstanceState, "MenuFragment");
+        }
+
+        setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
 
@@ -76,10 +82,14 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
      */
     private void switchToMenu(MenuInfo menuInfo) {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
+        if (menuFragment == null) {
+            menuFragment = MenuFragment.newInstance(menuInfo);
+        }
+        manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
 
-        //aanklikken van de menu
-        findViewById(R.id.action_menu).performClick();
+        // Selects the correct item in the view
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.getMenu().findItem(R.id.action_menu).setChecked(true);
     }
 
 
@@ -139,4 +149,11 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         switchToMenu(menuInfo);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save MenuFragment instance
+        getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
+    }
 }

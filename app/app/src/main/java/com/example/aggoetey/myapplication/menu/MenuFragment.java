@@ -74,7 +74,23 @@ public class MenuFragment extends Fragment implements Listener {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            menuInfo = (MenuInfo) savedInstanceState.getSerializable(ARG_MENUINFO);
+            menuInfo.getCurrentOrder().addListener(this);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(ARG_MENUINFO, menuInfo);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             menuInfo = (MenuInfo) getArguments().getSerializable(ARG_MENUINFO);
