@@ -27,7 +27,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     public MenuListAdapter(MenuInfo menuInfo, String category) {
         this.menuInfo = menuInfo;
-        menuInfo.addAdapter(this);
+
         this.category = category;
     }
 

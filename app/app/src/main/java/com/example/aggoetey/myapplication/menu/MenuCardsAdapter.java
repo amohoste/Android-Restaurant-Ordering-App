@@ -26,6 +26,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         this.menuInfo = menuInfo;
         this.category = category;
 
+
     }
 
     @Override
@@ -103,7 +104,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
             mDescriptionTextView.setText(item.description);
             mNameTextView.setText(item.title);
             mPriceTextView.setText(String.format("€ %d", item.price));
-
+            setNewOrderCount(item.id);
             mOrderIncrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
