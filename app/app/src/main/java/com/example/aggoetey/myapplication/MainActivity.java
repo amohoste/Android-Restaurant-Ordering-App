@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                             case R.id.action_menu:
                                 if (!isFragmentVisible(R.id.fragment_place)) {
                                     manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
-                                    setVisibleFragment(R.id.fragment_place);
+                                    setVisibleFragment(R.id.fragment_place
+                                    );
                                 }
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
                                 break;

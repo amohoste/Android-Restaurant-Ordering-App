@@ -8,15 +8,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
+
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,16 +25,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
-import java.util.ArrayList;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.models.Restaurant;
 import com.example.aggoetey.myapplication.discover.models.RestaurantMapItem;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
@@ -117,8 +111,6 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
         listButton.setOnClickListener(this);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
-        restaurantProvider.addRestaurantListener(this);
-
         locationProvider = mCallbacks.getLocationProvider();
 
         return v;
@@ -270,90 +262,4 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
         }
     }
 
-    @Override
-    public void onRestaurantUpdate(ArrayList<Restaurant> restaurants) {
-        addItemsToClusterManager();
-    }
-
-    @Override
-    public void onStop() {
-        if (restaurantProvider != null) {
-            restaurantProvider.removeRestaurantListener(this);
-        }
-        super.onStop();
-    }
-
-    @Override
-    void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
-        if (clear) {
-            removeMarkers();
-        } else if (collection != null) {
-            removeMarkers();
-
-            if (result.size() > 1) {
-                LatLngBounds.Builder builder = LatLngBounds.builder();
-                for (Restaurant restaurant : result) {
-                    builder.include(restaurant.getPosition());
-                    Marker myMarker = collection.addMarker(new MarkerOptions().position(restaurant.getPosition()).title(restaurant.getName()).zIndex(2));
-                    myMarker.setTag(restaurant);
-                    dropPinEffect(myMarker);
-                }
-                final LatLngBounds bounds = builder.build();
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 300));
-
-            } else if (result.size() == 1) {
-                Restaurant restaurant = result.get(0);
-                Marker myMarker = collection.addMarker(new MarkerOptions().position(restaurant.getPosition()).title(restaurant.getName()).zIndex(2));
-                myMarker.setTag(restaurant);
-                dropPinEffect(myMarker);
-                Location loc = new Location("");
-                loc.setLatitude(restaurant.getPosition().latitude);
-                loc.setLongitude(restaurant.getPosition().longitude);
-                zoomMapToPosition(loc, 16);
-            }
-        }
-    }
-
-    // Source: https://stackoverflow.com/questions/13189054/implement-falling-pin-animation-on-google-maps-android/20241972#20241972
-    private void dropPinEffect(final Marker marker) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        final long duration = 1000;
-
-        final Interpolator interpolator = new BounceInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = Math.max(
-                        1 - interpolator.getInterpolation((float) elapsed
-                                / duration), 0);
-                marker.setAnchor(0.5f, 1.0f + 4 * t);
-
-                if (t > 0.0) {
-                    handler.postDelayed(this, 15);
-                }
-            }
-        });
-    }
-
-    private void removeMarkers() {
-        if (collection != null) {
-            collection.clear();
-        }
-    }
-
-    @Override
-    void filterResults() {
-
-        if (collection != null && collection.getMarkers() != null) {
-            for (Marker marker : collection.getMarkers()) {
-                Restaurant res = (Restaurant) marker.getTag();
-                if (! SearchRestaurantHelper.satisfiesFilter(res)) {
-                    collection.remove(marker);
-                }
-            }
-        }
-    }
 }

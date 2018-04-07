@@ -1,49 +1,29 @@
 package com.example.aggoetey.myapplication.discover.fragments;
 
-
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.activities.FilterActivity;
-import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
-import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
-import com.example.aggoetey.myapplication.discover.models.Filter;
-import com.example.aggoetey.myapplication.discover.models.Restaurant;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 
 /**
  * Created by amoryhoste on 03/04/2018.
  */
-public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks, RestaurantProvider.AsyncListener, CurrentLocationProvider.LocationListener {
+public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks, CurrentLocationProvider.LocationListener {
 
     // Tags
     private static final String TAG_LOCATION_PROVIDER = "LocationProvider";
     private static final String RESTAURANT_FRAG = "GetRestaurantsFrag";
-    private static final int REQUEST_CODE_FILTER = 0;
-    public static final String EXTRA_DISCOVERFILTER = "com.menu.discover.extra_filter";
-    private static final String SAVE_FILTER = "com.menu.discover.save_filter";
 
     // Providers
     private CurrentLocationProvider mLocationProvider;
@@ -52,9 +32,6 @@ public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks
     private FragmentManager fm;
     private LocationFragment currentfragment;
     private FloatingSearchView mSearchView;
-
-    private final SearchRestaurantHelper helper = SearchRestaurantHelper.getInstance();
-    private Filter filter;
 
     public DiscoverFragment() {
 
@@ -68,13 +45,6 @@ public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.discover_fragment, container, false);
-
-        if (savedInstanceState != null) {
-            filter = savedInstanceState.getParcelable(SAVE_FILTER);
-            helper.setFilter(filter);
-        } else {
-            filter = new Filter(Filter.SortMethod.DISTANCE, 0, false, 0);
-        }
 
         fm = getChildFragmentManager();
 
@@ -94,8 +64,6 @@ public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks
         if (mRestaurantProvider == null) {
             mRestaurantProvider = RestaurantProvider.newInstance();
             fm.beginTransaction().add(mRestaurantProvider, RESTAURANT_FRAG).commit();
-        } else if (mRestaurantProvider.getRestaurants() != null) {
-            setupSearchbar();
         }
 
         // Setup current fragment
@@ -112,9 +80,9 @@ public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
                 if (item.getItemId() == R.id.action_filter) {
-                    Intent in = new Intent(getContext(), FilterActivity.class);
-                    in.putExtra(EXTRA_DISCOVERFILTER, filter);
-                    startActivityForResult(in, REQUEST_CODE_FILTER);
+                    //just print action
+                    Toast.makeText(getActivity().getApplicationContext(), "Open filter",
+                            Toast.LENGTH_SHORT).show();
                 } else if(item.getItemId() == R.id.action_qr){
                     //just print action
                     Toast.makeText(getActivity().getApplicationContext(), "Open qr scanner",
@@ -139,102 +107,6 @@ public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks
                 .commit();
     }
 
-    @Override
-    public void onPreExecute() {
-
-    }
-
-    @Override
-    public void onProgressUpdate(Integer... progress) {
-
-    }
-
-    @Override
-    public void onPostExecute(ArrayList<Restaurant> result) {
-        if (result != null) {
-            setupSearchbar();
-        }
-    }
-
-    public void setupSearchbar() {
-
-        helper.setRestaurants(mRestaurantProvider.getRestaurants());
-
-        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
-
-            @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
-
-                if (!oldQuery.equals("") && newQuery.equals("")) {
-                    mSearchView.clearSuggestions();
-                } else {
-                    helper.findSuggestions(getActivity(), newQuery, 5,
-                            new SearchRestaurantHelper.OnFindSuggestionsListener() {
-
-                                @Override
-                                public void onResults(List<Restaurant> results) {
-                                    mSearchView.swapSuggestions(results);
-                                }
-                            });
-                }
-            }
-        });
-
-        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
-            @Override
-            public void onSuggestionClicked(final SearchSuggestion searchSuggestion) {
-
-                ArrayList<Restaurant> result = new ArrayList<>();
-                result.add((Restaurant) searchSuggestion);
-                if (currentfragment != null) {
-                    currentfragment.onSearchResult(result, false);
-                }
-            }
-
-            @Override
-            public void onSearchAction(String query) {
-                helper.findRestaurants(getActivity(), query,
-                        new SearchRestaurantHelper.onFindRestaurantsListener() {
-
-                            @Override
-                            public void onResults(List<Restaurant> results) {
-                                if (currentfragment != null) {
-                                    currentfragment.onSearchResult(new ArrayList<Restaurant>(results), false);
-                                }
-                            }
-
-                        });
-            }
-        });
-
-        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
-            @Override
-            public void onBindSuggestion(View suggestionView, ImageView leftIcon, TextView textView, SearchSuggestion item, int itemPosition) {
-                Restaurant restaurantSuggestion = (Restaurant) item;
-
-                leftIcon.setAlpha(0.54f);
-                leftIcon.setImageDrawable(getResources().getDrawable(PlacetypeStringifier.getIcon(restaurantSuggestion.getType())));
-
-                textView.setTextColor(Color.parseColor("#95000000"));
-                textView.setText(restaurantSuggestion.getBody());
-            }
-
-        });
-
-        mSearchView.setOnClearSearchActionListener(new FloatingSearchView.OnClearSearchActionListener() {
-            @Override
-            public void onClearSearchClicked() {
-                if (currentfragment != null && mRestaurantProvider != null) {
-                    currentfragment.onSearchResult(mRestaurantProvider.getRestaurants(), true);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onCancelled(ArrayList<Restaurant> result) {
-
-    }
 
     @Override
     public CurrentLocationProvider getLocationProvider() {
@@ -246,32 +118,6 @@ public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks
         return mRestaurantProvider;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-
-        if (requestCode == REQUEST_CODE_FILTER) {
-            if (data == null) {
-                return;
-            }
-            Filter filter = data.getParcelableExtra(FilterActivity.EXTRA_FILTER);
-            if (filter != null) {
-                this.filter = filter;
-                helper.setFilter(filter);
-                if (currentfragment != null) {
-                    currentfragment.filterResults();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelable(SAVE_FILTER, filter);
-        super.onSaveInstanceState(outState);
-    }
 
     @Override
     public void onStop() {
@@ -283,8 +129,6 @@ public class DiscoverFragment extends Fragment implements MapsFragment.Callbacks
 
     @Override
     public void onLocationUpdate(Location location) {
-        if (helper != null) {
-            helper.setLastLocation(location);
-        }
+
     }
 }

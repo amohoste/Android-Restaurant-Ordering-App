@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
-import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.models.Restaurant;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
 
@@ -74,10 +73,8 @@ public class RestaurantListFragment extends LocationFragment implements View.OnC
         mRecyclerView.setAdapter(mAdapter);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
-        restaurantProvider.addRestaurantListener(this);
         ArrayList<Restaurant> restaurants = restaurantProvider.getRestaurants();
         if (restaurants != null) {
-            restaurants = SearchRestaurantHelper.sortResults(restaurants);
             mAdapter.setRestaurants(restaurants);
         }
 
@@ -107,41 +104,5 @@ public class RestaurantListFragment extends LocationFragment implements View.OnC
         Log.v("menu", "should launch new activity with this restaurant (open menu)");
     }
 
-    @Override
-    public void onRestaurantUpdate(ArrayList<Restaurant> restaurants) {
-        if (mAdapter != null && restaurants != null) {
-            mAdapter.setRestaurants(restaurants);
-        }
-    }
 
-    @Override
-    public void onStop() {
-        if (restaurantProvider != null) {
-            restaurantProvider.removeRestaurantListener(this);
-        }
-        super.onStop();
-    }
-
-    @Override
-    void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
-        if (clear) {
-            result = SearchRestaurantHelper.sortResults(result);
-        }
-        mAdapter.setRestaurants(result);
-    }
-
-    @Override
-    void filterResults() {
-        if (mAdapter != null && mAdapter.getRestaurants() != null) {
-            ArrayList<Restaurant> result = new ArrayList<>();
-
-            for (Restaurant restaurant : mAdapter.getRestaurants()) {
-                if (SearchRestaurantHelper.satisfiesFilter(restaurant)) {
-                    result.add(restaurant);
-                }
-            }
-            result = SearchRestaurantHelper.sortResults(result);
-            mAdapter.setRestaurants(result);
-        }
-    }
 }
