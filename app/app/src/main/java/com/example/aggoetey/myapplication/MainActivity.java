@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.menu.MenuInfo;
@@ -76,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
     private void switchToMenu(MenuInfo menuInfo) {
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
+
+        //aanklikken van de menu
+        findViewById(R.id.action_menu).performClick();
     }
 
 
