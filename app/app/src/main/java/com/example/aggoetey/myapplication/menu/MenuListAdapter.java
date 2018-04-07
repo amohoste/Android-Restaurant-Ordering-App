@@ -12,6 +12,7 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Tab;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,12 +20,15 @@ import java.util.List;
  * Created by Dries on 26/03/2018.
  */
 
-public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder>{
+public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> implements Serializable {
 
-    private MenuFragment menuFragment;
+    private MenuInfo menuInfo;
+    private String category;
 
-    public MenuListAdapter(MenuFragment menuFragment) {
-        this.menuFragment = menuFragment;
+    public MenuListAdapter(MenuInfo menuInfo, String category) {
+        this.menuInfo = menuInfo;
+        menuInfo.addAdapter(this);
+        this.category = category;
     }
 
     @Override
@@ -36,12 +40,12 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     @Override
     public void onBindViewHolder(MenuItemHolder holder, int position) {
-        holder.bind(menuFragment.getRestaurant().getMenu().getMenuItemList().get(position));
+        holder.bind(menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position));
     }
 
     @Override
     public int getItemCount() {
-        return menuFragment.getRestaurant().getMenu().getMenuItemList().size();
+        return menuInfo.getRestaurant().getMenu().getMenuItemList(category).size();
     }
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {
@@ -49,9 +53,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         private Button mOrderIncrementButton;
         private Button mOrderDecrementButton;
         private TextView mOrderCountTextView;
-
-        private String itemID;
-
 
         public MenuItemHolder(View itemView) {
             super(itemView);
@@ -62,48 +63,30 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         public void bind(final MenuItem menuItem) {
-            itemID = menuItem.id;
             mTitleTextView.setText(menuItem.title + " (€" + Integer.toString(menuItem.price) +")");
-            if (menuFragment.getOrderCountMap().containsKey(menuItem.id)) {
-               setNewOrderCount();
-            }
+
+            setNewOrderCount(menuItem.id);
 
             mOrderIncrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    changeOrderCount(1);
-                    menuFragment.getCurrentOrder().addOrderItem("", menuItem);
-                    menuFragment.setOrderButtonText();
-                    menuFragment.enableOrderButton();
+                    menuInfo.addOrderItem(menuItem);
+                    setNewOrderCount(menuItem.id);
             }
             });
 
             mOrderDecrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (changeOrderCount(-1) >= 0) {
-                        menuFragment.getCurrentOrder().removeOrderItem(menuItem);
-                        menuFragment.setOrderButtonText();
-                        if (menuFragment.getCurrentOrder().getOrderItems().size() == 0) {
-                            menuFragment.disableOrderButton();
-                        }
+                    if (menuInfo.removeOrderItem(menuItem)) {
+                        setNewOrderCount(menuItem.id);
                     }
                 }
             });
         }
 
-
-        private int changeOrderCount(int i) {
-            int c = i + (menuFragment.getOrderCountMap().containsKey(itemID) ? menuFragment.getOrderCountMap().get(itemID) : 0);
-            if (c >= 0) {
-                menuFragment.getOrderCountMap().put(itemID, c);
-                setNewOrderCount();
-            }
-            return c;
-        }
-
-        private void setNewOrderCount() {
-            mOrderCountTextView.setText(Integer.toString(menuFragment.getOrderCountMap().get(itemID)));
+        private void setNewOrderCount(String itemID) {
+            mOrderCountTextView.setText(menuInfo.getOrderCount(itemID));
         }
     }
 }

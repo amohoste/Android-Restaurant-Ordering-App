@@ -10,7 +10,7 @@ import java.util.UUID;
  * Hier vind je info over de prijs, de naam, korte inhoud.
  */
 
-public class MenuItem implements Serializable{
+public class MenuItem implements Serializable {
     // Titel van het gerecht
     public final String title;
     // prijs van het gerecht

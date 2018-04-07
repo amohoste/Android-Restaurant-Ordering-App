@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.menu.MenuFragment;
+import com.example.aggoetey.myapplication.menu.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
@@ -18,11 +19,13 @@ import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
 
     private Restaurant restaurant;
+    private MenuInfo menuInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         enableBottomNavigation();
 
         createTestRestaurant();
+        menuInfo = new MenuInfo(restaurant);
     }
 
     /**
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                             case R.id.action_discover:
                                 break;
                             case R.id.action_menu:
-                                manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(restaurant)).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
                                 break;
                             case R.id.action_pay:
                                 manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
