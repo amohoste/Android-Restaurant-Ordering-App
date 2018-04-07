@@ -14,7 +14,7 @@ import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
  * Created by amoryhoste on 03/04/2018.
  */
 
-public abstract class LocationFragment extends Fragment implements RestaurantProvider.RestaurantListener {
+public abstract class LocationFragment extends Fragment {
 
     protected Callbacks mCallbacks;
     protected CurrentLocationProvider locationProvider;
@@ -29,7 +29,4 @@ public abstract class LocationFragment extends Fragment implements RestaurantPro
     public LocationFragment() {
 
     }
-
-    abstract void onSearchResult(ArrayList<Restaurant> result, boolean clear);
-    abstract void filterResults();
 }
