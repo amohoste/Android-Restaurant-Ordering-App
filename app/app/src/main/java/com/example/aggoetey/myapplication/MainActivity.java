@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.aggoetey.myapplication.discover.fragments.DiscoverFragment;
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.menu.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
 
+    private int visibleFragment = -1;
+    private static final String VISIBLE_FRAGMENT_KEY = "VISIBLE_FRAGMEN";
+
     private Restaurant restaurant;
     private MenuInfo menuInfo;
 
@@ -32,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(savedInstanceState != null) {
+            visibleFragment = savedInstanceState.getInt(VISIBLE_FRAGMENT_KEY);
+        }
 
         enableBottomNavigation();
 
@@ -45,21 +52,45 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
     private void enableBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        // Set discovery as main view at first startup
+        if (visibleFragment == -1) {
+            FragmentManager manager = getSupportFragmentManager();
+            DiscoverFragment discoverFragment = new DiscoverFragment();
+            manager.beginTransaction().add(R.id.fragment_place, discoverFragment).commit();
+            setVisibleFragment(R.id.action_discover);
+        }
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
+
                         switch (item.getItemId()) {
                             case R.id.action_discover:
+                                if (!isFragmentVisible(R.id.action_discover)) {
+                                    DiscoverFragment discoverFragment = new DiscoverFragment();
+                                    manager.beginTransaction().replace(R.id.fragment_place, discoverFragment).commit();
+                                    setVisibleFragment(R.id.action_discover);
+                                }
                                 break;
                             case R.id.action_menu:
+                                if (!isFragmentVisible(R.id.fragment_place)) {
+                                    manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
+                                    setVisibleFragment(R.id.fragment_place);
+                                }
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
                                 break;
                             case R.id.action_pay:
-                                manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
+                                if (!isFragmentVisible(R.id.action_pay)) {
+                                    TabFragment tabFragment = new TabFragment();
+                                    manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
+                                    setVisibleFragment(R.id.action_pay);
+                                }
                                 break;
                         }
+
 
                         return true;
                     }
@@ -117,5 +148,19 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     .replace(R.id.order_detail_fragment_container, OrderDetailFragment.newInstance(order))
                     .commit();
         }
+    }
+
+    public boolean isFragmentVisible(int id) {
+        return visibleFragment == id;
+    }
+
+    public void setVisibleFragment(int id) {
+        visibleFragment = id;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(VISIBLE_FRAGMENT_KEY, visibleFragment);
+        super.onSaveInstanceState(outState);
     }
 }

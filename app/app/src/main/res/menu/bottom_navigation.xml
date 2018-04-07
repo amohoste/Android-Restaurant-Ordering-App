@@ -5,20 +5,21 @@
      <item
         android:id="@+id/action_discover"
         android:enabled="true"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/navbar_discover"
         android:title="@string/text_menu_discover"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_menu"
         android:enabled="true"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/navbar_menu"
         android:title="@string/text_menu_menu"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_pay"
         android:enabled="true"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/navbar_checkout"
         android:title="@string/text_menu_pay"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        />
 
 </menu>
