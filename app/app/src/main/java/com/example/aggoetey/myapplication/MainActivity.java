@@ -22,10 +22,7 @@ import com.example.aggoetey.myapplication.model.Menu;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
-
-    private Restaurant restaurant;
-    private MenuInfo menuInfo;
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks, AmoryVerplaatsDit {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         enableBottomNavigation();
 
         createTestRestaurant();
-        menuInfo = new MenuInfo(restaurant);
     }
 
     /**
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                             case R.id.action_discover:
                                 break;
                             case R.id.action_menu:
-                                manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
+                                switchToMenu(createTestRestaurant());
                                 break;
                             case R.id.action_pay:
                                 manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
@@ -72,7 +68,18 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
 
     }
 
-    private void createTestRestaurant() {
+
+    /**
+     * Als er geen menu is dat ingeladen moet worden kan je hier null aan meegeven
+     * Dan zal het menuFragment zelf kijken of hij al weet welk menu er is en anders een ander menuutje inladen
+     */
+    private void switchToMenu(MenuInfo menuInfo) {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
+    }
+
+
+    private MenuInfo createTestRestaurant() {
         Menu current_menu = new Menu();
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
@@ -96,12 +103,13 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
 
-        restaurant = new Restaurant("Chez Cyka Blyat", current_menu);
+        return new MenuInfo(new Restaurant("Chez Cyka Blyat", current_menu));
     }
 
 
     /**
      * Bij het selecteren van een order de juiste actie doen
+     *
      * @param order
      */
     @Override
@@ -118,4 +126,13 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     .commit();
         }
     }
+
+    /**
+     * Bij het selecteren van een Restaurant
+     */
+    @Override
+    public void onRestaurantSelect(MenuInfo menuInfo) {
+        switchToMenu(menuInfo);
+    }
+
 }
