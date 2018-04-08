@@ -2,6 +2,7 @@ package com.example.aggoetey.myapplication.menu;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     public MenuListAdapter(MenuInfo menuInfo, String category) {
         this.menuInfo = menuInfo;
-
         this.category = category;
+        menuInfo.addAdapter(this);
     }
 
     @Override
@@ -86,6 +87,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         private void setNewOrderCount(String itemID) {
+
             mOrderCountTextView.setText(menuInfo.getOrderCount(itemID));
         }
     }

@@ -6,32 +6,15 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.model.Menu;
-import com.example.aggoetey.myapplication.model.MenuItem;
-import com.example.aggoetey.myapplication.model.Restaurant;
-import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.utils.UIUtility;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.TreeSet;
 
 /**
  * Created by Dries on 26/03/2018.
@@ -107,8 +90,6 @@ public class MenuFragment extends Fragment implements Listener {
         viewPager.setAdapter(new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo));
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

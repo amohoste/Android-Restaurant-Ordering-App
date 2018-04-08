@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
+import android.view.ViewGroup;
 
 import java.util.TreeSet;
 
@@ -29,6 +31,18 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter {
         return menuPageFragment;
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        MenuPageFragment fragment = (MenuPageFragment) object;
+        Log.e("Pager adapter", "Fragment isGridView: " + fragment.isInstanceIsGridView());
+        Log.e("Pager adapter",  "Fragment global gridview: " + MenuPageFragment.isIsGridView());
+        if(fragment.isInstanceIsGridView() != MenuPageFragment.isIsGridView()) {
+            // Refresh fragment if it's view type is different from the global setting.
+            fragment.getFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
+        }
+
+        return super.getItemPosition(object);
+    }
 
     @Override
     public int getCount() {

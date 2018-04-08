@@ -14,9 +14,6 @@ public class UIUtility {
 
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         float itemWidth = itemDpWidth / displayMetrics.density;
-        Log.i("display: ", "" + dpWidth);
-
-        Log.i("width: " , "" + itemWidth);
         return Math.round(dpWidth / itemWidth);
     }
 }

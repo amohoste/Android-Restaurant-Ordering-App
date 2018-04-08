@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
+
                         switch (item.getItemId()) {
                             case R.id.action_discover:
                                 break;

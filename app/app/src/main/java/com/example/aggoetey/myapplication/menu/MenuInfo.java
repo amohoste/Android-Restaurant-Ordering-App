@@ -61,6 +61,7 @@ public class MenuInfo implements Serializable {
 
     public void notifyAllAdapters() {
         for (RecyclerView.Adapter adapter : mAdapters) {
+            Log.i("MenuInfo", adapter.toString());
             adapter.notifyDataSetChanged();
         }
     }
@@ -69,6 +70,7 @@ public class MenuInfo implements Serializable {
     }
 
     public void addAdapter(RecyclerView.Adapter adapter){
+
         mAdapters.add(adapter);
     }
 

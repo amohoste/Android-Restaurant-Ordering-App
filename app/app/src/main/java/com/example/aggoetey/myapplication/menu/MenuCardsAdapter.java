@@ -1,5 +1,7 @@
 package com.example.aggoetey.myapplication.menu;
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,21 +13,29 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.model.Tab;
 
 /**
  * Created by sitt on 05/04/18.
  */
 
 public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> {
+
+    public interface OnAddNoteButtonClickListener {
+         void onAddNoteButtonClick ();
+    }
     private MenuInfo menuInfo;
     private String category;
+    private OnAddNoteButtonClickListener listener;
     private  int mExpandedPosition = -1;
     private  int mPreviousPosition = -1;
 
-    public MenuCardsAdapter(MenuInfo menuInfo, String category){
+    public MenuCardsAdapter(MenuInfo menuInfo, String category, OnAddNoteButtonClickListener listener){
         this.menuInfo = menuInfo;
         this.category = category;
-
+        this.listener = listener;
+        this.notifyDataSetChanged();
+        menuInfo.addAdapter(this);
 
     }
 
@@ -33,13 +43,15 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
     public MenuCardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater =  LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.fragment_menu_card_item,parent,false);
-        return new MenuCardHolder(view);
+
+        return new MenuCardHolder(view, this.listener);
     }
 
 
     @Override
     public void onBindViewHolder(final MenuCardHolder holder, final int position) {
         final boolean isExpanded = position == mExpandedPosition;
+        MenuItem menuItem = menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position);
         if(isExpanded) {
             mPreviousPosition = mExpandedPosition;
             holder.mDescriptionTextView.setVisibility(View.VISIBLE);
@@ -50,9 +62,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         }
 
 
-
-        holder.itemView.setActivated(isExpanded);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.mDishImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Card clicked position: ", String.valueOf(position));
@@ -63,7 +73,8 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         });
 
 
-        holder.bind(menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position));
+
+        holder.bind(menuItem);
     }
 
     @Override
@@ -84,10 +95,13 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         private Button mOrderIncrementButton;
         private Button mOrderDecrementButton;
         private TextView mOrderCountTextView;
+        private Button mAddNoteButton;
+        private OnAddNoteButtonClickListener mListener;
 
-
-        public MenuCardHolder(View itemView) {
+        public MenuCardHolder(View itemView, OnAddNoteButtonClickListener listener) {
             super(itemView);
+            mListener = listener;
+            mAddNoteButton = itemView.findViewById(R.id.add_note_button);
             mDescriptionTextView = itemView.findViewById(R.id.menu_item_description);
             mNameTextView = itemView.findViewById(R.id.menu_item_name);
             mDishImageView = itemView.findViewById(R.id.menu_item_image);
@@ -100,16 +114,17 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         }
 
         public void bind(final MenuItem item){
-
-            mDescriptionTextView.setText(item.description);
-            mNameTextView.setText(item.title);
-            mPriceTextView.setText(String.format("€ %d", item.price));
             setNewOrderCount(item.id);
+            setTextViews(item);
+            Log.i("Cards Holder: " , "Count "  +  menuInfo.getOrderCount(item.id));
+            updateAddNoteButton(item);
             mOrderIncrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     menuInfo.addOrderItem(item);
                     setNewOrderCount(item.id);
+                    updateAddNoteButton(item);
+
                 }
             });
 
@@ -118,10 +133,33 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
                 public void onClick(View view) {
                     if (menuInfo.removeOrderItem(item)) {
                         setNewOrderCount(item.id);
+                        updateAddNoteButton(item);
                     }
                 }
             });
 
+
+            mAddNoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onAddNoteButtonClick();
+                }
+            });
+        }
+
+
+
+        public void updateAddNoteButton (final MenuItem item){
+            mAddNoteButton.setEnabled(Integer.valueOf(menuInfo.getOrderCount(item.id)) > 0);
+        }
+
+
+        private void setTextViews(final MenuItem item){
+
+
+            mDescriptionTextView.setText(item.description);
+            mNameTextView.setText(item.title);
+            mPriceTextView.setText(String.format("€ %d", item.price));
             // TEMPORARY IMAGE
             mDishImageView.setImageResource(R.drawable.kimchi1);
 
