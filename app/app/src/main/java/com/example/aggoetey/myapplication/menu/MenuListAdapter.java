@@ -23,6 +23,9 @@ import java.util.List;
 
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> implements Serializable {
 
+    public interface MenuListLongClickListener {
+        void onMenuListLongClick();
+    }
     private MenuInfo menuInfo;
     private String category;
 
@@ -61,6 +64,14 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
             mOrderIncrementButton = (Button) itemView.findViewById(R.id.menu_recycler_increment_ordercount_button);
             mOrderDecrementButton = (Button) itemView.findViewById(R.id.menu_recycler_decrement_ordercount_button);
             mOrderCountTextView = (TextView) itemView.findViewById(R.id.menu_recycler_item_count_view);
+
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return false;
+                }
+            });
         }
 
         public void bind(final MenuItem menuItem) {

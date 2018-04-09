@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -95,12 +96,9 @@ public class MenuPageFragment extends Fragment implements MenuCardsAdapter.OnAdd
 
         if (isGridView) {
             adapter = new MenuCardsAdapter(menuInfo, category, this);
-            float dpWidth = getResources().getDimension(R.dimen.card_width);
-            columnSpan = UIUtility.calculateNoOfColumns(getContext(), dpWidth);
-            columnSpan = columnSpan <= 0 ? 1 : columnSpan;
         }
         instanceIsGridView = isGridView;
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnSpan));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         menuInfo.addAdapter(adapter);
         recyclerView.setAdapter(adapter);
     }
