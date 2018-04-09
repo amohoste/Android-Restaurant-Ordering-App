@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.aggoetey.myapplication.menu.MenuFragment;
-import com.example.aggoetey.myapplication.menu.MenuInfo;
+import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
@@ -18,9 +18,6 @@ import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
 

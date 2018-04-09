@@ -1,13 +1,12 @@
-package com.example.aggoetey.myapplication.menu;
+package com.example.aggoetey.myapplication.menu.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
-import android.view.ViewGroup;
 
-import java.util.TreeSet;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.menu.fragments.MenuPageFragment;
 
 /**
  * Created by Dries on 6/04/2018.

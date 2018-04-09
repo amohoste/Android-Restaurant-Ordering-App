@@ -1,30 +1,23 @@
-package com.example.aggoetey.myapplication.menu;
+package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.model.Menu;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Tab;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Created by sitt on 08/04/18.

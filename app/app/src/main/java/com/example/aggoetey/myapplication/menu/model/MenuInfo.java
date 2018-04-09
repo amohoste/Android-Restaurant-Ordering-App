@@ -1,9 +1,10 @@
-package com.example.aggoetey.myapplication.menu;
+package com.example.aggoetey.myapplication.menu.model;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.aggoetey.myapplication.Listener;
+import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
@@ -12,7 +13,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Dries on 6/04/2018.

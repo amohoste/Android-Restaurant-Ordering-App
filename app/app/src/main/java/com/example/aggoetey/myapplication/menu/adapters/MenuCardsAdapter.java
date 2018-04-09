@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.menu;
+package com.example.aggoetey.myapplication.menu.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
 
 /**
@@ -49,6 +50,8 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
     public void onBindViewHolder(final MenuCardHolder holder, final int position) {
         final boolean isExpanded = position == mExpandedPosition;
         MenuItem menuItem = menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position);
+
+
         if(isExpanded) {
             mPreviousPosition = mExpandedPosition;
             holder.mDescriptionTextView.setVisibility(View.VISIBLE);
@@ -99,11 +102,11 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
             super(itemView);
             mListener = listener;
             mAddNoteButton = itemView.findViewById(R.id.add_note_button);
-            mDescriptionTextView = itemView.findViewById(R.id.menu_item_description);
-            mNameTextView = itemView.findViewById(R.id.menu_item_name);
-            mDishImageView = itemView.findViewById(R.id.menu_item_image);
-            mDivider = itemView.findViewById(R.id.menu_item_desc_divider);
-            mPriceTextView = itemView.findViewById(R.id.menu_item_price);
+            mDescriptionTextView = itemView.findViewById(R.id.menu_card_item_description);
+            mNameTextView = itemView.findViewById(R.id.menu_card_item_name);
+            mDishImageView = itemView.findViewById(R.id.menu_card_item_image);
+            mDivider = itemView.findViewById(R.id.menu_card_item_desc_divider);
+            mPriceTextView = itemView.findViewById(R.id.menu_card_item_price);
             mOrderIncrementButton = itemView.findViewById(R.id.menu_cards_increment_ordercount_button);
             mOrderDecrementButton = itemView.findViewById(R.id.menu_cards_decrement_ordercount_button);
             mOrderCountTextView = itemView.findViewById(R.id.menu_cards_item_count_view);
@@ -157,6 +160,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
             mDescriptionTextView.setText(item.description);
             mNameTextView.setText(item.title);
             mPriceTextView.setText(String.format("€ %d", item.price));
+
             // TEMPORARY IMAGE
             mDishImageView.setImageResource(R.drawable.kimchi1);
 

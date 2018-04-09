@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/menu_item_image"
+                android:id="@+id/menu_card_item_image"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:contentDescription="@string/menu_image_description"
@@ -26,7 +26,7 @@
                 tools:src="@drawable/kimchi1" />
 
             <TextView
-                android:id="@+id/menu_item_price"
+                android:id="@+id/menu_card_item_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -51,14 +51,14 @@
             android:padding="@dimen/card_padding">
 
             <TextView
-                android:id="@+id/menu_item_name"
+                android:id="@+id/menu_card_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/menu_item_name"
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/menu_item_desc_divider"
+                android:id="@+id/menu_card_item_desc_divider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="@dimen/card_padding"
@@ -67,7 +67,7 @@
                 tools:visibility="visible" />
 
             <TextView
-                android:id="@+id/menu_item_description"
+                android:id="@+id/menu_card_item_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/card_padding"
@@ -79,24 +79,27 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
                 <Button
                     android:id="@+id/menu_cards_decrement_ordercount_button"
                     android:layout_width="34dp"
                     android:layout_height="22dp"
-                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:layout_gravity="center"
                     android:text="-"
                     android:textAlignment="center"
                     android:textSize="14sp"
-                    android:textStyle="bold" />/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/menu_cards_item_count_view"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="0"
@@ -107,14 +110,15 @@
                     android:layout_gravity="center"
                     android:layout_width="28dp"
                     android:layout_height="23dp"
-                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/card_padding"
                     android:background="@drawable/round_button"
                     android:text="+" />
+
                 <Button
                     android:id="@+id/add_note_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+
                     android:text="@string/add_note_button"
                     android:textSize="12sp" />
             </LinearLayout>

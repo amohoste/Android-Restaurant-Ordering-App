@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.menu;
+package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 
 /**
  * Created by Dries on 26/03/2018.
@@ -101,9 +103,6 @@ public class MenuFragment extends Fragment implements Listener {
         return v;
     }
 
-    public Button getmMenuOrderButton() {
-        return mMenuOrderButton;
-    }
 
     public void setOrderButtonProperties() {
         if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
@@ -149,7 +148,6 @@ public class MenuFragment extends Fragment implements Listener {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
