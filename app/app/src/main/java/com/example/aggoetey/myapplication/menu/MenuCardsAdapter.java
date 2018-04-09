@@ -1,7 +1,5 @@
 package com.example.aggoetey.myapplication.menu;
 
-import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuItem;
-import com.example.aggoetey.myapplication.model.Tab;
 
 /**
  * Created by sitt on 05/04/18.
@@ -22,7 +19,7 @@ import com.example.aggoetey.myapplication.model.Tab;
 public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> {
 
     public interface OnAddNoteButtonClickListener {
-         void onAddNoteButtonClick ();
+         void onAddNoteButtonClick(MenuItem menuItem);
     }
     private MenuInfo menuInfo;
     private String category;
@@ -142,7 +139,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
             mAddNoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onAddNoteButtonClick();
+                    mListener.onAddNoteButtonClick(item);
                 }
             });
         }

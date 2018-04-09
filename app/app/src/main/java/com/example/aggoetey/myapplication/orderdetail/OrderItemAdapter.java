@@ -46,17 +46,20 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
 
         private TextView name;
         private TextView price;
+        private TextView note;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.order_item_item, parent, false));
             name = (TextView) itemView.findViewById(R.id.name);
             price = (TextView) itemView.findViewById(R.id.price);
+            note = itemView.findViewById(R.id.item_note);
         }
 
         public void bind(Tab.Order.OrderItem orderItem) {
             Log.d("binding", "binding");
             this.orderItem = orderItem;
             name.setText(orderItem.getMenuItem().title);
+            note.setText(orderItem.getNote());
             price.setText(String.valueOf(this.orderItem.getMenuItem().price));
         }
 

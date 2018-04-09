@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.utils.UIUtility;
@@ -21,7 +20,7 @@ import com.example.aggoetey.myapplication.utils.UIUtility;
  * Created by Dries on 6/04/2018.
  */
 
-public class MenuPageFragment extends Fragment implements MenuCardsAdapter.OnAddNoteButtonClickListener{
+public class MenuPageFragment extends Fragment implements MenuCardsAdapter.OnAddNoteButtonClickListener {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String ARG_MENU_INFO = "ARG_MENU_INFO";
     public static final String ARG_MENU_CATEGORY = "ARG_MENU_CATEGORY";
@@ -139,9 +138,10 @@ public class MenuPageFragment extends Fragment implements MenuCardsAdapter.OnAdd
     }
 
     @Override
-    public void onAddNoteButtonClick() {
+    public void onAddNoteButtonClick(com.example.aggoetey.myapplication.model.MenuItem menuItem) {
 
-        DialogFragment fragment = new OrderNoteDialogFragment();
+        DialogFragment fragment = OrderNoteDialogFragment.newInstance(menuItem, menuInfo);
         fragment.show(this.getFragmentManager(), this.toString());
     }
+
 }
