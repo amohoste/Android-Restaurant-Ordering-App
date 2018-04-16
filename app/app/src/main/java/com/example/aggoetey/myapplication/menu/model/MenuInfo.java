@@ -74,7 +74,7 @@ public class MenuInfo implements Serializable {
         mAdapters.add(adapter);
     }
 
-    public void removeAdapter(MenuListAdapter adapter) {
+    public void removeAdapter(RecyclerView.Adapter adapter) {
         mAdapters.remove(adapter);
     }
 

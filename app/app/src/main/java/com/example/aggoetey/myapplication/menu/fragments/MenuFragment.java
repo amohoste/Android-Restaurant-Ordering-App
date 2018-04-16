@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,7 +23,7 @@ import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 
 /**
  * Created by Dries on 26/03/2018.
- *
+ * <p>
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link MenuFragment.OnFragmentInteractionListener} interface
@@ -28,7 +31,7 @@ import com.example.aggoetey.myapplication.menu.model.MenuInfo;
  * Use the {@link MenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MenuFragment extends Fragment implements Listener {
+public class MenuFragment extends Fragment implements Listener{
     private static final String ARG_MENUINFO = "menuinfo";
 
     private OnFragmentInteractionListener mListener;
@@ -36,17 +39,17 @@ public class MenuFragment extends Fragment implements Listener {
     private MenuInfo menuInfo;
 
     private ViewPager viewPager;
+    private MenuFragmentPagerAdapter pagerAdapter;
     private TabLayout tabLayout;
     private TextView mMenuRestaurantNameView;
+    private Menu optionsMenu;
     private Button mMenuOrderButton;
+
+
+    private boolean isGridView = false;
 
     public MenuFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_view_change,menu);
     }
 
     /**
@@ -66,13 +69,13 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             menuInfo = (MenuInfo) getArguments().getSerializable(ARG_MENUINFO);
             menuInfo.getCurrentOrder().addListener(this);
         }
     }
 
-    
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -89,7 +92,8 @@ public class MenuFragment extends Fragment implements Listener {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo));
+        pagerAdapter = new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo);
+        viewPager.setAdapter(pagerAdapter);
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +118,55 @@ public class MenuFragment extends Fragment implements Listener {
         }
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_view_change, menu);
+        this.optionsMenu = menu;
+        toggleViewTypeMenu(menu);
+    }
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        toggleViewTypeMenu(menu);
+    }
+
+    private void toggleViewTypeMenu(Menu menu) {
+        int grid = R.id.to_grid_view;
+        int list = R.id.to_list_view;
+        menu.findItem(grid).setVisible(!isGridView);
+        menu.findItem(list).setVisible(isGridView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.e("MenuFragment " ,  item.getItemId() + "");
+
+        switch (item.getItemId()) {
+            case R.id.to_grid_view:
+                if (!isGridView) {
+                    isGridView = true;
+                    pagerAdapter.changeViewType(true);
+                    toggleViewTypeMenu(this.optionsMenu);
+                }
+                return true;
+            case R.id.to_list_view:
+                if (isGridView) {
+                    isGridView = false;
+                    pagerAdapter.changeViewType(false);
+                    toggleViewTypeMenu(this.optionsMenu);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -129,6 +182,7 @@ public class MenuFragment extends Fragment implements Listener {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        pagerAdapter = null;
         menuInfo.getCurrentOrder().removeListener(this);
     }
 

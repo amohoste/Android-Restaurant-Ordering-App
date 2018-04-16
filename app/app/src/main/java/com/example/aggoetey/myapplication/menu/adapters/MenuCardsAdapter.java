@@ -32,7 +32,6 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         this.menuInfo = menuInfo;
         this.category = category;
         this.listener = listener;
-        this.notifyDataSetChanged();
         menuInfo.addAdapter(this);
 
     }
@@ -116,7 +115,6 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         public void bind(final MenuItem item){
             setNewOrderCount(item.id);
             setTextViews(item);
-            Log.i("Cards Holder: " , "Count "  +  menuInfo.getOrderCount(item.id));
             updateAddNoteButton(item);
             mOrderIncrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
