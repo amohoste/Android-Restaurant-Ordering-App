@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import java.io.Serializable;
  * Created by Dries on 6/04/2018.
  */
 
-public class MenuPageFragment extends Fragment implements MenuCardsAdapter.OnAddNoteButtonClickListener, MenuListAdapter.MenuListClickListener, MenuCardInfoDialogFragment.CardDialogClickListener {
+public class MenuPageFragment extends Fragment implements  MenuCardsAdapter.OnAddNoteButtonClickListener, MenuListAdapter.MenuListClickListener, MenuCardInfoDialogFragment.CardDialogClickListener {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String ARG_MENU_INFO = "ARG_MENU_INFO";
     public static final String ARG_MENU_CATEGORY = "ARG_MENU_CATEGORY";
@@ -77,13 +78,19 @@ public class MenuPageFragment extends Fragment implements MenuCardsAdapter.OnAdd
     private void initViewType(RecyclerView recyclerView) {
         int columnSpan = 1;
         RecyclerView.Adapter adapter;
+
+
         if (menuViewStateListener.currentViewIsGrid()) {
             adapter = new MenuCardsAdapter(menuInfo, category, this);
-            int calculatedNoOfColumns = UIUtility.calculateNoOfColumns(getContext(), R.dimen.card_width);
+            float width = getResources().getDimension(R.dimen.card_width);
+            int calculatedNoOfColumns = UIUtility.calculateNoOfColumns(getContext(), width);
             columnSpan = (calculatedNoOfColumns > columnSpan) ? calculatedNoOfColumns : columnSpan;
         } else {
             adapter = new MenuListAdapter(menuInfo, category, this);
         }
+
+        Log.i("PageFragment" , "viewType: " + menuViewStateListener.currentViewIsGrid());
+        Log.i("PageFragment",  "columnSpan: " + columnSpan);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSpan));
         recyclerView.setAdapter(adapter);
         mMenuRecyclerAdapter = adapter;

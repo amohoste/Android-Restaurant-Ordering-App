@@ -14,24 +14,24 @@ import com.example.aggoetey.myapplication.menu.fragments.MenuPageFragment;
  * Created by Dries on 6/04/2018.
  */
 
-public class MenuFragmentPagerAdapter extends FragmentPagerAdapter implements MenuPageFragment.MenuViewStateListener {
+public class MenuFragmentPagerAdapter extends FragmentPagerAdapter{
 
     private String tabTitles[];
     private MenuInfo menuInfo;
-    private boolean isGridView;
+    private MenuPageFragment.MenuViewStateListener listener;
 
-    public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo) {
+    public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, MenuPageFragment.MenuViewStateListener listener) {
         super(fm);
         tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
                 new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
         this.menuInfo = menuInfo;
-        this.isGridView = false;
+        this.listener = listener;
     }
 
     @Override
     public Fragment getItem(int position) {
         Log.i("PagerAdapter", "getItem : "  + position);
-        return MenuPageFragment.newInstance(position + 1, getPageTitle(position).toString(), menuInfo, this);
+        return MenuPageFragment.newInstance(position + 1, getPageTitle(position).toString(), menuInfo, this.listener);
     }
 
     /**
@@ -56,14 +56,8 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter implements Me
     }
 
 
-    public void changeViewType (boolean isGridView){
-        this.isGridView =  isGridView;
+    public void changeViewType (){
         notifyDataSetChanged();
     }
 
-
-    @Override
-    public boolean currentViewIsGrid() {
-        return this.isGridView;
-    }
 }
