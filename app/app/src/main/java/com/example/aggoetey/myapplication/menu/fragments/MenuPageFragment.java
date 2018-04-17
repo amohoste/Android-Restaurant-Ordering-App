@@ -32,8 +32,8 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     private MenuInfo menuInfo;
     private int mPage;
     private String category;
-    private transient RecyclerView mMenuPageRecyclerView;
-    private transient RecyclerView.Adapter mMenuRecyclerAdapter;
+    private  RecyclerView mMenuPageRecyclerView;
+    private  RecyclerView.Adapter mMenuRecyclerAdapter;
     private transient MenuViewStateListener menuViewStateListener;
 
     public static MenuPageFragment newInstance(int page, String category, MenuInfo menuInfo, MenuViewStateListener listener) {
@@ -80,7 +80,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
         RecyclerView.Adapter adapter;
 
 
-        if (MenuFragment.isGridView) {
+        if (menuViewStateListener.currentViewIsGrid()) {
             adapter = new MenuCardsAdapter(menuInfo, category, this);
             float width = getResources().getDimension(R.dimen.card_width);
             int calculatedNoOfColumns = UIUtility.calculateNoOfColumns(getContext(), width);

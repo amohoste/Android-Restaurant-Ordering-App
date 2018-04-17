@@ -25,6 +25,7 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter{
         tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
                 new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
         this.menuInfo = menuInfo;
+        this.listener = listener;
     }
 
     @Override
@@ -52,11 +53,6 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter{
     public CharSequence getPageTitle(int position) {
         // Generate title based on item position
         return tabTitles[position];
-    }
-
-
-    public void changeViewType (){
-        notifyDataSetChanged();
     }
 
 }

@@ -47,7 +47,7 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
     private Button mMenuOrderButton;
 
 
-    public static boolean isGridView = false;
+    private static boolean isGridView = false;
 
     public MenuFragment() {
         // Required empty public constructor
