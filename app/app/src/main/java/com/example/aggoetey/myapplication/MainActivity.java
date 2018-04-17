@@ -22,7 +22,7 @@ import com.example.aggoetey.myapplication.model.Menu;
 
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
 
-    private int visibleFragment = -1;
+    private boolean first = false;
     private static final String VISIBLE_FRAGMENT_KEY = "VISIBLE_FRAGMEN";
 
     private Restaurant restaurant;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         setContentView(R.layout.activity_main);
 
         if(savedInstanceState != null) {
-            visibleFragment = savedInstanceState.getInt(VISIBLE_FRAGMENT_KEY);
+            first = savedInstanceState.getBoolean(VISIBLE_FRAGMENT_KEY);
         }
 
         enableBottomNavigation();
@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         // Set discovery as visible fragment when app starts
-        if (visibleFragment == -1) {
+        if (!first) {
             FragmentManager manager = getSupportFragmentManager();
             DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
             manager.beginTransaction().add(R.id.fragment_place, discoverContainerFragment).commit();
-            setVisibleFragment(R.id.action_discover);
+            first = true;
         }
 
 
@@ -66,25 +66,15 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
 
                         switch (item.getItemId()) {
                             case R.id.action_discover:
-                                if (!isFragmentVisible(R.id.action_discover)) {
-                                    DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
-                                    manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
-                                    setVisibleFragment(R.id.action_discover);
-                                }
+                                DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
+                                manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
                                 break;
                             case R.id.action_menu:
-                                if (!isFragmentVisible(R.id.fragment_place)) {
-                                    manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
-                                    setVisibleFragment(R.id.fragment_place);
-                                }
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
                                 break;
                             case R.id.action_pay:
-                                if (!isFragmentVisible(R.id.action_pay)) {
-                                    TabFragment tabFragment = new TabFragment();
-                                    manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
-                                    setVisibleFragment(R.id.action_pay);
-                                }
+                                TabFragment tabFragment = new TabFragment();
+                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
                                 break;
                         }
 
@@ -147,17 +137,9 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         }
     }
 
-    public boolean isFragmentVisible(int id) {
-        return visibleFragment == id;
-    }
-
-    public void setVisibleFragment(int id) {
-        visibleFragment = id;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(VISIBLE_FRAGMENT_KEY, visibleFragment);
+        outState.putBoolean(VISIBLE_FRAGMENT_KEY, first);
         super.onSaveInstanceState(outState);
     }
 }
