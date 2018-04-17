@@ -1,8 +1,6 @@
 package com.example.aggoetey.myapplication.discover.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,25 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.helpers.DayConverter;
-import com.example.aggoetey.myapplication.discover.models.Restaurant;
+import com.example.aggoetey.myapplication.model.Restaurant;
+
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
@@ -98,12 +88,15 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         return mRestaurants == null ? 0 : mRestaurants.size();
     }
 
+    /**
+     * Viewholder for the restaurant ListView
+     */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        // data field
+        // Corresponding restaurant for viewholder object
         private Restaurant mRestaurant;
 
-        // view fields
+        // View fields
         private TextView nameTextView;
         private TextView locationTextView;
         private TextView ratingTextView;
@@ -115,7 +108,11 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.discover_restaurantlist_item, parent, false));
+
+            // Listen to clicks
             itemView.setOnClickListener(this);
+
+            // Initialize views
             nameTextView = (TextView) itemView.findViewById(R.id.card_name);
             locationTextView = (TextView) itemView.findViewById(R.id.card_location);
             ratingTextView = (TextView) itemView.findViewById(R.id.card_stars);
@@ -126,12 +123,17 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             placetype = (TextView) itemView.findViewById(R.id.placetype);
         }
 
+        /**
+         * Updates viewholder when new restaurant is bound
+         */
         void bind(final Restaurant restaurant) {
             this.mRestaurant = restaurant;
-            this.nameTextView.setText(restaurant.getName());
+            this.nameTextView.setText(restaurant.getTitle());
             this.locationTextView.setText(restaurant.getAddress());
 
             Double rating = restaurant.getRating();
+
+            // Check if restaurant has rating
             if (rating >= 0 && rating <= 5) {
                 this.ratingTextView.setText(Double.toString(rating));
                 this.starImageView.setVisibility(View.VISIBLE);
@@ -141,14 +143,11 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             }
 
             hoursTextView.setText("Hours not known");
-
             placetype.setText("8:00 - 16:00");
         }
 
         @Override
         public void onClick(View v) {
-            // TODO: menu openen
-            Toast.makeText(v.getContext(), mRestaurant.getGooglePlaceId() + " clicked!" + " open menu", Toast.LENGTH_SHORT).show();
             if (mListener != null) {
                 mListener.onRestaurantClick(mRestaurant);
             }

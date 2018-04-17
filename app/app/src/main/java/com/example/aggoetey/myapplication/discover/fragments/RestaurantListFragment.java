@@ -6,20 +6,22 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
-import com.example.aggoetey.myapplication.discover.models.Restaurant;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
+import com.example.aggoetey.myapplication.model.Restaurant;
 
-
-public class RestaurantListFragment extends LocationFragment implements View.OnClickListener, RestaurantListAdapter.OnRestaurantClickListener {
+/**
+ * Fragment that displays a list of restaurants
+ */
+public class RestaurantListFragment extends DiscoverFragment implements View.OnClickListener, RestaurantListAdapter.OnRestaurantClickListener {
 
     private RecyclerView mRecyclerView;
     private RestaurantListAdapter mAdapter;
@@ -95,13 +97,15 @@ public class RestaurantListFragment extends LocationFragment implements View.OnC
     }
 
     public void onClickMapButton() {
-        mCallbacks.setFragment(0);
+        mCallbacks.setFragment(DiscoverContainerFragment.MAPS_FRAGMENT_ID);
     }
 
 
     @Override
     public void onRestaurantClick(Restaurant restaurant) {
-        Log.v("menu", "should launch new activity with this restaurant (open menu)");
+        // Todo open restaurant
+        Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
+
     }
 
 

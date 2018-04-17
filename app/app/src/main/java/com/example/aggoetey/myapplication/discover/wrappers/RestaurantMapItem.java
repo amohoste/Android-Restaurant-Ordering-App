@@ -1,12 +1,12 @@
-package com.example.aggoetey.myapplication.discover.models;
+package com.example.aggoetey.myapplication.discover.wrappers;
 
+import com.example.aggoetey.myapplication.model.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
 /**
- * Created by amoryhoste on 02/04/2018.
+ * Container class needed for the clustermanager, contains a restaurant and all neccesary fields
  */
-
 public class RestaurantMapItem implements ClusterItem {
 
     private final LatLng mPosition;
@@ -16,7 +16,7 @@ public class RestaurantMapItem implements ClusterItem {
 
     public RestaurantMapItem(Restaurant restaurant) {
         this.mPosition = restaurant.getPosition();
-        this.mTitle = restaurant.getName();
+        this.mTitle = restaurant.getTitle();
         this.mSnippet = restaurant.getAddress();
         this.mRestaurant = restaurant;
     }

@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.aggoetey.myapplication.discover.fragments.DiscoverFragment;
+import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.menu.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -19,9 +19,6 @@ import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
 
@@ -52,11 +49,11 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
     private void enableBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Set discovery as main view at first startup
+        // Set discovery as visible fragment when app starts
         if (visibleFragment == -1) {
             FragmentManager manager = getSupportFragmentManager();
-            DiscoverFragment discoverFragment = new DiscoverFragment();
-            manager.beginTransaction().add(R.id.fragment_place, discoverFragment).commit();
+            DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
+            manager.beginTransaction().add(R.id.fragment_place, discoverContainerFragment).commit();
             setVisibleFragment(R.id.action_discover);
         }
 
@@ -70,16 +67,15 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                         switch (item.getItemId()) {
                             case R.id.action_discover:
                                 if (!isFragmentVisible(R.id.action_discover)) {
-                                    DiscoverFragment discoverFragment = new DiscoverFragment();
-                                    manager.beginTransaction().replace(R.id.fragment_place, discoverFragment).commit();
+                                    DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
+                                    manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
                                     setVisibleFragment(R.id.action_discover);
                                 }
                                 break;
                             case R.id.action_menu:
                                 if (!isFragmentVisible(R.id.fragment_place)) {
                                     manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
-                                    setVisibleFragment(R.id.fragment_place
-                                    );
+                                    setVisibleFragment(R.id.fragment_place);
                                 }
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
                                 break;

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.example.aggoetey.myapplication.model.Restaurant;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,19 +33,20 @@ import com.google.maps.android.clustering.ClusterManager;
 
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.models.Restaurant;
-import com.example.aggoetey.myapplication.discover.models.RestaurantMapItem;
+import com.example.aggoetey.myapplication.discover.wrappers.RestaurantMapItem;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
 import com.example.aggoetey.myapplication.discover.views.MapIconsRenderer;
 
 
 /**
- * Created by amoryhoste on 03/04/2018.
+ * Fragment that displays a map of restaurants
  */
-public class MapsFragment extends LocationFragment implements OnMapReadyCallback, View.OnClickListener {
+public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback, View.OnClickListener {
 
     // Constants
     private static final String CAMERA_STATE_KEY = "MAPS-CAMERA-POSITION";
+    private static final int MY_LOCATION_ZOOM = 17;
+    private static final int GENERAL_ZOOM = 11;
 
     // Maps
     private GoogleMap mMap;
@@ -116,6 +118,10 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
         return v;
     }
 
+
+    /**
+     * Initializes map when map is ready
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -130,7 +136,7 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
             } else {
                 Location loc = locationProvider.getLastLocation();
                 if (loc != null) {
-                    zoomMapToPosition(locationProvider.getLastLocation(), 11);
+                    zoomMapToPosition(locationProvider.getLastLocation(), GENERAL_ZOOM);
                 }
             }
         }
@@ -139,6 +145,10 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
         setUpClusterManager();
     }
 
+
+    /**
+     * Sets up clustermanager (used to display restaurants on map)
+     */
     private void setUpClusterManager() {
         MarkerManager manager = new MarkerManager(mMap);
         collection = manager.newCollection();
@@ -147,7 +157,7 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
             public boolean onMarkerClick(Marker marker) {
                 Restaurant res = (Restaurant) marker.getTag();
                 if (res != null) {
-                    Log.v("Menu", res.getName());
+                    Log.v("Menu", res.getTitle());
                 }
                 return false;
             }
@@ -187,6 +197,10 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
         }
     }
 
+
+    /**
+     * Helper method to add all restaurants from the restaurantprovider to the clustermanager
+     */
     private void addItemsToClusterManager() {
         if (mClusterManager != null) {
             mClusterManager.clearItems();
@@ -214,7 +228,7 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
     }
 
     private void onClickListButton() {
-        mCallbacks.setFragment(1);
+        mCallbacks.setFragment(DiscoverContainerFragment.LIST_FRAGMENT_ID);
     }
 
 
@@ -225,9 +239,8 @@ public class MapsFragment extends LocationFragment implements OnMapReadyCallback
             case R.id.imgMyLocation:
                 Location loc = locationProvider.getLastLocation();
                 if (loc != null) {
-                    zoomMapToPosition(loc, 17);
+                    zoomMapToPosition(loc, MY_LOCATION_ZOOM);
                 }
-
                 break;
             case R.id.imgZoomIn:
                 zoomInMap();

@@ -23,6 +23,9 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.LocationSource;
 
+/**
+ * Helper class that provides the users current location
+ */
 public class CurrentLocationProvider extends Fragment implements LocationSource, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private final int LOCATION_PERMISSION = 2748;
@@ -54,6 +57,9 @@ public class CurrentLocationProvider extends Fragment implements LocationSource,
         return lastLocation;
     }
 
+    /**
+     * Gets executed on each location update
+     */
     private LocationCallback mLocationCallback = new LocationCallback(){
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -88,6 +94,9 @@ public class CurrentLocationProvider extends Fragment implements LocationSource,
         }
     }
 
+    /**
+     * Initializes google api client
+     */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .enableAutoManage(getActivity(), this)
@@ -95,6 +104,7 @@ public class CurrentLocationProvider extends Fragment implements LocationSource,
                 .addApi(LocationServices.API)
                 .build();
     }
+
 
     public void startLocationServices() {
         try {
@@ -105,6 +115,9 @@ public class CurrentLocationProvider extends Fragment implements LocationSource,
         }
     }
 
+    /**
+     * Shows alert that user needs to give location permissions
+     */
     public void showAlertDialog() {
 
         // setup the alert builder

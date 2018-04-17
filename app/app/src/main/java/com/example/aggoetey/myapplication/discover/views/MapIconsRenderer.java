@@ -10,15 +10,15 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.models.RestaurantMapItem;
+import com.example.aggoetey.myapplication.discover.wrappers.RestaurantMapItem;
 
 
 /**
- * Created by amoryhoste on 02/04/2018.
+ * Class to render custom markers on map instead of the default ones
  */
-
 public class MapIconsRenderer extends DefaultClusterRenderer<RestaurantMapItem> {
 
+    private static final int ICON_COLOR = Color.rgb(211, 47, 47);
 
     public MapIconsRenderer(Context context, GoogleMap map, ClusterManager<RestaurantMapItem> clusterManager) {
         super(context, map, clusterManager);
@@ -34,7 +34,7 @@ public class MapIconsRenderer extends DefaultClusterRenderer<RestaurantMapItem> 
 
     @Override
     protected int getColor(int clusterSize) {
-        return Color.rgb(211, 47, 47);
+        return ICON_COLOR;
     }
 
 
