@@ -23,7 +23,7 @@ import java.io.Serializable;
  * Created by Dries on 6/04/2018.
  */
 
-public class MenuPageFragment extends Fragment implements  MenuCardsAdapter.OnAddNoteButtonClickListener, MenuListAdapter.MenuListClickListener, MenuCardInfoDialogFragment.CardDialogClickListener {
+public class MenuPageFragment extends Fragment implements Serializable, MenuCardsAdapter.OnAddNoteButtonClickListener, MenuListAdapter.MenuListClickListener, MenuCardInfoDialogFragment.CardDialogClickListener {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String ARG_MENU_INFO = "ARG_MENU_INFO";
     public static final String ARG_MENU_CATEGORY = "ARG_MENU_CATEGORY";
@@ -32,9 +32,9 @@ public class MenuPageFragment extends Fragment implements  MenuCardsAdapter.OnAd
     private MenuInfo menuInfo;
     private int mPage;
     private String category;
-    private RecyclerView mMenuPageRecyclerView;
-    private RecyclerView.Adapter mMenuRecyclerAdapter;
-    private MenuViewStateListener menuViewStateListener;
+    private transient RecyclerView mMenuPageRecyclerView;
+    private transient RecyclerView.Adapter mMenuRecyclerAdapter;
+    private transient MenuViewStateListener menuViewStateListener;
 
     public static MenuPageFragment newInstance(int page, String category, MenuInfo menuInfo, MenuViewStateListener listener) {
         Bundle args = new Bundle();
@@ -80,7 +80,7 @@ public class MenuPageFragment extends Fragment implements  MenuCardsAdapter.OnAd
         RecyclerView.Adapter adapter;
 
 
-        if (menuViewStateListener.currentViewIsGrid()) {
+        if (MenuFragment.isGridView) {
             adapter = new MenuCardsAdapter(menuInfo, category, this);
             float width = getResources().getDimension(R.dimen.card_width);
             int calculatedNoOfColumns = UIUtility.calculateNoOfColumns(getContext(), width);
@@ -88,9 +88,6 @@ public class MenuPageFragment extends Fragment implements  MenuCardsAdapter.OnAd
         } else {
             adapter = new MenuListAdapter(menuInfo, category, this);
         }
-
-        Log.i("PageFragment" , "viewType: " + menuViewStateListener.currentViewIsGrid());
-        Log.i("PageFragment",  "columnSpan: " + columnSpan);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSpan));
         recyclerView.setAdapter(adapter);
         mMenuRecyclerAdapter = adapter;

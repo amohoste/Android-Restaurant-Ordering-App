@@ -18,14 +18,13 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter{
 
     private String tabTitles[];
     private MenuInfo menuInfo;
-    private MenuPageFragment.MenuViewStateListener listener;
+    private transient MenuPageFragment.MenuViewStateListener listener;
 
     public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, MenuPageFragment.MenuViewStateListener listener) {
         super(fm);
         tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
                 new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
         this.menuInfo = menuInfo;
-        this.listener = listener;
     }
 
     @Override

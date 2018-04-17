@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,14 +40,14 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
     private MenuInfo menuInfo;
 
     private ViewPager viewPager;
-    private MenuFragmentPagerAdapter pagerAdapter;
+    private PagerAdapter pagerAdapter;
     private TabLayout tabLayout;
     private TextView mMenuRestaurantNameView;
     private Menu optionsMenu;
     private Button mMenuOrderButton;
 
 
-    private static boolean isGridView = false;
+    public static boolean isGridView = false;
 
     public MenuFragment() {
         // Required empty public constructor
