@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
     }
 
 
+    // TODO: AMORY REMOVE THIS WHEN LOADING RESTAURANTS FROM MAPS IS POSSIBLE
     private MenuInfo createTestRestaurant() {
         Menu current_menu = new Menu();
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));

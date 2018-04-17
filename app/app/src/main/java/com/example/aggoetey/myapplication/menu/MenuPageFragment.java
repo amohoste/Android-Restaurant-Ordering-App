@@ -13,8 +13,8 @@ import com.example.aggoetey.myapplication.R;
 
 /**
  * Created by Dries on 6/04/2018.
+ * Fragment dat gebruikt wordt om de inhoud van een bepaalde tab in weer te geven.
  */
-
 public class MenuPageFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String ARG_MENU_INFO = "ARG_MENU_INFO";

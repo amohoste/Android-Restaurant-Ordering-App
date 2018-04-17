@@ -9,6 +9,8 @@ import java.util.TreeSet;
 
 /**
  * Created by Dries on 6/04/2018.
+ *
+ * Adapter voor de menu tabs (drinks, food...).
  */
 
 public class MenuFragmentPagerAdapter extends FragmentPagerAdapter {
