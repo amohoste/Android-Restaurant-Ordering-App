@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/CardView.Light"
+    android:id="@+id/restaurant_card_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
@@ -167,7 +168,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
-
+        <com.example.aggoetey.myapplication.discover.views.ClickableImageView
+            android:id="@+id/card_navigationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_navigation"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible"
+            tools:visibility="visible"
+            tools:layout_editor_absoluteX="332dp"
+            tools:layout_editor_absoluteY="68dp" />
         <ImageView
             android:id="@+id/card_img"
             android:layout_width="90dp"

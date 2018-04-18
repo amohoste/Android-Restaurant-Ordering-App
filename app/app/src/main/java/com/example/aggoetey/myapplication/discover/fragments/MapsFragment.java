@@ -13,8 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 
+import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
+import com.example.aggoetey.myapplication.discover.views.RestaurantCardViewInitializer;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -55,6 +58,8 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
     private ClickableImageView locationButton;
     private CameraPosition lastpos;
+    private LinearLayout restaurantCardLayout;
+
 
     public MapsFragment() {
 
@@ -94,7 +99,6 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.discover_maps_fragment, container, false);
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -102,6 +106,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         locationButton = (ClickableImageView) v.findViewById(R.id.imgMyLocation);
         locationButton.setOnClickListener(this);
         locationButton.setVisibility(View.INVISIBLE);
+
 
         ClickableImageView  zoominButton = (ClickableImageView) v.findViewById(R.id.imgZoomIn);
         zoominButton.setOnClickListener(this);
@@ -111,6 +116,8 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
         ClickableImageView listButton = (ClickableImageView) v.findViewById(R.id.listButton);
         listButton.setOnClickListener(this);
+
+        restaurantCardLayout  =  v.findViewById(R.id.restaurant_info_card_parent);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
         locationProvider = mCallbacks.getLocationProvider();
@@ -149,53 +156,70 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     /**
      * Sets up clustermanager (used to display restaurants on map)
      */
-    private void setUpClusterManager() {
-        MarkerManager manager = new MarkerManager(mMap);
-        collection = manager.newCollection();
-        collection.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                Restaurant res = (Restaurant) marker.getTag();
-                if (res != null) {
-                    Log.v("Menu", res.getTitle());
-                }
-                return false;
-            }
-        });
-
-        mClusterManager = new ClusterManager<RestaurantMapItem>(getContext(), mMap, manager);
-        mClusterManager.setRenderer(new MapIconsRenderer(getContext(), mMap, mClusterManager));
-
-        mClusterManager
-                .setOnClusterClickListener(new ClusterManager.OnClusterClickListener<RestaurantMapItem>() {
-                    @Override
-                    public boolean onClusterClick(Cluster<RestaurantMapItem> cluster) {
-                        LatLngBounds.Builder builder = LatLngBounds.builder();
-                        for (ClusterItem item : cluster.getItems()) {
-                            builder.include(item.getPosition());
-                        }
-                        final LatLngBounds bounds = builder.build();
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 300));
-                        return true;
+        private void setUpClusterManager() {
+            MarkerManager manager = new MarkerManager(mMap);
+            collection = manager.newCollection();
+            collection.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    Restaurant res = (Restaurant) marker.getTag();
+                    if (res != null) {
+                        Log.v("Menu", res.getTitle());
                     }
-                });
+                    return false;
+                }
+            });
 
-        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<RestaurantMapItem>() {
-            @Override
-            public boolean onClusterItemClick(RestaurantMapItem restaurantMapItem) {
-                Log.v("menü", "Open sitt zijn ding adhv restaurantmapitem");
-                return false;
+            mClusterManager = new ClusterManager<RestaurantMapItem>(getContext(), mMap, manager);
+            mClusterManager.setRenderer(new MapIconsRenderer(getContext(), mMap, mClusterManager));
+
+            mClusterManager
+                    .setOnClusterClickListener(new ClusterManager.OnClusterClickListener<RestaurantMapItem>() {
+                        @Override
+                        public boolean onClusterClick(Cluster<RestaurantMapItem> cluster) {
+                            LatLngBounds.Builder builder = LatLngBounds.builder();
+                            for (ClusterItem item : cluster.getItems()) {
+                                builder.include(item.getPosition());
+                            }
+                            final LatLngBounds bounds = builder.build();
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 300));
+                            restaurantCardLayout.removeAllViews();
+                            return true;
+                        }
+                    });
+
+
+
+            mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<RestaurantMapItem>() {
+                @Override
+                public boolean onClusterItemClick(RestaurantMapItem restaurantMapItem) {
+                    Log.v("menü", "Open sitt zijn ding adhv restaurantmapitem");
+                    restaurantCardLayout.removeAllViews();
+                    View restaurantView =  View.inflate(restaurantCardLayout.getContext(),R.layout.discover_restaurantlist_item,null);
+                    RestaurantCardViewInitializer initializer = new  RestaurantCardViewInitializer(restaurantView, true);
+                    initializer.bind(restaurantMapItem.getRestaurant());
+                    restaurantCardLayout.addView(restaurantView);
+                    return false;
+                }
+            });
+
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    restaurantCardLayout.removeAllViews();
+                }
+            });
+
+
+
+            mMap.setOnCameraIdleListener(mClusterManager);
+            mMap.setOnMarkerClickListener(manager);
+
+            // Add cluster items (markers) to the cluster manager.
+            if (restaurantProvider != null && restaurantProvider.getRestaurants() != null) {
+                addItemsToClusterManager();
             }
-        });
-
-        mMap.setOnCameraIdleListener(mClusterManager);
-        mMap.setOnMarkerClickListener(manager);
-
-        // Add cluster items (markers) to the cluster manager.
-        if (restaurantProvider != null && restaurantProvider.getRestaurants() != null) {
-            addItemsToClusterManager();
         }
-    }
 
 
     /**
