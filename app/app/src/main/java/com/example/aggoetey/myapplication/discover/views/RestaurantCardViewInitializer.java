@@ -1,19 +1,29 @@
 package com.example.aggoetey.myapplication.discover.views;
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
 import com.example.aggoetey.myapplication.model.Restaurant;
+
+import java.io.Serializable;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by sitt on 18/04/18.
  */
 
-public class RestaurantCardViewInitializer {
+public class RestaurantCardViewInitializer implements Serializable {
     // View fields
     private TextView nameTextView;
     private TextView locationTextView;
@@ -44,6 +54,7 @@ public class RestaurantCardViewInitializer {
             navigation.setVisibility(View.VISIBLE);
         }
     }
+    
 
     public void bind (final Restaurant restaurant){
         this.nameTextView.setText(restaurant.getTitle());
@@ -71,5 +82,25 @@ public class RestaurantCardViewInitializer {
 
         hoursTextView.setText("Hours not known");
         placetype.setText("8:00 - 16:00");
+        
+        loadRestaurantPicture(restaurant);
     }
+
+    private void loadRestaurantPicture(Restaurant restaurant) {
+        // Transformation to round corners etc.
+        MultiTransformation<Bitmap> multi;
+        multi = new MultiTransformation<>(
+                new FitCenter(),
+                new CenterCrop(),
+                new RoundedCornersTransformation(7, 0));
+
+        final ProgressBar progressBar = (ProgressBar) progressbar;
+
+        Glide.with(itemView.getContext()).clear(restaurantImageView);
+        restaurantImageView.setImageDrawable(null);
+        progressbar.setVisibility(View.GONE);
+        restaurantImageView.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.restaurant_placeholder));
+    }
+    
+    
 }

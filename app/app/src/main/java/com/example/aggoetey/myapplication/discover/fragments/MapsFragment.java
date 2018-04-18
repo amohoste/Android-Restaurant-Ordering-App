@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -182,6 +183,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                                 builder.include(item.getPosition());
                             }
                             final LatLngBounds bounds = builder.build();
+                            
                             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 300));
                             restaurantCardLayout.removeAllViews();
                             return true;
