@@ -24,13 +24,7 @@ import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 
 /**
  * Created by Dries on 26/03/2018.
- * <p>
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MenuFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MenuFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment waarin een menu wordt getoond.
  */
 public class MenuFragment extends Fragment implements Listener, MenuPageFragment.MenuViewStateListener {
     private static final String ARG_MENUINFO = "menuinfo";
@@ -68,7 +62,23 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            menuInfo = (MenuInfo) savedInstanceState.getSerializable(ARG_MENUINFO);
+            menuInfo.getCurrentOrder().addListener(this);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(ARG_MENUINFO, menuInfo);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {

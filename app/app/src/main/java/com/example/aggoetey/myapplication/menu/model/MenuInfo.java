@@ -16,6 +16,9 @@ import java.util.List;
 
 /**
  * Created by Dries on 6/04/2018.
+ *
+ * Klasse dat alle nodige informatie bijhoudt om de huidige bestelling
+ * te kunnen tonen op de menuview van een restaurant.
  */
 
 public class MenuInfo implements Serializable {
