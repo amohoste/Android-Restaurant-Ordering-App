@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuCardsAdapter;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.utils.UIUtility;
 
 import java.io.Serializable;
@@ -32,9 +32,9 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     private MenuInfo menuInfo;
     private int mPage;
     private String category;
-    private  RecyclerView mMenuPageRecyclerView;
-    private  RecyclerView.Adapter mMenuRecyclerAdapter;
-    private transient MenuViewStateListener menuViewStateListener;
+    private RecyclerView mMenuPageRecyclerView;
+    private RecyclerView.Adapter mMenuRecyclerAdapter;
+    private MenuViewStateListener menuViewStateListener;
 
     public static MenuPageFragment newInstance(int page, String category, MenuInfo menuInfo, MenuViewStateListener listener) {
         Bundle args = new Bundle();

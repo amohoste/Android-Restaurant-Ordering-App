@@ -12,13 +12,14 @@ import com.example.aggoetey.myapplication.menu.fragments.MenuPageFragment;
 
 /**
  * Created by Dries on 6/04/2018.
+ * Adapter voor de menu tabs (drinks, food...).
  */
 
 public class MenuFragmentPagerAdapter extends FragmentPagerAdapter{
 
     private String tabTitles[];
     private MenuInfo menuInfo;
-    private transient MenuPageFragment.MenuViewStateListener listener;
+    private MenuPageFragment.MenuViewStateListener listener;
 
     public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, MenuPageFragment.MenuViewStateListener listener) {
         super(fm);

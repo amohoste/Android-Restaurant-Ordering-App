@@ -16,6 +16,8 @@ import java.io.Serializable;
 
 /**
  * Created by Dries on 26/03/2018.
+ *
+ * Adapter voor de recyclerview voor menuitems.
  */
 
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> implements Serializable {
