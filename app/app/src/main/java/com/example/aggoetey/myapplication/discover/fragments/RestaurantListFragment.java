@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
-import com.example.aggoetey.myapplication.menu.MenuInfo;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 
 /**

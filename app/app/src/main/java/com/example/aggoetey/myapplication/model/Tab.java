@@ -89,6 +89,11 @@ public class Tab extends Model implements Serializable {
             return this;
         }
 
+        public Order addOrderItem(OrderItem orderItem) {
+            this.orderItems.add(orderItem);
+            fireInvalidationEvent();
+            return  this;
+        }
         /**
          * Verwijder een orderItem aan de hand van een OrderItem
          */

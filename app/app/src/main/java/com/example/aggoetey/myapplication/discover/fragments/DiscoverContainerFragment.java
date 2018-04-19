@@ -14,7 +14,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
-import com.example.aggoetey.myapplication.menu.MenuInfo;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants

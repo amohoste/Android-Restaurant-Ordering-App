@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
-import com.example.aggoetey.myapplication.menu.MenuFragment;
-import com.example.aggoetey.myapplication.menu.MenuInfo;
+
+import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
@@ -19,13 +21,10 @@ import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks, DiscoverContainerFragment.RestaurantSelectListener {
+public class MainActivity extends AppCompatActivity implements TabFragment.Callbacks, DiscoverContainerFragment.RestaurantSelectListener {
 
     private boolean first = false;
     private static final String FIRST_KEY = "VISIBLE_FRAGMEN";
-
-    private Restaurant restaurant;
-    private MenuInfo menuInfo;
 
     MenuFragment menuFragment;
 
@@ -41,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
+
+        createTestRestaurant();
     }
 
     /**
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                                 manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
                                 break;
                             case R.id.action_menu:
-                                switchToMenu(null);
+                                switchToMenu(createTestRestaurant());
                                 break;
                             case R.id.action_pay:
                                 TabFragment tabFragment = new TabFragment();
@@ -87,11 +88,34 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         );
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
+    // TODO: AMORY REMOVE THIS WHEN LOADING RESTAURANTS FROM MAPS IS POSSIBLE
+    private MenuInfo createTestRestaurant() {
+        Menu current_menu = new Menu();
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+
+        return new MenuInfo(new Restaurant("Chez Cyka Blyat", current_menu));
     }
-
 
     /**
      * Als er geen menu is dat ingeladen moet worden kan je hier null aan meegeven
@@ -143,22 +167,22 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         }
     }
 
-    /**
-     * Bij het selecteren van een Restaurant
-     */
-    @Override
-    public void onRestaurantSelect(MenuInfo menuInfo) {
-        switchToMenu(menuInfo);
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // Save MenuFragment instance
         super.onSaveInstanceState(outState);
         outState.putBoolean(FIRST_KEY, first);
+
         // Save MenuFragment instance
-        if(menuFragment != null) {
+        if(menuFragment != null && menuFragment.isAdded()) {
             getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
         }
+    }
+
+
+    @Override
+    public void onRestaurantSelect(MenuInfo menuInfo) {
+        switchToMenu(menuInfo);
     }
 }
