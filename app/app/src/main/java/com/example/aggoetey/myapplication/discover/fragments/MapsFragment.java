@@ -47,6 +47,8 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
     // Constants
     private static final String CAMERA_STATE_KEY = "MAPS-CAMERA-POSITION";
+    private static final String CHOSEN_RESTAURANT = "CHOSEN_RESTAURANT";
+    private static final String CHOSEN_RESTAURANT_POSITION = "CHOSEN_RESTAURANT_POSITION";
     private static final int MY_LOCATION_ZOOM = 17;
     private static final int GENERAL_ZOOM = 11;
 
@@ -61,9 +63,13 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     private CameraPosition lastpos;
     private LinearLayout restaurantCardLayout;
 
-
-    //TODO: make RestaurantMapItem parcelable 
-    private RestaurantMapItem chosenRestaurant;
+    /**
+     * Position of restaurant is stored separately as parcelable. This is because making
+     * Restaurant parcelable means having to replace almost all models in a direct/indirect
+     * relationship with restaurant to implement Parcelable. (Difficult to achieve with the time constraint)
+     */
+    private LatLng restaurantPosition;
+    private Restaurant chosenRestaurant;
 
 
     public MapsFragment() {
@@ -98,6 +104,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
             if(mMap != null) {
                 lastpos = savedInstanceState.getParcelable(CAMERA_STATE_KEY);
             }
+            loadRestaurant(savedInstanceState);
         }
 
     }
@@ -105,7 +112,10 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        if(savedInstanceState != null){
+            lastpos = (CameraPosition) savedInstanceState.getParcelable(CAMERA_STATE_KEY);
+            loadRestaurant(savedInstanceState);
+        }
         View v = inflater.inflate(R.layout.discover_maps_fragment, container, false);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -126,7 +136,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         listButton.setOnClickListener(this);
 
         restaurantCardLayout  =  v.findViewById(R.id.restaurant_info_card_parent);
-        selectAndStartRestCardView(this.chosenRestaurant);
+        selectAndStartRestCardView(chosenRestaurant);
         restaurantProvider = mCallbacks.getRestaurantProvider();
         locationProvider = mCallbacks.getLocationProvider();
 
@@ -180,7 +190,6 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
             mClusterManager = new ClusterManager<RestaurantMapItem>(getContext(), mMap, manager);
             mClusterManager.setRenderer(new MapIconsRenderer(getContext(), mMap, mClusterManager));
-
             mClusterManager
                     .setOnClusterClickListener(new ClusterManager.OnClusterClickListener<RestaurantMapItem>() {
                         @Override
@@ -204,7 +213,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                 public boolean onClusterItemClick(RestaurantMapItem restaurantMapItem) {
                     Log.v("menü", "Open sitt zijn ding adhv restaurantmapitem");
                     resetChosenRestaurant();
-                    selectAndStartRestCardView(restaurantMapItem);
+                    selectAndStartRestCardView(restaurantMapItem.getRestaurant());
                     return false;
                 }
             });
@@ -227,11 +236,11 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
             }
         }
 
-    private void selectAndStartRestCardView(RestaurantMapItem restaurantMapItem){
-        if(restaurantMapItem != null) {
-            chosenRestaurant = restaurantMapItem;
+    private void selectAndStartRestCardView(Restaurant restaurant){
+        if(restaurant != null) {
+            chosenRestaurant = restaurant;
             RestaurantInfoCardView restaurantInfoCardView = new RestaurantInfoCardView(getContext());
-            restaurantInfoCardView.bind(restaurantMapItem.getRestaurant());
+            restaurantInfoCardView.bind(restaurant);
             restaurantCardLayout.addView(restaurantInfoCardView);
         }
     }
@@ -308,6 +317,23 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         }
     }
 
+    private void saveRestaurant(Bundle bundle){
+        if(bundle != null && chosenRestaurant != null){
+
+            bundle.putSerializable(CHOSEN_RESTAURANT, chosenRestaurant);
+            bundle.putParcelable(CHOSEN_RESTAURANT_POSITION, chosenRestaurant.getPosition());
+        }
+
+    }
+
+    private void loadRestaurant(Bundle bundle){
+        if(bundle != null){
+           restaurantPosition = bundle.getParcelable(CHOSEN_RESTAURANT_POSITION);
+           chosenRestaurant = (Restaurant) bundle.getSerializable(CHOSEN_RESTAURANT);
+        }
+
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -315,6 +341,8 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         if (mMap != null) {
             outState.putParcelable(CAMERA_STATE_KEY, mMap.getCameraPosition());
         }
+
+       saveRestaurant(outState);
     }
 
 }

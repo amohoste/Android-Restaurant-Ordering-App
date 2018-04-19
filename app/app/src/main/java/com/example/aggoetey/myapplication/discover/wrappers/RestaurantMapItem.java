@@ -4,10 +4,12 @@ import com.example.aggoetey.myapplication.model.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.io.Serializable;
+
 /**
  * Container class needed for the clustermanager, contains a restaurant and all neccesary fields
  */
-public class RestaurantMapItem implements ClusterItem {
+public class RestaurantMapItem implements ClusterItem, Serializable{
 
     private final LatLng mPosition;
     private final String mTitle;

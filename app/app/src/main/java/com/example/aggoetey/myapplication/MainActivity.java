@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
+import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.menu.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -98,6 +99,20 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
      */
     private void switchToMenu(MenuInfo menuInfo) {
         FragmentManager manager = getSupportFragmentManager();
+
+        /*
+          Placeholder for demo
+          ------
+          TODO: Remove this once default behaviour without selecting restaurant has been decided.
+         */
+        if(menuInfo == null){
+            Restaurant restaurant = RestaurantProvider.newInstance().getRestaurants().get(0);
+            menuInfo = new MenuInfo(restaurant);
+        }
+        /*
+          ----------
+         */
+
         if (menuFragment == null) {
             menuFragment = MenuFragment.newInstance(menuInfo);
         }
@@ -142,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         super.onSaveInstanceState(outState);
         outState.putBoolean(FIRST_KEY, first);
         // Save MenuFragment instance
-        getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
+        if(menuFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
+        }
     }
 }
