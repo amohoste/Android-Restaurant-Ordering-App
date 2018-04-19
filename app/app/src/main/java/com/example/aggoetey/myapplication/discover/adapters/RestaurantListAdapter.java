@@ -17,7 +17,6 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import java.util.List;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.views.RestaurantCardViewInitializer;
 import com.example.aggoetey.myapplication.model.Restaurant;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -64,10 +63,25 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Restaurant restaurant = mRestaurants.get(position);
+        loadRestaurantPicture(holder, restaurant);
         holder.bind(restaurant);
     }
 
+    private void loadRestaurantPicture(ViewHolder holder, Restaurant restaurant) {
+        // Transformation to round corners etc.
+        MultiTransformation<android.graphics.Bitmap> multi;
+        multi = new MultiTransformation<>(
+                new FitCenter(),
+                new CenterCrop(),
+                new RoundedCornersTransformation(7, 0));
 
+        final ProgressBar progressBar = (ProgressBar) holder.progressbar;
+
+        Glide.with(context).clear(holder.restaurantImageView);
+        holder.restaurantImageView.setImageDrawable(null);
+        holder.progressbar.setVisibility(View.GONE);
+        holder.restaurantImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.restaurant_placeholder));
+    }
 
     @Override
     public int getItemCount() {
@@ -81,14 +95,32 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         // Corresponding restaurant for viewholder object
         private Restaurant mRestaurant;
-        private RestaurantCardViewInitializer initializer;
+
+        // View fields
+        private TextView nameTextView;
+        private TextView locationTextView;
+        private TextView ratingTextView;
+        private TextView hoursTextView;
+        private ImageView starImageView;
+        private ImageView restaurantImageView;
+        private ProgressBar progressbar;
+        private TextView placetype;
 
         ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.discover_restaurantlist_item, parent, false));
 
             // Listen to clicks
             itemView.setOnClickListener(this);
-            initializer = new RestaurantCardViewInitializer(itemView,false);
+
+            // Initialize views
+            nameTextView = (TextView) itemView.findViewById(R.id.card_name);
+            locationTextView = (TextView) itemView.findViewById(R.id.card_location);
+            ratingTextView = (TextView) itemView.findViewById(R.id.card_stars);
+            hoursTextView = (TextView) itemView.findViewById(R.id.card_hours);
+            starImageView = (ImageView) itemView.findViewById(R.id.star_image);
+            restaurantImageView = (ImageView) itemView.findViewById(R.id.card_img);
+            progressbar = (ProgressBar) itemView.findViewById(R.id.progress);
+            placetype = (TextView) itemView.findViewById(R.id.placetype);
         }
 
         /**
@@ -96,7 +128,22 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
          */
         void bind(final Restaurant restaurant) {
             this.mRestaurant = restaurant;
-            initializer.bind(restaurant);
+            this.nameTextView.setText(restaurant.getTitle());
+            this.locationTextView.setText(restaurant.getAddress());
+
+            Double rating = restaurant.getRating();
+
+            // Check if restaurant has rating
+            if (rating >= 0 && rating <= 5) {
+                this.ratingTextView.setText(Double.toString(rating));
+                this.starImageView.setVisibility(View.VISIBLE);
+            } else {
+                this.starImageView.setVisibility(View.INVISIBLE);
+                this.ratingTextView.setText("");
+            }
+
+            hoursTextView.setText("Hours not known");
+            placetype.setText("8:00 - 16:00");
         }
 
         @Override

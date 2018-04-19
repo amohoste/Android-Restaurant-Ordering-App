@@ -1,8 +1,13 @@
 package com.example.aggoetey.myapplication.discover.views;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,43 +28,52 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  * Created by sitt on 18/04/18.
  */
 
-public class RestaurantCardViewInitializer implements Serializable {
+public class RestaurantInfoCardView extends LinearLayout {
     // View fields
     private TextView nameTextView;
-    private TextView locationTextView;
     private TextView ratingTextView;
     private TextView hoursTextView;
     private ImageView starImageView;
     private ImageView restaurantImageView;
     private ProgressBar progressbar;
-    private View itemView;
     private TextView placetype;
     private ClickableImageView navigation;
 
-    public RestaurantCardViewInitializer(View view, boolean enableNavigation) {
-
-        itemView = view;
-        // Initialize views
-        nameTextView = (TextView) itemView.findViewById(R.id.card_name);
-        locationTextView = (TextView) itemView.findViewById(R.id.card_location);
-        ratingTextView = (TextView) itemView.findViewById(R.id.card_stars);
-        hoursTextView = (TextView) itemView.findViewById(R.id.card_hours);
-        starImageView = (ImageView) itemView.findViewById(R.id.star_image);
-        restaurantImageView = (ImageView) itemView.findViewById(R.id.card_img);
-        progressbar = (ProgressBar) itemView.findViewById(R.id.progress);
-        placetype = (TextView) itemView.findViewById(R.id.placetype);
-
-        if(enableNavigation) {
-            navigation = (ClickableImageView) itemView.findViewById(R.id.card_navigationButton);
-            navigation.setVisibility(View.VISIBLE);
-        }
+    public RestaurantInfoCardView(Context context) {
+        super(context);
+        init();
     }
-    
 
-    public void bind (final Restaurant restaurant){
+    public RestaurantInfoCardView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public RestaurantInfoCardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+
+    private void init() {
+        inflate(getContext(), R.layout.discover_restaurant_info_card, this);
+        // Initialize views
+        nameTextView = (TextView) findViewById(R.id.card_name);
+        ratingTextView = (TextView) findViewById(R.id.card_stars);
+        hoursTextView = (TextView) findViewById(R.id.card_hours);
+        starImageView = (ImageView) findViewById(R.id.star_image);
+        restaurantImageView = (ImageView) findViewById(R.id.card_img);
+        progressbar = (ProgressBar) findViewById(R.id.progress);
+        placetype = (TextView) findViewById(R.id.placetype);
+
+        navigation = (ClickableImageView) findViewById(R.id.card_navigationButton);
+        navigation.setVisibility(View.VISIBLE);
+        
+    }
+
+
+    public void bind(final Restaurant restaurant) {
         this.nameTextView.setText(restaurant.getTitle());
-        this.locationTextView.setText(restaurant.getAddress());
-
         Double rating = restaurant.getRating();
 
         // Check if restaurant has rating
@@ -71,18 +85,19 @@ public class RestaurantCardViewInitializer implements Serializable {
             this.ratingTextView.setText("");
         }
 
-        if(navigation != null){
+        if (navigation != null) {
             navigation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Navigation clicked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Navigation clicked", Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
+        //TODO: get data from backend
         hoursTextView.setText("Hours not known");
-        placetype.setText("8:00 - 16:00");
-        
+        placetype.setText("Bar -placeholder-");
+
         loadRestaurantPicture(restaurant);
     }
 
@@ -96,11 +111,11 @@ public class RestaurantCardViewInitializer implements Serializable {
 
         final ProgressBar progressBar = (ProgressBar) progressbar;
 
-        Glide.with(itemView.getContext()).clear(restaurantImageView);
+        Glide.with(getContext()).clear(restaurantImageView);
         restaurantImageView.setImageDrawable(null);
         progressbar.setVisibility(View.GONE);
-        restaurantImageView.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.restaurant_placeholder));
+        restaurantImageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.restaurant_placeholder));
     }
-    
-    
+
+
 }

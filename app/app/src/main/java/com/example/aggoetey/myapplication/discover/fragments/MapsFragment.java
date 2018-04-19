@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 
-import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
-import com.example.aggoetey.myapplication.discover.views.RestaurantCardViewInitializer;
+import com.example.aggoetey.myapplication.discover.views.RestaurantInfoCardView;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -197,10 +195,10 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                 public boolean onClusterItemClick(RestaurantMapItem restaurantMapItem) {
                     Log.v("menü", "Open sitt zijn ding adhv restaurantmapitem");
                     restaurantCardLayout.removeAllViews();
-                    View restaurantView =  View.inflate(restaurantCardLayout.getContext(),R.layout.discover_restaurantlist_item,null);
-                    RestaurantCardViewInitializer initializer = new  RestaurantCardViewInitializer(restaurantView, true);
-                    initializer.bind(restaurantMapItem.getRestaurant());
-                    restaurantCardLayout.addView(restaurantView);
+
+                    RestaurantInfoCardView restaurantInfoCardView = new RestaurantInfoCardView(getContext());
+                    restaurantInfoCardView.bind(restaurantMapItem.getRestaurant());
+                    restaurantCardLayout.addView(restaurantInfoCardView);
                     return false;
                 }
             });
