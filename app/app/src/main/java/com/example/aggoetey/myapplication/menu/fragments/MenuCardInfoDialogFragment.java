@@ -23,7 +23,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
 
 
     public interface CardDialogClickListener extends Serializable {
-        void onConfirmClick(MenuItem menuItem, int pos);
+        void onInteraction(int pos);
     }
 
     private static final String ARG_CARD_MENU_LISTENER = "ARG_CARD_MENU_LISTENER";
@@ -40,7 +40,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
     public MenuCardInfoDialogFragment() {
     }
 
-    public static MenuCardInfoDialogFragment newInstance(MenuItem menuItem, MenuInfo info, CardDialogClickListener listener, int position) {
+    public static MenuCardInfoDialogFragment newInstance(MenuItem menuItem, MenuInfo info,int position ,CardDialogClickListener listener) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_CARD_MENU_INFO, info);
         args.putSerializable(ARG_CARD_MENU_LISTENER, listener);
@@ -67,7 +67,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onConfirmClick(menuItem, menuItemPos );
+                        listener.onInteraction(menuItemPos );
                         dialog.dismiss();
                     }
                 });
@@ -80,6 +80,17 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
         return builder.create();
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        listener.onInteraction(menuItemPos);
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        listener.onInteraction(menuItemPos);
+    }
 
     @Override
     public void onAddNoteButtonClick(MenuItem item) {

@@ -107,6 +107,7 @@ public class MenuFragment extends Fragment implements Listener {
             @Override
             public void onClick(View view) {
                 menuInfo.commitOrder();
+                Log.e("MenuFragment", "Adapter size " + menuInfo.getmAdapters().size());
                 setOrderButtonProperties();
             }
         });
@@ -143,8 +144,6 @@ public class MenuFragment extends Fragment implements Listener {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         this.optionsMenu = menu;
-        Log.e("MenuFragment " ,  menu + "");
-
         toggleViewTypeMenu(menu);
     }
 

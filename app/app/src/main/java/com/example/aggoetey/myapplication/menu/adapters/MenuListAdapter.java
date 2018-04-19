@@ -51,6 +51,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         holder.bind(menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position), position);
     }
 
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        menuInfo.removeAdapter(this);
+    }
+
     @Override
     public int getItemCount() {
         return menuInfo.getRestaurant().getMenu().getMenuItemList(category).size();

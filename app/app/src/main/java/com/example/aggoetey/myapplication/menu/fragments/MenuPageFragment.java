@@ -23,7 +23,7 @@ import java.io.Serializable;
  * Created by Dries on 6/04/2018.
  */
 
-public class MenuPageFragment extends Fragment implements Serializable, MenuCardsAdapter.OnAddNoteButtonClickListener, MenuListAdapter.MenuListClickListener, MenuCardInfoDialogFragment.CardDialogClickListener {
+public class MenuPageFragment extends Fragment implements Serializable, MenuCardsAdapter.OnAddNoteButtonClickListener, MenuListAdapter.MenuListClickListener {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String ARG_MENU_INFO = "ARG_MENU_INFO";
     public static final String ARG_MENU_CATEGORY = "ARG_MENU_CATEGORY";
@@ -32,7 +32,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     private MenuInfo menuInfo;
     private int mPage;
     private String category;
-    private RecyclerView mMenuPageRecyclerView;
+    private transient RecyclerView mMenuPageRecyclerView;
     private RecyclerView.Adapter mMenuRecyclerAdapter;
     private MenuViewStateListener menuViewStateListener;
 
@@ -57,18 +57,10 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        menuInfo.removeAdapter(mMenuRecyclerAdapter);
-    }
-
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu_page, container, false);
         mMenuPageRecyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler_view);
-        menuInfo.removeAdapter(mMenuRecyclerAdapter);
         initViewType(mMenuPageRecyclerView);
 
         return view;
@@ -101,17 +93,18 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
 
     @Override
     public void onMenuListLongClick(com.example.aggoetey.myapplication.model.MenuItem menuItem, MenuInfo menuInfo, int position) {
-        showDialog(MenuCardInfoDialogFragment.newInstance(menuItem, menuInfo, this, position));
+        showDialog(MenuCardInfoDialogFragment.newInstance(menuItem, menuInfo, position, new MenuCardInfoDialogFragment.CardDialogClickListener() {
+            @Override
+            public void onInteraction(int pos) {
+                mMenuPageRecyclerView.getAdapter().notifyItemChanged(pos);
+            }
+        }));
     }
 
     private void showDialog(DialogFragment fragment) {
         fragment.show(this.getFragmentManager(), this.toString());
     }
 
-    @Override
-    public void onConfirmClick(com.example.aggoetey.myapplication.model.MenuItem menuItem, int pos) {
-        mMenuPageRecyclerView.getAdapter().notifyItemChanged(pos);
-    }
 
     public interface MenuViewStateListener extends Serializable {
         ViewType currentViewIsGrid();
