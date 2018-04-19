@@ -21,6 +21,11 @@ import java.util.List;
 
 /**
  * Created by sitt on 08/04/18.
+ *
+ * A dialog which will be called upon to add notes to an order.
+ *
+ * TODO: Allow user to choose number of notes.
+ * Currently only adds one note to the chosen item in the current batch order.
  */
 
 public class OrderNoteDialogFragment extends DialogFragment {

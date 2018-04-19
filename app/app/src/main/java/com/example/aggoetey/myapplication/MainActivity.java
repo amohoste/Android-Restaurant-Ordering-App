@@ -20,7 +20,7 @@ import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
+public class MainActivity extends AppCompatActivity implements TabFragment.Callbacks {
 
 
     MenuFragment menuFragment;
@@ -67,11 +67,6 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     }
                 }
         );
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
 
@@ -153,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         super.onSaveInstanceState(outState);
 
         // Save MenuFragment instance
-        getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
+        if(menuFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
+        }
     }
 }

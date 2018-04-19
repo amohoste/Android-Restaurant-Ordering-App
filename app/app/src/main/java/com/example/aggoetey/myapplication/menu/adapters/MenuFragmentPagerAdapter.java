@@ -1,38 +1,36 @@
 package com.example.aggoetey.myapplication.menu.adapters;
 
-import android.database.DataSetObservable;
-import android.database.DataSetObserver;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.menu.fragments.MenuPageFragment;
+import com.example.aggoetey.myapplication.model.ViewType;
 
 /**
  * Created by Dries on 6/04/2018.
  * Adapter voor de menu tabs (drinks, food...).
  */
 
-public class MenuFragmentPagerAdapter extends FragmentPagerAdapter{
+public class MenuFragmentPagerAdapter extends FragmentStatePagerAdapter implements MenuPageFragment.MenuViewStateListener{
 
     private String tabTitles[];
     private MenuInfo menuInfo;
-    private MenuPageFragment.MenuViewStateListener listener;
-
-    public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, MenuPageFragment.MenuViewStateListener listener) {
+    private ViewType viewType;
+    public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, ViewType viewType) {
         super(fm);
         tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
                 new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
         this.menuInfo = menuInfo;
-        this.listener = listener;
+        this.viewType = viewType;
     }
 
     @Override
     public Fragment getItem(int position) {
         Log.i("PagerAdapter", "getItem : "  + position);
-        return MenuPageFragment.newInstance(position + 1, getPageTitle(position).toString(), menuInfo, this.listener);
+        return MenuPageFragment.newInstance(position + 1, getPageTitle(position).toString(), menuInfo, this);
     }
 
     /**
@@ -56,4 +54,14 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter{
         return tabTitles[position];
     }
 
+    @Override
+    public ViewType currentViewIsGrid() {
+        return this.viewType;
+
+    }
+
+    @Override
+    public void updateViewType(ViewType viewType) {
+        this.viewType = viewType;
+    }
 }

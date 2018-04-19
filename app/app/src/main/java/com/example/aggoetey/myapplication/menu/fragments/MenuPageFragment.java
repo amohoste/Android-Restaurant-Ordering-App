@@ -6,7 +6,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuCardsAdapter;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.ViewType;
 import com.example.aggoetey.myapplication.utils.UIUtility;
 
 import java.io.Serializable;
@@ -80,7 +80,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
         RecyclerView.Adapter adapter;
 
 
-        if (menuViewStateListener.currentViewIsGrid()) {
+        if (menuViewStateListener.currentViewIsGrid().equals(ViewType.GRID_VIEW)) {
             adapter = new MenuCardsAdapter(menuInfo, category, this);
             float width = getResources().getDimension(R.dimen.card_width);
             int calculatedNoOfColumns = UIUtility.calculateNoOfColumns(getContext(), width);
@@ -114,6 +114,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     }
 
     public interface MenuViewStateListener extends Serializable {
-        boolean currentViewIsGrid();
+        ViewType currentViewIsGrid();
+        void updateViewType(ViewType viewType);
     }
 }

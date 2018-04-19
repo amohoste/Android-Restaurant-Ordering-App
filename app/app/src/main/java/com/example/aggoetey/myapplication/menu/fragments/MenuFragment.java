@@ -1,11 +1,9 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,27 +19,25 @@ import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.ViewType;
 
 /**
  * Created by Dries on 26/03/2018.
  * Fragment waarin een menu wordt getoond.
  */
-public class MenuFragment extends Fragment implements Listener, MenuPageFragment.MenuViewStateListener {
+public class MenuFragment extends Fragment implements Listener {
     private static final String ARG_MENUINFO = "menuinfo";
-
-    private OnFragmentInteractionListener mListener;
-
     private MenuInfo menuInfo;
 
     private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
+    private MenuFragmentPagerAdapter pagerAdapter;
     private TabLayout tabLayout;
     private TextView mMenuRestaurantNameView;
     private Menu optionsMenu;
     private Button mMenuOrderButton;
 
 
-    private static boolean isGridView = false;
+    private static ViewType viewType = ViewType.LIST_VIEW;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -103,7 +99,7 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-        pagerAdapter = new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo, this);
+        pagerAdapter = new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo, viewType);
         viewPager.setAdapter(pagerAdapter);
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -155,9 +151,11 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
     private void toggleViewTypeMenu(Menu menu) {
         int grid = R.id.to_grid_view;
         int list = R.id.to_list_view;
-        menu.findItem(grid).setVisible(!isGridView);
-        menu.findItem(list).setVisible(isGridView);
+        menu.findItem(grid).setVisible(viewType == ViewType.LIST_VIEW);
+        menu.findItem(list).setVisible(viewType == ViewType.GRID_VIEW);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -166,15 +164,17 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
 
         switch (item.getItemId()) {
             case R.id.to_grid_view:
-                if (!isGridView) {
-                    isGridView = true;
+                if (viewType == ViewType.LIST_VIEW) {
+                    viewType = ViewType.GRID_VIEW;
+                    pagerAdapter.updateViewType(viewType);
                     pagerAdapter.notifyDataSetChanged();
                     toggleViewTypeMenu(this.optionsMenu);
                 }
                 return true;
             case R.id.to_list_view:
-                if (isGridView) {
-                    isGridView = false;
+                if (viewType == ViewType.GRID_VIEW) {
+                    viewType = ViewType.LIST_VIEW;
+                    pagerAdapter.updateViewType(viewType);
                     pagerAdapter.notifyDataSetChanged();
                     toggleViewTypeMenu(this.optionsMenu);
                 }
@@ -189,12 +189,6 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
@@ -209,22 +203,5 @@ public class MenuFragment extends Fragment implements Listener, MenuPageFragment
         setOrderButtonProperties();
     }
 
-    @Override
-    public boolean currentViewIsGrid() {
-        return  isGridView;
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }

@@ -11,6 +11,10 @@ import com.example.aggoetey.myapplication.model.MenuItem;
 
 /**
  * Created by sitt on 09/04/18.
+ *
+ * View initializer for menu cards in grid view.
+ *
+ * //TODO: Make this class extend a view group instead of working with view initializer
  */
 
 public class MenuCardViewInitializer implements ViewInitializer<MenuItem, MenuCardViewInitializer> {
