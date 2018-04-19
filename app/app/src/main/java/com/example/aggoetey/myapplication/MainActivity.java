@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.menu.MenuInfo;
@@ -18,29 +17,29 @@ import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.tab.TabFragment;
 
-import com.example.aggoetey.myapplication.model.Menu;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks, DiscoverContainerFragment.RestaurantSelectListener {
 
     private boolean first = false;
-    private static final String VISIBLE_FRAGMENT_KEY = "VISIBLE_FRAGMEN";
+    private static final String FIRST_KEY = "VISIBLE_FRAGMEN";
 
     private Restaurant restaurant;
     private MenuInfo menuInfo;
 
+    MenuFragment menuFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        if(savedInstanceState != null) {
-            first = savedInstanceState.getBoolean(VISIBLE_FRAGMENT_KEY);
+        if (savedInstanceState != null) {
+            first = savedInstanceState.getBoolean(FIRST_KEY);
+            menuFragment = (MenuFragment) getSupportFragmentManager().getFragment(savedInstanceState, "MenuFragment");
         }
 
-        enableBottomNavigation();
+        setContentView(R.layout.activity_main);
 
-        createTestRestaurant();
-        menuInfo = new MenuInfo(restaurant);
+        enableBottomNavigation();
     }
 
     /**
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         if (!first) {
             FragmentManager manager = getSupportFragmentManager();
             DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
+            discoverContainerFragment.setRestaurantSelectListener(this);
             manager.beginTransaction().add(R.id.fragment_place, discoverContainerFragment).commit();
             first = true;
         }
@@ -67,10 +67,11 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                         switch (item.getItemId()) {
                             case R.id.action_discover:
                                 DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
+                                discoverContainerFragment.setRestaurantSelectListener(MainActivity.this);
                                 manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
                                 break;
                             case R.id.action_menu:
-                                manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
+                                switchToMenu(null);
                                 break;
                             case R.id.action_pay:
                                 TabFragment tabFragment = new TabFragment();
@@ -90,36 +91,26 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
 
     }
 
-    private void createTestRestaurant() {
-        Menu current_menu = new Menu();
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
 
-        restaurant = new Restaurant("Chez Cyka Blyat", current_menu);
+    /**
+     * Als er geen menu is dat ingeladen moet worden kan je hier null aan meegeven
+     * Dan zal het menuFragment zelf kijken of hij al weet welk menu er is en anders een ander menuutje inladen
+     */
+    private void switchToMenu(MenuInfo menuInfo) {
+        FragmentManager manager = getSupportFragmentManager();
+        if (menuFragment == null) {
+            menuFragment = MenuFragment.newInstance(menuInfo);
+        }
+        manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
+
+        // Selects the correct item in the view
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.getMenu().findItem(R.id.action_menu).setChecked(true);
     }
-
 
     /**
      * Bij het selecteren van een order de juiste actie doen
+     *
      * @param order
      */
     @Override
@@ -137,9 +128,20 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         }
     }
 
+    /**
+     * Bij het selecteren van een Restaurant
+     */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(VISIBLE_FRAGMENT_KEY, first);
+    public void onRestaurantSelect(MenuInfo menuInfo) {
+        switchToMenu(menuInfo);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Save MenuFragment instance
         super.onSaveInstanceState(outState);
+        outState.putBoolean(FIRST_KEY, first);
+        // Save MenuFragment instance
+        getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
     }
 }
