@@ -22,14 +22,36 @@ public class RestaurantProvider extends Fragment {
     }
 
     public RestaurantProvider() {
+        Menu current_menu = new Menu();
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
+        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
 
         // Dummy restaurants, zullen in Sprint 2 dynamisch van de database gehaald worden
-        list.add(new Restaurant("Ally's", new Menu(),51.0116228, 3.703219500000001, "Grotesteenweg-Noord 83, 9052 Gent, Belgium", "+32 9 324 44 42", 4.4,"ChIJW-0XrL5zw0cR5qMWyaOQO3c"));
-        list.add(new Restaurant("Hong Thong Thai Restaurant", new Menu(), 51.0107888, 3.702853, "Grotesteenweg-Noord 61, 9052 Gent, Belgium", "+32 9 391 95 21", 3.8,"ChIJTQGh-Ltzw0cRchmw4FtjZbI"));
-        list.add(new Restaurant("Woody Sandwichbar", new Menu(), 51.0130622, 3.704545099999999, "Bollebergen 15/A, 9052 Gent, Belgium", "+32 9 221 43 93", 3.5,"ChIJB_Gg6b5zw0cRx52kSGVGQT0"));
-        list.add(new Restaurant("Frituur 't Lekkerbekje", new Menu(), 51.0105049, 3.702324200000001, "Grotesteenweg-Noord 51, 9052 Gent, Belgium", "+32 9 330 06 41", 4.3,"ChIJUxDA8Ltzw0cRwWbx7AcryD4"));
-        list.add(new Restaurant("Gitane", new Menu(), 51.015314, 3.7062634, "Bollebergen 95, 9052 Gent, Belgium", "+32 9 221 78 87", -1,"ChIJI0UedL9zw0cR_5TZvd3pDWs"));
-        list.add(new Restaurant("Amadeus Gent 1", new Menu(), 51.057956, 3.722445, "Plotersgracht 8, 9000 Gent, Belgium", "+32 497 43 85 71", 4.1,"ChIJq3hVrzhxw0cRSC3feblv4iY"));
+        list.add(new Restaurant("Ally's", current_menu,51.0116228, 3.703219500000001, "Grotesteenweg-Noord 83, 9052 Gent, Belgium", "+32 9 324 44 42", 4.4,"ChIJW-0XrL5zw0cR5qMWyaOQO3c"));
+        list.add(new Restaurant("Hong Thong Thai Restaurant", current_menu, 51.0107888, 3.702853, "Grotesteenweg-Noord 61, 9052 Gent, Belgium", "+32 9 391 95 21", 3.8,"ChIJTQGh-Ltzw0cRchmw4FtjZbI"));
+        list.add(new Restaurant("Woody Sandwichbar", current_menu, 51.0130622, 3.704545099999999, "Bollebergen 15/A, 9052 Gent, Belgium", "+32 9 221 43 93", 3.5,"ChIJB_Gg6b5zw0cRx52kSGVGQT0"));
+        list.add(new Restaurant("Frituur 't Lekkerbekje", current_menu, 51.0105049, 3.702324200000001, "Grotesteenweg-Noord 51, 9052 Gent, Belgium", "+32 9 330 06 41", 4.3,"ChIJUxDA8Ltzw0cRwWbx7AcryD4"));
+        list.add(new Restaurant("Gitane", current_menu, 51.015314, 3.7062634, "Bollebergen 95, 9052 Gent, Belgium", "+32 9 221 78 87", -1,"ChIJI0UedL9zw0cR_5TZvd3pDWs"));
+        list.add(new Restaurant("Amadeus Gent 1", current_menu, 51.057956, 3.722445, "Plotersgracht 8, 9000 Gent, Belgium", "+32 497 43 85 71", 4.1,"ChIJq3hVrzhxw0cRSC3feblv4iY"));
     }
 
     public ArrayList<Restaurant> getRestaurants() {

@@ -14,6 +14,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
+import com.example.aggoetey.myapplication.menu.MenuInfo;
 
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants
@@ -36,8 +37,27 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     private DiscoverFragment currentfragment;
     private FloatingSearchView mSearchView;
 
+    // Interface to open menu
+    private RestaurantSelectListener mListener;
+    public interface RestaurantSelectListener {
+        void onRestaurantSelect(MenuInfo menuInfo);
+    }
+
     public DiscoverContainerFragment() {
 
+    }
+
+    public static DiscoverContainerFragment newInstance() {
+        DiscoverContainerFragment fragment = new DiscoverContainerFragment();
+        return fragment;
+    }
+
+    public void setRestaurantSelectListener(RestaurantSelectListener listener) {
+        this.mListener = listener;
+    }
+
+    public RestaurantSelectListener getSelectListener() {
+        return mListener;
     }
 
     @Override
