@@ -83,10 +83,11 @@ public class MenuFragment extends Fragment implements Listener {
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.e("MenuFragment",  "Fragment created");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
 
@@ -133,6 +134,12 @@ public class MenuFragment extends Fragment implements Listener {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        menuInfo.clearAdapters();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_view_change, menu);
         this.optionsMenu = menu;
@@ -165,6 +172,7 @@ public class MenuFragment extends Fragment implements Listener {
             case R.id.to_grid_view:
                 if (viewType == ViewType.LIST_VIEW) {
                     viewType = ViewType.GRID_VIEW;
+                    menuInfo.clearAdapters();
                     pagerAdapter.updateViewType(viewType);
                     pagerAdapter.notifyDataSetChanged();
                     toggleViewTypeMenu(this.optionsMenu);
@@ -173,9 +181,11 @@ public class MenuFragment extends Fragment implements Listener {
             case R.id.to_list_view:
                 if (viewType == ViewType.GRID_VIEW) {
                     viewType = ViewType.LIST_VIEW;
+                    menuInfo.clearAdapters();
                     pagerAdapter.updateViewType(viewType);
                     pagerAdapter.notifyDataSetChanged();
                     toggleViewTypeMenu(this.optionsMenu);
+
                 }
                 return true;
             default:

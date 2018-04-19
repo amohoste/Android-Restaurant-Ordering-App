@@ -14,7 +14,7 @@ import java.util.Observer;
  * Een tab is een lijst met orders die nog betaald moeten worden door een bepaalde tafel.
  */
 
-public class Tab extends Model {
+public class Tab extends Model implements  Serializable {
 
     private static final Tab ourInstance = new Tab();
 

@@ -19,13 +19,13 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter implements Me
 
     private String tabTitles[];
     private MenuInfo menuInfo;
-    private ViewType viewType;
+    private static ViewType viewType;
     public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, ViewType viewType) {
         super(fm);
         tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
                 new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
         this.menuInfo = menuInfo;
-        this.viewType = viewType;
+        MenuFragmentPagerAdapter.viewType = viewType;
     }
 
     @Override
@@ -57,12 +57,12 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter implements Me
 
     @Override
     public ViewType currentViewIsGrid() {
-        return this.viewType;
+        return viewType;
 
     }
 
     @Override
     public void updateViewType(ViewType viewType) {
-        this.viewType = viewType;
+        MenuFragmentPagerAdapter.viewType = viewType;
     }
 }

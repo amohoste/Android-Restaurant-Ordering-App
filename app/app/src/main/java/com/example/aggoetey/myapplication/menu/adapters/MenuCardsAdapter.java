@@ -32,14 +32,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         this.menuInfo = menuInfo;
         this.category = category;
         this.listener = listener;
-        menuInfo.addAdapter(this);
 
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        menuInfo.removeAdapter(this);
     }
 
     @Override

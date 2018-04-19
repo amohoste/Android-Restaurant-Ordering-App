@@ -64,11 +64,13 @@ public class MenuInfo implements Serializable {
 
     public void notifyAllAdapters() {
         for (RecyclerView.Adapter adapter : mAdapters) {
-            Log.i("MenuInfo", adapter.toString());
+            Log.i("MenuInfo", mAdapters.size() + "");
             adapter.notifyDataSetChanged();
         }
     }
     public void clearAdapters(){
+
+        Log.e("Menuinfo", "Cleared Adapters!");
         this.mAdapters.clear();
     }
 

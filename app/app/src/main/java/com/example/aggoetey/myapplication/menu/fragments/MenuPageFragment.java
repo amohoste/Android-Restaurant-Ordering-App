@@ -32,7 +32,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     private MenuInfo menuInfo;
     private int mPage;
     private String category;
-    private transient RecyclerView mMenuPageRecyclerView;
+
     private RecyclerView.Adapter mMenuRecyclerAdapter;
     private MenuViewStateListener menuViewStateListener;
 
@@ -60,8 +60,8 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu_page, container, false);
-        mMenuPageRecyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler_view);
-        initViewType(mMenuPageRecyclerView);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler_view);
+        initViewType(recyclerView);
 
         return view;
     }
@@ -80,6 +80,8 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
         } else {
             adapter = new MenuListAdapter(menuInfo, category, this);
         }
+
+        menuInfo.addAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSpan));
         recyclerView.setAdapter(adapter);
         mMenuRecyclerAdapter = adapter;
@@ -96,7 +98,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
         showDialog(MenuCardInfoDialogFragment.newInstance(menuItem, menuInfo, position, new MenuCardInfoDialogFragment.CardDialogClickListener() {
             @Override
             public void onInteraction(int pos) {
-                mMenuPageRecyclerView.getAdapter().notifyItemChanged(pos);
+                mMenuRecyclerAdapter.notifyItemChanged(pos);
             }
         }));
     }
