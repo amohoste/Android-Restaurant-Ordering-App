@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
+import com.example.aggoetey.myapplication.model.DataView;
 import com.example.aggoetey.myapplication.model.Restaurant;
 
 import java.io.Serializable;
@@ -32,7 +33,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  * 
  */
 
-public class RestaurantInfoCardView extends LinearLayout {
+public class RestaurantInfoCardView extends LinearLayout implements DataView<Restaurant>{
     // View fields
     private TextView nameTextView;
     private TextView ratingTextView;
@@ -58,8 +59,8 @@ public class RestaurantInfoCardView extends LinearLayout {
         init();
     }
 
-
-    private void init() {
+    @Override
+    public void init() {
         inflate(getContext(), R.layout.discover_restaurant_info_card, this);
         // Initialize views
         nameTextView = (TextView) findViewById(R.id.card_name);
@@ -75,7 +76,7 @@ public class RestaurantInfoCardView extends LinearLayout {
         
     }
 
-
+    @Override
     public void bind(final Restaurant restaurant) {
         this.nameTextView.setText(restaurant.getTitle());
         Double rating = restaurant.getRating();

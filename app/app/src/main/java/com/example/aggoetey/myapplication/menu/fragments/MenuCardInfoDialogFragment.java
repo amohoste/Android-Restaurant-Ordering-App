@@ -6,10 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
-import android.view.View;
 
-import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.menu.views.MenuCardViewInitializer;
+import com.example.aggoetey.myapplication.menu.views.MenuCardView;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
 
@@ -23,7 +21,7 @@ import java.io.Serializable;
  * 
  */
 
-public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCardViewInitializer.OnAddNoteButtonClickListener {
+public class MenuCardInfoDialogFragment extends DialogFragment {
 
 
     public interface CardDialogClickListener extends Serializable {
@@ -63,9 +61,15 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
         menuItemPos = getArguments().getInt(ARG_CARD_MENU_POS);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_menu_card_item, null);
 
+        MenuCardView view =  new MenuCardView(getContext(), menuInfo, new MenuCardView.OnAddNoteButtonClickListener() {
+            @Override
+            public void onAddNoteButtonClick(MenuItem data) {
+                showDialog(OrderNoteDialogFragment.newInstance(data, menuInfo));
+            }
+        });
+
+        view.bind(menuItem);
     
         builder.setView(view)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
@@ -76,12 +80,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
                     }
                 });
 
-        //TODO: Swap the following initializer with a custom card body view!!
-        /**Holding this for now, but will swap it with a custom view next sprint */
-        
-        new MenuCardViewInitializer(menuInfo, this)
-                .intializeView(view)
-                .updateView(menuItem);
+
 
         return builder.create();
     }
@@ -100,10 +99,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
         listener.onInteraction(menuItemPos);
     }
 
-    @Override
-    public void onAddNoteButtonClick(MenuItem item) {
-        showDialog(OrderNoteDialogFragment.newInstance(item, menuInfo));
-    }
+
 
     private void showDialog(DialogFragment fragment) {
         fragment.show(this.getFragmentManager(), this.toString());

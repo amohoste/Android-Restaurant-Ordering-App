@@ -1,5 +1,8 @@
 package com.example.aggoetey.myapplication.menu.views;
 
+import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -7,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.DataView;
 import com.example.aggoetey.myapplication.model.MenuItem;
 
 /**
@@ -17,7 +21,8 @@ import com.example.aggoetey.myapplication.model.MenuItem;
  * //TODO: Make this class extend a view group instead of working with view initializer
  */
 
-public class MenuCardViewInitializer implements ViewInitializer<MenuItem, MenuCardViewInitializer> {
+public class MenuCardView extends CardView implements DataView<MenuItem>{
+
 
     public interface  OnAddNoteButtonClickListener {
         void onAddNoteButtonClick (MenuItem data);
@@ -35,24 +40,41 @@ public class MenuCardViewInitializer implements ViewInitializer<MenuItem, MenuCa
     private OnAddNoteButtonClickListener mListener;
 
 
-    
     private MenuInfo menuInfo;
 
-    public MenuCardViewInitializer(MenuInfo menuInfo, OnAddNoteButtonClickListener listener) {
+    public MenuCardView(Context context) {
+        super(context);
+        init();
+    }
+
+    public MenuCardView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public MenuCardView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+
+    public MenuCardView(Context context, MenuInfo menuInfo, OnAddNoteButtonClickListener listener) {
+        super(context);
         this.menuInfo = menuInfo;
         this.mListener = listener;
+        init();
     }
 
-    @Override
-    public MenuCardViewInitializer intializeView(View view) {
 
+    @Override
+    public void init() {
+        View view = inflate(getContext(), R.layout.fragment_menu_card_item, this );
         infoViewInit(view);
         buttonInit(view);
-        return  this;
     }
 
     @Override
-    public MenuCardViewInitializer updateView(final MenuItem data) {
+    public void bind(final MenuItem data) {
         setNewOrderCount(data.id);
         updateAddNoteButton(data);
         updateTextView(data);
@@ -84,8 +106,6 @@ public class MenuCardViewInitializer implements ViewInitializer<MenuItem, MenuCa
                 mListener.onAddNoteButtonClick(data);
             }
         });
-        
-        return this;
     }
 
     private void updateTextView (final MenuItem item){
