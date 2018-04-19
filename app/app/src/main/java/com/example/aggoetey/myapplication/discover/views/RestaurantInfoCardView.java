@@ -26,6 +26,10 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by sitt on 18/04/18.
+ * 
+ * A view which contains a card view of a restaurant similar to the cards in restaurant list.
+ * This info card will be expanded with google maps routing in the near future.
+ * 
  */
 
 public class RestaurantInfoCardView extends LinearLayout {

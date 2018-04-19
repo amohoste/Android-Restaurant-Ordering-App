@@ -6,6 +6,8 @@ import android.util.Log;
 
 /**
  * Created by sitt on 05/04/18.
+ * 
+ * Utility class which can be expanded upon to calculate UI bounds/layouts. 
  */
 
 public class UIUtility {

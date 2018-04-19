@@ -15,6 +15,8 @@ import com.example.aggoetey.myapplication.model.MenuItem;
 
 /**
  * Created by sitt on 05/04/18.
+ * 
+ * Adapter to show menu in cards form.
  */
 
 public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> {
@@ -82,7 +84,9 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
 
 
 
-
+    /**
+     * View holder for individual cards in the recycler view. 
+     */
     public class  MenuCardHolder extends RecyclerView.ViewHolder{
 
         private TextView mDescriptionTextView;

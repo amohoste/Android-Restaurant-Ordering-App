@@ -15,7 +15,8 @@ import java.util.List;
  * Een restaurant model.
  */
 
-//TODO: Make restaurant parcelable to be able to save restaurant in bundles since LatLng is only parcelable
+//TODO: Make restaurant parcelable to be able to save restaurant in bundles without transient
+//TODO: since LatLng is only parcelable not serializable.
 
 public class Restaurant implements Serializable {
 

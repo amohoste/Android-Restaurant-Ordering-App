@@ -17,6 +17,10 @@ import java.io.Serializable;
 
 /**
  * Created by sitt on 09/04/18.
+ * 
+ * A menu card dialog which will open up when there is a hold click on menu items during the list view. 
+ * Notes can be added to the menu which can be viewed in the payment tab. 
+ * 
  */
 
 public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCardViewInitializer.OnAddNoteButtonClickListener {
@@ -62,7 +66,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_menu_card_item, null);
 
-
+    
         builder.setView(view)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
@@ -72,13 +76,17 @@ public class MenuCardInfoDialogFragment extends DialogFragment implements MenuCa
                     }
                 });
 
-
+        //TODO: Swap the following initializer with a custom card body view!!
+        /**Holding this for now, but will swap it with a custom view next sprint */
+        
         new MenuCardViewInitializer(menuInfo, this)
                 .intializeView(view)
                 .updateView(menuItem);
 
         return builder.create();
     }
+
+
 
     @Override
     public void onDismiss(DialogInterface dialog) {
