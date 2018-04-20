@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 
 import com.example.aggoetey.myapplication.discover.views.RestaurantInfoCardView;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,7 +45,7 @@ import com.example.aggoetey.myapplication.discover.views.MapIconsRenderer;
 /**
  * Fragment that displays a map of restaurants
  */
-public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback, View.OnClickListener {
+public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback, View.OnClickListener, RestaurantInfoCardView.OnCardClickListener {
 
     // Constants
     private static final String CAMERA_STATE_KEY = "MAPS-CAMERA-POSITION";
@@ -57,8 +58,6 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     private GoogleMap mMap;
     private ClusterManager<RestaurantMapItem> mClusterManager;
     MarkerManager.Collection collection;
-
-
 
     private ClickableImageView locationButton;
     private CameraPosition lastpos;
@@ -238,6 +237,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
             chosenRestaurant = restaurant;
             RestaurantInfoCardView restaurantInfoCardView = new RestaurantInfoCardView(getContext());
             restaurantInfoCardView.bind(restaurant);
+            restaurantInfoCardView.setCardClickListener(this);
             restaurantCardLayout.addView(restaurantInfoCardView);
         }
     }
@@ -342,4 +342,13 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
     }
 
+    @Override
+    public void onCardClick(Restaurant restaurant) {
+        DiscoverContainerFragment parent = (DiscoverContainerFragment) getParentFragment();
+        DiscoverContainerFragment.RestaurantSelectListener mListener =  parent.getSelectListener();
+        if (mListener != null) {
+            parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
+        }
+        //Toast.makeText(getContext(), "Menu", Toast.LENGTH_SHORT).show();
+    }
 }

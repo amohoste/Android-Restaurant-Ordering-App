@@ -44,6 +44,20 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
     private TextView placetype;
     private ClickableImageView navigation;
     private TextView phone;
+    private CardView cardView;
+
+    private Restaurant mRestaurant;
+
+    // Listener
+    private OnCardClickListener mListener;
+
+    public interface OnCardClickListener {
+        void onCardClick(Restaurant restaurant);
+    }
+
+    public void setCardClickListener(OnCardClickListener listener) {
+        this.mListener = listener;
+    }
 
     public RestaurantInfoCardView(Context context) {
         super(context);
@@ -64,6 +78,7 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
     public void init() {
         inflate(getContext(), R.layout.discover_restaurant_info_card, this);
         // Initialize views
+        cardView = (CardView) findViewById(R.id.restaurant_infocard_cardview);
         nameTextView = (TextView) findViewById(R.id.card_name);
         ratingTextView = (TextView) findViewById(R.id.card_stars);
         hoursTextView = (TextView) findViewById(R.id.card_hours);
@@ -75,11 +90,20 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
 
         navigation = (ClickableImageView) findViewById(R.id.card_navigationButton);
         navigation.setVisibility(View.VISIBLE);
-        
+
+        cardView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null && mRestaurant != null) {
+                    mListener.onCardClick(mRestaurant);
+                }
+            }
+        });
     }
 
     @Override
     public void bind(final Restaurant restaurant) {
+        mRestaurant = restaurant;
         this.nameTextView.setText(restaurant.getTitle());
         Double rating = restaurant.getRating();
         phone.setText(restaurant.getPhone());

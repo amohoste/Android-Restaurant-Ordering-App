@@ -84,6 +84,7 @@
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="5dp"
         android:orientation="vertical"
+        android:onClick="onInfoCardClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/listButton"
          />
