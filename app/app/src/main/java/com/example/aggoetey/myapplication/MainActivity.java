@@ -73,8 +73,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
                                 break;
                             case R.id.action_pay:
-                                TabFragment tabFragment = new TabFragment();
-                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
                                 break;
                         }
 
