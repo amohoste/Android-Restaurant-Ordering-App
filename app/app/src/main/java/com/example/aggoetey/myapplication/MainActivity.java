@@ -76,8 +76,7 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
                                 switchToMenu(createTestRestaurant());
                                 break;
                             case R.id.action_pay:
-                                TabFragment tabFragment = new TabFragment();
-                                manager.beginTransaction().replace(R.id.fragment_place, tabFragment).commit();
+                                manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
                                 break;
                         }
 
