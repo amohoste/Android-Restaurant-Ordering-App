@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
+import com.example.aggoetey.myapplication.discover.fragments.DiscoverFragment;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
@@ -35,6 +37,12 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         if (savedInstanceState != null) {
             first = savedInstanceState.getBoolean(FIRST_KEY);
             menuFragment = (MenuFragment) getSupportFragmentManager().getFragment(savedInstanceState, "MenuFragment");
+        }
+
+        // Todo Little hacky, do better in second sprint
+        Fragment cur = getSupportFragmentManager().findFragmentById(R.id.fragment_place);
+        if (cur instanceof DiscoverContainerFragment) {
+            ((DiscoverContainerFragment) cur).setRestaurantSelectListener(this);
         }
 
         setContentView(R.layout.activity_main);
