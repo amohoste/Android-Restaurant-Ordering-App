@@ -83,6 +83,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
         if (savedInstanceState != null && mMap != null) {
             lastpos = savedInstanceState.getParcelable(CAMERA_STATE_KEY);
