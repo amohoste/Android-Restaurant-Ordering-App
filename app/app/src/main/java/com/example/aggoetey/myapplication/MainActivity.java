@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
 import com.example.aggoetey.myapplication.menu.MenuFragment;
 import com.example.aggoetey.myapplication.menu.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -19,10 +20,10 @@ import com.example.aggoetey.myapplication.tab.TabFragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener, TabFragment.Callbacks {
+
+    private boolean first = false;
+    private static final String VISIBLE_FRAGMENT_KEY = "VISIBLE_FRAGMEN";
 
     private Restaurant restaurant;
     private MenuInfo menuInfo;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(savedInstanceState != null) {
+            first = savedInstanceState.getBoolean(VISIBLE_FRAGMENT_KEY);
+        }
 
         enableBottomNavigation();
 
@@ -45,13 +49,25 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
     private void enableBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        // Set discovery as visible fragment when app starts
+        if (!first) {
+            FragmentManager manager = getSupportFragmentManager();
+            DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
+            manager.beginTransaction().add(R.id.fragment_place, discoverContainerFragment).commit();
+            first = true;
+        }
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         FragmentManager manager = getSupportFragmentManager();
+
                         switch (item.getItemId()) {
                             case R.id.action_discover:
+                                DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
+                                manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
                                 break;
                             case R.id.action_menu:
                                 manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
@@ -60,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                                 manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
                                 break;
                         }
+
 
                         return true;
                     }
@@ -117,5 +134,11 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnFr
                     .replace(R.id.order_detail_fragment_container, OrderDetailFragment.newInstance(order))
                     .commit();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(VISIBLE_FRAGMENT_KEY, first);
+        super.onSaveInstanceState(outState);
     }
 }
