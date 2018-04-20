@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
             menuFragment = (MenuFragment) getSupportFragmentManager().getFragment(savedInstanceState, "MenuFragment");
         }
 
+        // Todo Little hacky, do better in second sprint
         Fragment cur = getSupportFragmentManager().findFragmentById(R.id.fragment_place);
         if (cur instanceof DiscoverContainerFragment) {
             ((DiscoverContainerFragment) cur).setRestaurantSelectListener(this);
