@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         );
     }
 
-
     /**
      * Als er geen menu is dat ingeladen moet worden kan je hier null aan meegeven
      * Dan zal het menuFragment zelf kijken of hij al weet welk menu er is en anders een ander menuutje inladen
