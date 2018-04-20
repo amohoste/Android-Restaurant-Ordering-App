@@ -14,6 +14,7 @@ import com.example.aggoetey.myapplication.discover.fragments.DiscoverFragment;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
+import com.example.aggoetey.myapplication.menu.fragments.NoMenuSelectedFragment;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -48,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
-
-        createTestRestaurant();
     }
 
     /**
@@ -81,7 +80,11 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
                                 manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
                                 break;
                             case R.id.action_menu:
-                                switchToMenu(createTestRestaurant());
+                                if (menuFragment != null) {
+                                    switchToMenu(menuFragment.getMenuInfo());
+                                } else {
+                                    switchToMenu(null);
+                                }
                                 break;
                             case R.id.action_pay:
                                 manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
@@ -96,34 +99,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
     }
 
 
-    // TODO: AMORY REMOVE THIS WHEN LOADING RESTAURANTS FROM MAPS IS POSSIBLE
-    private MenuInfo createTestRestaurant() {
-        Menu current_menu = new Menu();
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Coca-cola", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Fanta", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Water", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Jupiler", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Stella", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
-        current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
-
-        return new MenuInfo(new Restaurant("Chez Cyka Blyat", current_menu));
-    }
-
     /**
      * Als er geen menu is dat ingeladen moet worden kan je hier null aan meegeven
      * Dan zal het menuFragment zelf kijken of hij al weet welk menu er is en anders een ander menuutje inladen
@@ -131,27 +106,19 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
     private void switchToMenu(MenuInfo menuInfo) {
         FragmentManager manager = getSupportFragmentManager();
 
-        /*
-          Placeholder for demo
-          ------
-          TODO: Remove this once default behaviour without selecting restaurant has been decided.
-         */
+
         if(menuInfo == null){
-            Restaurant restaurant = RestaurantProvider.newInstance().getRestaurants().get(0);
-            menuInfo = new MenuInfo(restaurant);
-        }
-        /*
-          ----------
-         */
+            manager.beginTransaction().replace(R.id.fragment_place, NoMenuSelectedFragment.newInstance()).commit();
+        } else {
+            if (menuFragment == null) {
+                menuFragment = MenuFragment.newInstance(menuInfo);
+            }
+            manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
 
-        if (menuFragment == null) {
-            menuFragment = MenuFragment.newInstance(menuInfo);
+            // Selects the correct item in the view
+            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+            bottomNavigationView.getMenu().findItem(R.id.action_menu).setChecked(true);
         }
-        manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
-
-        // Selects the correct item in the view
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.getMenu().findItem(R.id.action_menu).setChecked(true);
     }
 
     /**

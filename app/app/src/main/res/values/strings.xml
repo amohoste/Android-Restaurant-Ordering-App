@@ -8,6 +8,7 @@
     <string name="pay_text">Bekijk hier wat je allemaal al besteld hebt.</string>
     <string name="title_menuitem_list">MenuItems</string>
     <string name="title_menuitem_detail">MenuItem Detail</string>
+    <string name="no_restaurant_selected">Gelieve een restaurant te selecteren in de discover tab.</string>
 
     <string name="menu_view_order_button">Order</string>
 
@@ -30,5 +31,8 @@
     <string name="list_view">List View</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
