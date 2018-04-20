@@ -214,7 +214,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                     Log.v("menü", "Open sitt zijn ding adhv restaurantmapitem");
                     resetChosenRestaurant();
                     selectAndStartRestCardView(restaurantMapItem.getRestaurant());
-                    return false;
+                    return true;
                 }
             });
 
