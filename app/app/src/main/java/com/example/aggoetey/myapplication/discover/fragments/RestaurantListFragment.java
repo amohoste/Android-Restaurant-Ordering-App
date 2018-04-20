@@ -110,7 +110,7 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         if (mListener != null) {
             parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
         }
-        Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
     }
 
 
