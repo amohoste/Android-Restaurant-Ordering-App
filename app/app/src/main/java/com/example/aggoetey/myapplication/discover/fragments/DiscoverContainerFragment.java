@@ -3,6 +3,7 @@ package com.example.aggoetey.myapplication.discover.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvi
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 
+import java.util.List;
+
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants
  */
@@ -25,16 +28,20 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     public static final int MAPS_FRAGMENT_ID = 0;
     public static final int LIST_FRAGMENT_ID = 1;
 
+    private static final String CURRENT_FRAGMENT_KEY = "CURRENT-FRAGMENT-KEY";
+    private int currentFragmentId = -1;
+
     // Tags
     private static final String TAG_LOCATION_PROVIDER = "LocationProvider";
     private static final String RESTAURANT_FRAG = "GetRestaurantsFrag";
+    private static final String TAG_MAPS = "MapsFragment";
+    private static final String TAG_LIST = "ListFragment";
 
     // Providers
     private CurrentLocationProvider mLocationProvider;
     private RestaurantProvider mRestaurantProvider;
 
     private FragmentManager fm;
-    private DiscoverFragment currentfragment;
     private FloatingSearchView mSearchView;
 
     // Interface to open menu
@@ -42,6 +49,8 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     public interface RestaurantSelectListener {
         void onRestaurantSelect(MenuInfo menuInfo);
     }
+    private MapsFragment mapsFragment;
+    private RestaurantListFragment listFragment;
 
     public DiscoverContainerFragment() {
 
@@ -88,15 +97,30 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
             fm.beginTransaction().add(mRestaurantProvider, RESTAURANT_FRAG).commit();
         }
 
-        // Setup current fragment
-        currentfragment = (DiscoverFragment) fm.findFragmentById(R.id.discover_fragment_container);
+        if (savedInstanceState != null) {
+            currentFragmentId = savedInstanceState.getInt(CURRENT_FRAGMENT_KEY);
+        } else {
+            currentFragmentId = 0;
+        }
 
-        if (currentfragment == null) {
-            currentfragment = MapsFragment.newInstance();
+        // Set up fragments
+        mapsFragment = (MapsFragment) fm.findFragmentByTag(TAG_MAPS) ;
+        if (mapsFragment == null) {
+            mapsFragment = MapsFragment.newInstance();
             fm.beginTransaction()
-                    .add(R.id.discover_fragment_container, currentfragment)
+                    .add(R.id.discover_fragment_container, mapsFragment, TAG_MAPS)
                     .commit();
         }
+
+        listFragment = (RestaurantListFragment) fm.findFragmentByTag(TAG_LIST);
+        if (listFragment == null) {
+            listFragment = RestaurantListFragment.newInstance();
+            fm.beginTransaction()
+                    .add(R.id.discover_fragment_container, listFragment, TAG_LIST)
+                    .commit();
+        }
+
+        showCurrentFragment();
 
         // Listen to search view clicks
         mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
@@ -118,19 +142,34 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     }
 
     /**
+     * Shows Current Fragment
+     */
+    private void showCurrentFragment() {
+        if (currentFragmentId == MAPS_FRAGMENT_ID) {
+            getChildFragmentManager().beginTransaction().show(mapsFragment).commit();
+            getChildFragmentManager().beginTransaction().hide(listFragment).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().hide(mapsFragment).commit();
+            getChildFragmentManager().beginTransaction().show(listFragment).commit();
+        }
+    }
+
+    /**
      * Change discover view fragment (map / list)
      */
     @Override
     public void setFragment(int fragment) {
         if (fragment == MAPS_FRAGMENT_ID) {
-            currentfragment = MapsFragment.newInstance();
+            currentFragmentId = MAPS_FRAGMENT_ID;
+            getChildFragmentManager().beginTransaction().hide(listFragment).commit();
+            getChildFragmentManager().beginTransaction().show(mapsFragment).commit();
 
         } else {
-            currentfragment = RestaurantListFragment.newInstance();
+            currentFragmentId = LIST_FRAGMENT_ID;
+            getChildFragmentManager().beginTransaction().hide(mapsFragment).commit();
+            getChildFragmentManager().beginTransaction().show(listFragment).commit();
         }
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.discover_fragment_container, currentfragment)
-                .commit();
+
     }
 
 
@@ -148,6 +187,16 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (currentFragmentId != -1) {
+            outState.putInt(CURRENT_FRAGMENT_KEY, currentFragmentId);
+        }
+
     }
 
 }
