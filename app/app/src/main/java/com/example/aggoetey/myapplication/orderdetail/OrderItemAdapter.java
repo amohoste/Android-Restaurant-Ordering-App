@@ -56,7 +56,6 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         }
 
         public void bind(Tab.Order.OrderItem orderItem) {
-            Log.d("binding", "binding");
             this.orderItem = orderItem;
             name.setText(orderItem.getMenuItem().title);
             note.setText(orderItem.getNote());

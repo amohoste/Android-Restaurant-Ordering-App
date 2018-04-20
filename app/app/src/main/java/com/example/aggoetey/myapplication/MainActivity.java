@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverFragment;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
@@ -28,8 +30,8 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
 
     private boolean first = false;
     private static final String FIRST_KEY = "VISIBLE_FRAGMEN";
-
-    MenuFragment menuFragment;
+    private static final String MENU_OBJECT_KEY = "MENU_OBJECT_KEY";
+    private MenuInfo menuInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
 
         if (savedInstanceState != null) {
             first = savedInstanceState.getBoolean(FIRST_KEY);
-            menuFragment = (MenuFragment) getSupportFragmentManager().getFragment(savedInstanceState, "MenuFragment");
+
+            menuInfo = (MenuInfo) savedInstanceState.getSerializable(MENU_OBJECT_KEY);
         }
 
         // Todo Little hacky, do better in second sprint
@@ -80,11 +83,7 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
                                 manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
                                 break;
                             case R.id.action_menu:
-                                if (menuFragment != null) {
-                                    switchToMenu(menuFragment.getMenuInfo());
-                                } else {
-                                    switchToMenu(null);
-                                }
+                                switchToMenu(menuInfo);
                                 break;
                             case R.id.action_pay:
                                 manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
@@ -104,16 +103,13 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
      */
     private void switchToMenu(MenuInfo menuInfo) {
         FragmentManager manager = getSupportFragmentManager();
+        this.menuInfo = menuInfo;
 
-
-        if(menuInfo == null){
+        if (menuInfo == null) {
             manager.beginTransaction().replace(R.id.fragment_place, NoMenuSelectedFragment.newInstance()).commit();
         } else {
-            if (menuFragment == null || (! menuFragment.getMenuInfo().getRestaurant().getTitle().equals(menuInfo.getRestaurant().getTitle()))) {
-                menuFragment = MenuFragment.newInstance(menuInfo);
-            }
 
-            manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
+            manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
 
             // Selects the correct item in the view
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -149,14 +145,14 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         outState.putBoolean(FIRST_KEY, first);
 
         // Save MenuFragment instance
-        if(menuFragment != null && menuFragment.isAdded()) {
-            getSupportFragmentManager().putFragment(outState, "MenuFragment", menuFragment);
+        if (menuInfo != null) {
+            outState.putSerializable(MENU_OBJECT_KEY, menuInfo);
         }
     }
 
 
     @Override
     public void onRestaurantSelect(MenuInfo menuInfo) {
-    switchToMenu(menuInfo);
-}
+        switchToMenu(menuInfo);
+    }
 }
