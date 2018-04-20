@@ -83,9 +83,8 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
 
-        if (savedInstanceState != null && mMap != null) {
+        if (savedInstanceState != null) {
             lastpos = savedInstanceState.getParcelable(CAMERA_STATE_KEY);
         }
     }
@@ -133,12 +132,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         if (locationProvider != null) {
             enableLocationBullet();
             if (lastpos != null) {
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(lastpos));
-            } else {
-                Location loc = locationProvider.getLastLocation();
-                if (loc != null) {
-                    zoomMapToPosition(locationProvider.getLastLocation(), GENERAL_ZOOM);
-                }
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(lastpos));
             }
         }
 
@@ -269,11 +263,10 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
         if (mMap != null) {
             outState.putParcelable(CAMERA_STATE_KEY, mMap.getCameraPosition());
         }
+        super.onSaveInstanceState(outState);
     }
 
 }
