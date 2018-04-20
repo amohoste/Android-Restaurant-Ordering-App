@@ -6,4 +6,29 @@
     <string name="discover_text">Hier kan je ontdekken wat er allemaal te doen is in de wereld.</string>
     <string name="menu_text">Bekijk hier een mooi menu.</string>
     <string name="pay_text">Bekijk hier wat je allemaal al besteld hebt.</string>
+    <string name="title_menuitem_list">MenuItems</string>
+    <string name="title_menuitem_detail">MenuItem Detail</string>
+
+    <string name="menu_view_order_button">Order</string>
+
+    <string name="tab_order_position">Order # %1$d</string>
+    <string name="tab_view_pay">Pay</string>
+    <string name="total_price">Totale prijs: %1$d euro.</string>
+
+    <string name="price_order">Prijs order: %1$d euro.</string>
+    <string name="price_order_short">€%1$d</string>
+    <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="grid_view">Grid view</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus a ante malesuada, laoreet quam at, cursus ligula. Sed placerat, turpis eget tincidunt egestas, ipsum nunc dignissim nulla, ac porta lacus enim id velit. Vivamus pretium ornare lorem vel lobortis. Maecenas ac purus quis enim egestas laoreet.</string>
+    <string name="menu_image_description">Image of dish</string>
+    <string name="menu_item_name">Dish Name</string>
+    <string name="card_more">more</string>
+    <string name="add_note_button">Add Note</string>
+    <string name="list_view">List View</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
