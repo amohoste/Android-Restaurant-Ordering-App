@@ -225,4 +225,8 @@ public class MenuFragment extends Fragment implements Listener {
     public MenuInfo getMenuInfo() {
         return menuInfo;
     }
+
+    public void setMenuInfo(MenuInfo menuInfo) {
+        this.menuInfo = menuInfo;
+    }
 }
