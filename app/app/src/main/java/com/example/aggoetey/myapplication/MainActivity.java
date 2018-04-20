@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Maes", 2, "blabla", "drinks"));
         current_menu.addMenuItem(new com.example.aggoetey.myapplication.model.MenuItem("Kobe Beef", 26, "blabla", "food"));
 
-        return new MenuInfo(new Restaurant("Chez Cyka Blyat", current_menu));
+        return new MenuInfo(new Restaurant("Chez le Bernadin", current_menu));
     }
 
     /**
