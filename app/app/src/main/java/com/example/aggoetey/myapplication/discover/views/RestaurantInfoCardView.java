@@ -43,6 +43,7 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
     private ProgressBar progressbar;
     private TextView placetype;
     private ClickableImageView navigation;
+    private TextView phone;
 
     public RestaurantInfoCardView(Context context) {
         super(context);
@@ -70,6 +71,7 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
         restaurantImageView = (ImageView) findViewById(R.id.card_img);
         progressbar = (ProgressBar) findViewById(R.id.progress);
         placetype = (TextView) findViewById(R.id.placetype);
+        phone = (TextView) findViewById(R.id.phone_hours);
 
         navigation = (ClickableImageView) findViewById(R.id.card_navigationButton);
         navigation.setVisibility(View.VISIBLE);
@@ -80,6 +82,7 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
     public void bind(final Restaurant restaurant) {
         this.nameTextView.setText(restaurant.getTitle());
         Double rating = restaurant.getRating();
+        phone.setText(restaurant.getPhone());
 
         // Check if restaurant has rating
         if (rating >= 0 && rating <= 5) {
@@ -100,8 +103,8 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
         }
 
         //TODO: get data from backend
-        hoursTextView.setText("Hours not known");
-        placetype.setText("Bar -placeholder-");
+        hoursTextView.setText("08:00 - 16:00");
+        placetype.setText("Restaurant");
 
         loadRestaurantPicture(restaurant);
     }
@@ -121,6 +124,5 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
         progressbar.setVisibility(View.GONE);
         restaurantImageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.restaurant_placeholder));
     }
-
 
 }

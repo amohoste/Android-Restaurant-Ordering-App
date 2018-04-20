@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 import com.example.aggoetey.myapplication.discover.views.RestaurantInfoCardView;
@@ -137,6 +138,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
         restaurantCardLayout  =  v.findViewById(R.id.restaurant_info_card_parent);
         selectAndStartRestCardView(chosenRestaurant);
+
         restaurantProvider = mCallbacks.getRestaurantProvider();
         locationProvider = mCallbacks.getLocationProvider();
 
