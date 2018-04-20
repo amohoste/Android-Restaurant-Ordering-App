@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
+import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 
 /**
@@ -104,8 +105,12 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
     @Override
     public void onRestaurantClick(Restaurant restaurant) {
         // Todo open restaurant
+        DiscoverContainerFragment parent = (DiscoverContainerFragment) getParentFragment();
+        DiscoverContainerFragment.RestaurantSelectListener mListener =  parent.getSelectListener();
+        if (mListener != null) {
+            parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
+        }
         Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
-
     }
 
 

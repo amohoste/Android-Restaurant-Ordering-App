@@ -1,5 +1,8 @@
 package com.example.aggoetey.myapplication.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -12,10 +15,14 @@ import java.util.List;
  * Een restaurant model.
  */
 
+//TODO: Make restaurant parcelable to be able to save restaurant in bundles without transient
+//TODO: since LatLng is only parcelable not serializable.
+
 public class Restaurant implements Serializable {
 
     private String title;
-    private LatLng position;
+    //TODO: Remove transient once parcelable is achieved
+    private transient LatLng position;
     private String address;
     private String phone;
     private double rating;
@@ -85,4 +92,6 @@ public class Restaurant implements Serializable {
     public String getGooglePlaceId() {
         return googlePlaceId;
     }
+
+
 }

@@ -142,8 +142,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 this.ratingTextView.setText("");
             }
 
-            hoursTextView.setText("Hours not known");
-            placetype.setText("8:00 - 16:00");
+            hoursTextView.setText("8:00 - 16:00");
+            placetype.setText("Restaurant");
         }
 
         @Override

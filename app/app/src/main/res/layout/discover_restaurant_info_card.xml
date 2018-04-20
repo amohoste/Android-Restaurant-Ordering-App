@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CardView.Light"
     android:id="@+id/restaurant_card_layout"
+    style="@style/CardView.Light"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    tools:ignore="ContentDescription"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true">
+    tools:ignore="ContentDescription">
 
-    <android.support.constraint.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -27,9 +25,9 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
             android:ellipsize="end"
+            android:fontFamily="Roboto"
             android:maxLines="1"
             android:text="Le Bernadin"
-            android:fontFamily="Roboto"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/colorPrimaryTextDefaultMaterialLight"
             android:textSize="16sp"
@@ -54,10 +52,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingRight="1dp"
                 android:src="@drawable/star"
                 tools:layout_editor_absoluteX="246dp"
-                tools:layout_editor_absoluteY="16dp"
-                android:paddingRight="1dp"/>
+                tools:layout_editor_absoluteY="16dp" />
 
             <TextView
                 android:id="@+id/card_stars"
@@ -88,57 +86,17 @@
             app:layout_constraintStart_toEndOf="@+id/card_img"
             app:layout_constraintTop_toBottomOf="@+id/card_name" />
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/locationcontainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="12dp"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/card_img"
-            app:layout_constraintVertical_bias="0.8">
-
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/location"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/card_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="97 Upton Points Apt. 854"
-                android:textSize="11sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView7"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/linearLayout11"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="12dp"
             android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout12"
+            app:layout_constraintEnd_toStartOf="@id/card_navigationButton"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/card_img">
 
@@ -168,6 +126,57 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/linearLayout12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/card_navigationButton"
+            app:layout_constraintStart_toEndOf="@+id/card_img">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/phone_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/phone_hours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="+32478968353"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <com.example.aggoetey.myapplication.discover.views.ClickableImageView
+            android:id="@+id/card_navigationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/route_button"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/card_img"

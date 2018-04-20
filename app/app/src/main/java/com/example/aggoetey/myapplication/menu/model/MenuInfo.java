@@ -1,6 +1,10 @@
-package com.example.aggoetey.myapplication.menu;
+package com.example.aggoetey.myapplication.menu.model;
+
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.aggoetey.myapplication.Listener;
+import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
@@ -9,17 +13,19 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Dries on 6/04/2018.
+ *
+ * Klasse dat alle nodige informatie bijhoudt om de huidige bestelling
+ * te kunnen tonen op de menuview van een restaurant.
  */
 
 public class MenuInfo implements Serializable {
 
     private Restaurant restaurant;
     private HashMap<String, Integer> orderCountMap;
-    private HashSet<MenuListAdapter> mAdapters;
+    private HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
 
     public MenuInfo(Restaurant restaurant) {
@@ -33,7 +39,7 @@ public class MenuInfo implements Serializable {
         return orderCountMap;
     }
 
-    public HashSet<MenuListAdapter> getmAdapters() {
+    public HashSet<RecyclerView.Adapter> getmAdapters() {
         return mAdapters;
     }
 
@@ -57,16 +63,23 @@ public class MenuInfo implements Serializable {
     }
 
     public void notifyAllAdapters() {
-        for (MenuListAdapter adapter : mAdapters) {
+        for (RecyclerView.Adapter adapter : mAdapters) {
+            Log.i("MenuInfo", mAdapters.size() + "");
             adapter.notifyDataSetChanged();
         }
     }
+    public void clearAdapters(){
 
-    public void addAdapter(MenuListAdapter adapter) {
+        Log.e("Menuinfo", "Cleared Adapters!");
+        this.mAdapters.clear();
+    }
+
+    public void addAdapter(RecyclerView.Adapter adapter){
+
         mAdapters.add(adapter);
     }
 
-    public void removeAdapter(MenuListAdapter adapter) {
+    public void removeAdapter(RecyclerView.Adapter adapter) {
         mAdapters.remove(adapter);
     }
 

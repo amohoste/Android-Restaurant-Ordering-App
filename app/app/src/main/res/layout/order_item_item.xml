@@ -13,6 +13,11 @@
     <View android:layout_weight="0.1"
         android:layout_height="0dp"
         android:layout_width="0dp" />
+    <TextView
+        android:id="@+id/item_note"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.45"/>
 
     <TextView
         android:id="@+id/price"
