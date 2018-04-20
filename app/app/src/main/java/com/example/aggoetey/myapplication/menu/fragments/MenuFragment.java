@@ -97,7 +97,6 @@ public class MenuFragment extends Fragment implements Listener {
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.menu_toolbar);
         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
         appCompatActivity.setSupportActionBar(toolbar);
-        appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(menuInfo.getRestaurant().getTitle());
@@ -224,5 +223,9 @@ public class MenuFragment extends Fragment implements Listener {
 
     public MenuInfo getMenuInfo() {
         return menuInfo;
+    }
+
+    public void setMenuInfo(MenuInfo menuInfo) {
+        this.menuInfo = menuInfo;
     }
 }

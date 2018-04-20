@@ -109,9 +109,10 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         if(menuInfo == null){
             manager.beginTransaction().replace(R.id.fragment_place, NoMenuSelectedFragment.newInstance()).commit();
         } else {
-            if (menuFragment == null) {
+            if (menuFragment == null || (! menuFragment.getMenuInfo().getRestaurant().getTitle().equals(menuInfo.getRestaurant().getTitle()))) {
                 menuFragment = MenuFragment.newInstance(menuInfo);
             }
+
             manager.beginTransaction().replace(R.id.fragment_place, menuFragment).commit();
 
             // Selects the correct item in the view
@@ -156,6 +157,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
 
     @Override
     public void onRestaurantSelect(MenuInfo menuInfo) {
-        switchToMenu(menuInfo);
-    }
+    switchToMenu(menuInfo);
+}
 }
