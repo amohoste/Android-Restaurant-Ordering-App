@@ -173,7 +173,6 @@ public class MenuFragment extends Fragment implements Listener {
         }
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -223,5 +222,7 @@ public class MenuFragment extends Fragment implements Listener {
         setOrderButtonProperties();
     }
 
-
+    public MenuInfo getMenuInfo() {
+        return menuInfo;
+    }
 }
