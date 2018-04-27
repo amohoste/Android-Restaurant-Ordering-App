@@ -133,7 +133,7 @@ public class MenuFragment extends Fragment implements Listener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_view_change, menu);
+        inflater.inflate(R.menu.menu, menu);
         this.optionsMenu = menu;
         toggleViewTypeMenu(menu);
     }
