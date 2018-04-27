@@ -19,7 +19,7 @@ import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
 
 
-public class MainActivity extends AppCompatActivity implements TabFragment.Callbacks, DiscoverContainerFragment.RestaurantSelectListener {
+public class MainActivity extends AppCompatActivity implements TabFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener {
 
 
     private static final String DISCOVER_FRAGMENT_TAG = "DISCOVER_FRAGMENT_TAG";
