@@ -41,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
         enableBottomNavigation();
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        if (getSupportFragmentManager().getFragments().size() == 0) {
+            switchToDiscover();
+        }
     }
 
     /**
@@ -48,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
      */
     private void enableBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
