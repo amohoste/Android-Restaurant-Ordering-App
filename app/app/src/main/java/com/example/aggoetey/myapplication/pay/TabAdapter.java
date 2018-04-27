@@ -1,16 +1,13 @@
-package com.example.aggoetey.myapplication.tab;
+package com.example.aggoetey.myapplication.pay;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 
 import java.util.List;
 

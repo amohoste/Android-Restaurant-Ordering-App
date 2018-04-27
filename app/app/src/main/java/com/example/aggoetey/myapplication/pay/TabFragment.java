@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.tab;
+package com.example.aggoetey.myapplication.pay;
 
 import android.app.Activity;
 import android.os.Bundle;

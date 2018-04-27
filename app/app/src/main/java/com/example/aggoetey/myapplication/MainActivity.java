@@ -1,29 +1,24 @@
 package com.example.aggoetey.myapplication;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
-import com.example.aggoetey.myapplication.discover.fragments.DiscoverFragment;
-import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
 import com.example.aggoetey.myapplication.menu.fragments.NoMenuSelectedFragment;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
-import com.example.aggoetey.myapplication.model.Menu;
-import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
-import com.example.aggoetey.myapplication.tab.TabFragment;
+import com.example.aggoetey.myapplication.pay.PayFragment;
+import com.example.aggoetey.myapplication.pay.TabFragment;
 
 
 public class MainActivity extends AppCompatActivity implements TabFragment.Callbacks, DiscoverContainerFragment.RestaurantSelectListener {
