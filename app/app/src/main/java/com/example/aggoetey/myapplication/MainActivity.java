@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         if (getSupportFragmentManager().getFragments().size() == 0) {
+            // als er nog geen fragments zijn dan gaan we naar discover
+            // dit is het geval als we de app voor de eerste keer opstarten
             switchToDiscover();
         }
     }
