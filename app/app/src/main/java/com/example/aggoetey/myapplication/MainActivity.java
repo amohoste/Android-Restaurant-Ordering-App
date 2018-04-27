@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -36,12 +35,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Todo Little hacky, do better in second sprint
-        Fragment cur = getSupportFragmentManager().findFragmentById(R.id.fragment_place);
-        if (cur instanceof DiscoverContainerFragment) {
-            ((DiscoverContainerFragment) cur).setRestaurantSelectListener(this);
-        }
-
         setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
@@ -68,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
                                 DiscoverContainerFragment discoverContainerFragment = (DiscoverContainerFragment) manager.findFragmentByTag(DISCOVER_FRAGMENT_TAG);
                                 if (discoverContainerFragment == null) {
                                     discoverContainerFragment = DiscoverContainerFragment.newInstance();
-                                    discoverContainerFragment.setRestaurantSelectListener(MainActivity.this);
                                 }
                                 manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment, DISCOVER_FRAGMENT_TAG)
                                         .addToBackStack(DISCOVER_FRAGMENT_TAG).commit();
