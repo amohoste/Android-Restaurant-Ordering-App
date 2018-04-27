@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
+        switchToDiscover();
     }
 
     /**
@@ -54,27 +55,15 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        FragmentManager manager = getSupportFragmentManager();
-
                         switch (item.getItemId()) {
                             case R.id.action_discover:
-                                DiscoverContainerFragment discoverContainerFragment = (DiscoverContainerFragment) manager.findFragmentByTag(DISCOVER_FRAGMENT_TAG);
-                                if (discoverContainerFragment == null) {
-                                    discoverContainerFragment = DiscoverContainerFragment.newInstance();
-                                }
-                                manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment, DISCOVER_FRAGMENT_TAG)
-                                        .addToBackStack(DISCOVER_FRAGMENT_TAG).commit();
+                                switchToDiscover();
                                 break;
                             case R.id.action_menu:
                                 switchToMenu();
                                 break;
                             case R.id.action_pay:
-                                PayFragment payFragment = (PayFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
-                                if (payFragment == null) {
-                                    payFragment = PayFragment.newInstance();
-                                }
-                                manager.beginTransaction().replace(R.id.fragment_place, payFragment)
-                                        .addToBackStack(PAY_FRAGMENT_TAG).commit();
+                                switchToPay();
                                 break;
                         }
 
@@ -101,6 +90,26 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
 
         manager.beginTransaction().replace(R.id.fragment_place, menuFragmentContainer, MENU_FRAGMENT_CONTAINER_TAG)
                 .addToBackStack(MENU_FRAGMENT_CONTAINER_TAG).commit();
+    }
+
+    private void switchToDiscover() {
+        FragmentManager manager = getSupportFragmentManager();
+        DiscoverContainerFragment discoverContainerFragment = (DiscoverContainerFragment) manager.findFragmentByTag(DISCOVER_FRAGMENT_TAG);
+        if (discoverContainerFragment == null) {
+            discoverContainerFragment = DiscoverContainerFragment.newInstance();
+        }
+        manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment, DISCOVER_FRAGMENT_TAG)
+                .addToBackStack(DISCOVER_FRAGMENT_TAG).commit();
+    }
+
+    private void switchToPay() {
+        FragmentManager manager = getSupportFragmentManager();
+        PayFragment payFragment = (PayFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
+        if (payFragment == null) {
+            payFragment = PayFragment.newInstance();
+        }
+        manager.beginTransaction().replace(R.id.fragment_place, payFragment)
+                .addToBackStack(PAY_FRAGMENT_TAG).commit();
     }
 
 
