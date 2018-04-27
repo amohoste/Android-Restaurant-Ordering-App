@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
@@ -27,6 +28,12 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
     private static final String FIRST_KEY = "VISIBLE_FRAGMEN";
     private static final String MENU_OBJECT_KEY = "MENU_OBJECT_KEY";
     private MenuInfo menuInfo;
+
+    private static final String DISCOVER_FRAGMENT_TAG = "DISCOVER_FRAGMENT_TAG";
+    private static final String MENU_FRAGMENT_TAG = "MENU_FRAGMENT_TAG";
+    private static final String PAY_FRAGMENT_TAG = "PAY_FRAGMENT_TAG";
+
+    private static final String DEBUG = "DEBUG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +62,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
     private void enableBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Set discovery as visible fragment when app starts
-        if (!first) {
-            FragmentManager manager = getSupportFragmentManager();
-            DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
-            discoverContainerFragment.setRestaurantSelectListener(this);
-            manager.beginTransaction().add(R.id.fragment_place, discoverContainerFragment).commit();
-            first = true;
-        }
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -73,15 +70,24 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
 
                         switch (item.getItemId()) {
                             case R.id.action_discover:
-                                DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
-                                discoverContainerFragment.setRestaurantSelectListener(MainActivity.this);
-                                manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
+                                DiscoverContainerFragment discoverContainerFragment = (DiscoverContainerFragment) manager.findFragmentByTag(DISCOVER_FRAGMENT_TAG);
+                                if(discoverContainerFragment == null) {
+                                    discoverContainerFragment = DiscoverContainerFragment.newInstance();
+                                    discoverContainerFragment.setRestaurantSelectListener(MainActivity.this);
+                                }
+                                manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment, DISCOVER_FRAGMENT_TAG)
+                                        .addToBackStack(DISCOVER_FRAGMENT_TAG).commit();
                                 break;
                             case R.id.action_menu:
                                 switchToMenu(menuInfo);
                                 break;
                             case R.id.action_pay:
-                                manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
+                                PayFragment payFragment = (PayFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
+                                if(payFragment == null){
+                                    payFragment = PayFragment.newInstance();
+                                }
+                                manager.beginTransaction().replace(R.id.fragment_place, payFragment)
+                                        .addToBackStack(PAY_FRAGMENT_TAG).commit();
                                 break;
                         }
 
@@ -136,13 +142,13 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // Save MenuFragment instance
-        super.onSaveInstanceState(outState);
         outState.putBoolean(FIRST_KEY, first);
 
         // Save MenuFragment instance
         if (menuInfo != null) {
             outState.putSerializable(MENU_OBJECT_KEY, menuInfo);
         }
+        super.onSaveInstanceState(outState);
     }
 
 
