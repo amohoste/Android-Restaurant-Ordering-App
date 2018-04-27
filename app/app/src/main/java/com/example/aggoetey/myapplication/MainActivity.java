@@ -39,9 +39,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
 
         enableBottomNavigation();
 
-        //starten van de effectieve applicatie
-        findViewById(R.id.action_discover).performClick();
-
     }
 
     /**
