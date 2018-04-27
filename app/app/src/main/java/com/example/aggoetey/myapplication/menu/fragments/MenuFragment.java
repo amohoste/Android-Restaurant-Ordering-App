@@ -82,9 +82,8 @@ public class MenuFragment extends Fragment implements Listener {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.e("MenuFragmentContainer", "Fragment created");
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_menu_container, container, false);
+        View v = inflater.inflate(R.layout.fragment_menu, container, false);
 
         //Toolbar initialization
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.menu_toolbar);
