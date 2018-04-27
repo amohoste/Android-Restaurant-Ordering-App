@@ -16,13 +16,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/shadow"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_place"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -40,7 +34,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
     </android.support.v7.widget.ContentFrameLayout>
 </android.support.constraint.ConstraintLayout>
