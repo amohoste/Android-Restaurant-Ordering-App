@@ -24,8 +24,6 @@ import com.example.aggoetey.myapplication.pay.TabFragment;
 
 public class MainActivity extends AppCompatActivity implements TabFragment.Callbacks, DiscoverContainerFragment.RestaurantSelectListener {
 
-    private boolean first = false;
-    private static final String FIRST_KEY = "VISIBLE_FRAGMEN";
     private static final String MENU_OBJECT_KEY = "MENU_OBJECT_KEY";
     private MenuInfo menuInfo;
 
@@ -40,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            first = savedInstanceState.getBoolean(FIRST_KEY);
-
             menuInfo = (MenuInfo) savedInstanceState.getSerializable(MENU_OBJECT_KEY);
         }
 
@@ -141,13 +137,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // Save MenuFragment instance
-        outState.putBoolean(FIRST_KEY, first);
-
-        // Save MenuFragment instance
-        if (menuInfo != null) {
-            outState.putSerializable(MENU_OBJECT_KEY, menuInfo);
-        }
         super.onSaveInstanceState(outState);
     }
 
