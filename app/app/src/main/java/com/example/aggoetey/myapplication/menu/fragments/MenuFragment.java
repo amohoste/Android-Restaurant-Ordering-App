@@ -45,12 +45,6 @@ public class MenuFragment extends Fragment implements Listener {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MenuFragment.
-     */
     public static MenuFragment newInstance(MenuInfo menuInfo) {
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
@@ -88,9 +82,9 @@ public class MenuFragment extends Fragment implements Listener {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.e("MenuFragment", "Fragment created");
+        Log.e("MenuFragmentContainer", "Fragment created");
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_menu, container, false);
+        View v = inflater.inflate(R.layout.fragment_menu_container, container, false);
 
         //Toolbar initialization
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.menu_toolbar);
@@ -114,7 +108,7 @@ public class MenuFragment extends Fragment implements Listener {
             @Override
             public void onClick(View view) {
                 menuInfo.commitOrder();
-                Log.e("MenuFragment", "Adapter size " + menuInfo.getmAdapters().size());
+                Log.e("MenuFragmentContainer", "Adapter size " + menuInfo.getmAdapters().size());
                 setOrderButtonProperties();
             }
         });
@@ -167,14 +161,14 @@ public class MenuFragment extends Fragment implements Listener {
             menu.findItem(grid).setVisible(viewType == ViewType.LIST_VIEW);
             menu.findItem(list).setVisible(viewType == ViewType.GRID_VIEW);
         } else {
-            Log.w("MenuFragment ", "MENU NOT FOUND");
+            Log.w("MenuFragmentContainer ", "MENU NOT FOUND");
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Log.e("MenuFragment ", item.getItemId() + "");
+        Log.e("MenuFragmentContainer ", item.getItemId() + "");
 
         switch (item.getItemId()) {
             case R.id.to_grid_view:

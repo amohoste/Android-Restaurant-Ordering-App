@@ -7,17 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
 
-import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
+import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.menu.fragments.NoMenuSelectedFragment;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
-import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
+import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
+import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.pay.PayFragment;
 import com.example.aggoetey.myapplication.pay.TabFragment;
 
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
     private MenuInfo menuInfo;
 
     private static final String DISCOVER_FRAGMENT_TAG = "DISCOVER_FRAGMENT_TAG";
-    private static final String MENU_FRAGMENT_TAG = "MENU_FRAGMENT_TAG";
+    private static final String MENU_FRAGMENT_CONTAINER_TAG = "MENU_FRAGMENT_CONTAINER_TAG";
     private static final String PAY_FRAGMENT_TAG = "PAY_FRAGMENT_TAG";
 
     private static final String DEBUG = "DEBUG";
@@ -75,7 +74,12 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
                                         .addToBackStack(DISCOVER_FRAGMENT_TAG).commit();
                                 break;
                             case R.id.action_menu:
-                                switchToMenu(menuInfo);
+                                MenuFragmentContainer menuFragmentContainer = (MenuFragmentContainer) manager.findFragmentByTag(MENU_FRAGMENT_CONTAINER_TAG);
+                                if(menuFragmentContainer == null){
+                                    menuFragmentContainer = MenuFragmentContainer.newInstance(null);
+                                }
+                                manager.beginTransaction().replace(R.id.fragment_place, menuFragmentContainer, MENU_FRAGMENT_CONTAINER_TAG)
+                                        .addToBackStack(MENU_FRAGMENT_CONTAINER_TAG).commit();
                                 break;
                             case R.id.action_pay:
                                 PayFragment payFragment = (PayFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
@@ -106,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
             manager.beginTransaction().replace(R.id.fragment_place, NoMenuSelectedFragment.newInstance()).commit();
         } else {
 
-            manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
 
             // Selects the correct item in the view
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
