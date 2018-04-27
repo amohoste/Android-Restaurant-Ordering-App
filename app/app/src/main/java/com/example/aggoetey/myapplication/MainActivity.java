@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         // Todo Little hacky, do better in second sprint
         Fragment cur = getSupportFragmentManager().findFragmentById(R.id.fragment_place);
         if (cur instanceof DiscoverContainerFragment) {
@@ -46,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
         setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
+
+        //starten van de effectieve applicatie
+        findViewById(R.id.action_discover).performClick();
+
     }
 
     /**
