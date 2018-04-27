@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
         enableBottomNavigation();
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
-        switchToDiscover();
     }
 
     /**
