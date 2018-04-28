@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
+import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
+import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
@@ -35,6 +37,10 @@ public class MenuInfo implements Serializable {
 
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;
+
+        // Load the restaurant's menu from the FireStore backend
+        new RestaurantMenuLoader(restaurant);
+
         orderCountMap = new HashMap<>();
         mAdapters = new HashSet<>();
         currentOrder = Tab.getInstance().newOrder();

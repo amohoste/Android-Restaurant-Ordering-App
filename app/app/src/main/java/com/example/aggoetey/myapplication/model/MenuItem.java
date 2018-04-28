@@ -14,7 +14,7 @@ public class MenuItem implements Serializable {
     // Titel van het gerecht
     public final String title;
     // prijs van het gerecht
-    public final int price;
+    public final double price;
     // een korte uitleg over het gerecht
     public final String description;
 
@@ -26,7 +26,7 @@ public class MenuItem implements Serializable {
      */
     public final String category;
 
-    public MenuItem(String title, int price, String description, String category) {
+    public MenuItem(String title, double price, String description, String category) {
         this.title = title;
         this.price = price;
         this.description = description;

@@ -14,6 +14,8 @@ import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFr
 import com.example.aggoetey.myapplication.discover.services.RestaurantLoader;
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
+import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.PayFragment;
 import com.example.aggoetey.myapplication.pay.TabFragment;
