@@ -160,7 +160,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
 
             mDescriptionTextView.setText(item.description);
             mNameTextView.setText(item.title);
-            mPriceTextView.setText(String.format("€ %d", item.price));
+            mPriceTextView.setText(String.format("€ %.2f", item.price));
 
             // TEMPORARY IMAGE
             mDishImageView.setImageResource(R.drawable.kimchi1);

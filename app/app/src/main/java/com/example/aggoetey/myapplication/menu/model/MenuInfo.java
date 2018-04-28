@@ -39,7 +39,9 @@ public class MenuInfo implements Serializable {
         this.restaurant = restaurant;
 
         // Load the restaurant's menu from the FireStore backend
-        new RestaurantMenuLoader(restaurant);
+        if (restaurant.getMenu() == null) {
+            new RestaurantMenuLoader(restaurant);
+        }
 
         orderCountMap = new HashMap<>();
         mAdapters = new HashSet<>();
