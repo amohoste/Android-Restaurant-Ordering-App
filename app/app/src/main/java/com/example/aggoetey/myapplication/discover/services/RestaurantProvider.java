@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 
 import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.Restaurant;
+import com.google.firebase.firestore.CollectionReference;
 
 import java.util.ArrayList;
 

@@ -8,6 +8,9 @@ import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -27,6 +30,8 @@ public class MenuInfo implements Serializable {
     private HashMap<String, Integer> orderCountMap;
     private HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
+
+    private DocumentReference mDocRef;
 
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;

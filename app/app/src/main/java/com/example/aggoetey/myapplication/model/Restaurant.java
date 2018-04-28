@@ -30,11 +30,14 @@ public class Restaurant implements Serializable {
     private Menu menu;
     private List<Table> tables = new ArrayList<>();
 
-    public Restaurant(String title, Menu menu) {
+    public Restaurant(String title, String phone, String googlePlaceId) {
         this.title = title;
-        this.menu = menu;
+        this.phone = phone;
+        this.googlePlaceId = googlePlaceId;
     }
 
+
+    // TODO: remove this
     public Restaurant(String title, Menu menu, double lat, double lng, String address, String phone, double rating, String googlePlaceId) {
         this.title = title;
         this.menu = menu;

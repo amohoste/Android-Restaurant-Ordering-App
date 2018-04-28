@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
+import com.example.aggoetey.myapplication.discover.services.RestaurantLoader;
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
@@ -60,28 +61,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
             switchToDiscover();
         }
     }
-
-    //------------------------------------------
-    // TODO: remove this before merging the PR
-    // Only used as a firestore test
-    private DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/DafgEIzMDi1g29rHHpqT"); // random generated id for restaurant
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            public static final String TAG = "SEARCH_FOR_THIS";
-
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    Map<String, Object> myData = documentSnapshot.getData();
-                    Log.d(TAG, myData.toString());
-                }
-            }
-        });
-    }
-
-    //------------------------------------------
 
     /**
      * Listeners enablen van de bottomnavigationview
