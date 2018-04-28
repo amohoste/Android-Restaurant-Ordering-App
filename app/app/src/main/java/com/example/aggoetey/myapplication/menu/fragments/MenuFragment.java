@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,12 +43,6 @@ public class MenuFragment extends Fragment implements Listener {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MenuFragment.
-     */
     public static MenuFragment newInstance(MenuInfo menuInfo) {
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
@@ -88,14 +80,8 @@ public class MenuFragment extends Fragment implements Listener {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.e("MenuFragment", "Fragment created");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
-
-        //Toolbar initialization
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.menu_toolbar);
-        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
-        appCompatActivity.setSupportActionBar(toolbar);
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(menuInfo.getRestaurant().getTitle());
@@ -114,7 +100,7 @@ public class MenuFragment extends Fragment implements Listener {
             @Override
             public void onClick(View view) {
                 menuInfo.commitOrder();
-                Log.e("MenuFragment", "Adapter size " + menuInfo.getmAdapters().size());
+                Log.e("MenuFragmentContainer", "Adapter size " + menuInfo.getmAdapters().size());
                 setOrderButtonProperties();
             }
         });
@@ -147,7 +133,7 @@ public class MenuFragment extends Fragment implements Listener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_view_change, menu);
+        inflater.inflate(R.menu.menu, menu);
         this.optionsMenu = menu;
         toggleViewTypeMenu(menu);
     }
@@ -167,14 +153,14 @@ public class MenuFragment extends Fragment implements Listener {
             menu.findItem(grid).setVisible(viewType == ViewType.LIST_VIEW);
             menu.findItem(list).setVisible(viewType == ViewType.GRID_VIEW);
         } else {
-            Log.w("MenuFragment ", "MENU NOT FOUND");
+            Log.w("MenuFragmentContainer ", "MENU NOT FOUND");
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Log.e("MenuFragment ", item.getItemId() + "");
+        Log.e("MenuFragmentContainer ", item.getItemId() + "");
 
         switch (item.getItemId()) {
             case R.id.to_grid_view:

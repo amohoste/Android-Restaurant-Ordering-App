@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication;
+package com.example.aggoetey.myapplication.pay;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.aggoetey.myapplication.orderdetail.NoOrderSelectedFragment;
-import com.example.aggoetey.myapplication.tab.TabFragment;
+import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.pay.orderdetail.NoOrderSelectedFragment;
 
 public class PayFragment extends Fragment  {
 
@@ -21,6 +21,7 @@ public class PayFragment extends Fragment  {
 
         View v = inflater.inflate(R.layout.pay_fragment, parent, false);
 
+        // kijken of de OrderSelectedFragment ook open staat
         getChildFragmentManager().beginTransaction().replace(R.id.tab_fragment_container, TabFragment.newInstance()).commit();
         if (v.findViewById(R.id.order_detail_fragment_container) != null) {
             getActivity().getSupportFragmentManager().beginTransaction()

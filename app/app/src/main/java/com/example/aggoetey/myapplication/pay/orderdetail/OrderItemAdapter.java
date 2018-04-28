@@ -1,9 +1,7 @@
-package com.example.aggoetey.myapplication.orderdetail;
+package com.example.aggoetey.myapplication.pay.orderdetail;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 

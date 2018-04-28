@@ -1,9 +1,9 @@
 package com.example.aggoetey.myapplication.discover.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,13 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
-
-import java.util.List;
 
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants
@@ -56,13 +53,21 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mListener = (RestaurantSelectListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
     public static DiscoverContainerFragment newInstance() {
         DiscoverContainerFragment fragment = new DiscoverContainerFragment();
         return fragment;
-    }
-
-    public void setRestaurantSelectListener(RestaurantSelectListener listener) {
-        this.mListener = listener;
     }
 
     public RestaurantSelectListener getSelectListener() {

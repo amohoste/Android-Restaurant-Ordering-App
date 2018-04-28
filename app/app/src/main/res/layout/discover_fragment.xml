@@ -42,7 +42,7 @@
         app:floatingSearch_dimBackground="false"
         app:floatingSearch_hintTextColor="#70000000"
         app:floatingSearch_leftActionMode="showSearch"
-        app:floatingSearch_menu="@menu/menu_main"
+        app:floatingSearch_menu="@menu/discover"
         app:floatingSearch_searchBarMarginLeft="5dp"
         app:floatingSearch_searchBarMarginRight="5dp"
         app:floatingSearch_searchBarMarginTop="5dp"
