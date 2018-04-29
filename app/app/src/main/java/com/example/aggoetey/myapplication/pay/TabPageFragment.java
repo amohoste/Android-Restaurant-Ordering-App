@@ -20,7 +20,7 @@ import com.example.aggoetey.myapplication.model.Tab;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabPageFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener, PayChoiceDialogFragment.PayChoiceListener {
+public abstract class TabPageFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener, PayChoiceDialogFragment.PayChoiceListener {
 
     TabAdapter tabAdapter;
     RecyclerView recyclerView;
@@ -75,13 +75,16 @@ public class TabPageFragment extends Fragment implements TabAdapter.OnOrderClick
         setTabAdapter();
         calculatePrice();
 
-        registerPayButtonListener((Button) view.findViewById(R.id.pay_button), tabAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+        registerPayButtonListener((Button) view.findViewById(R.id.pay_button));
         tab.addListener(this);
 
         return view;
     }
 
-    private void registerPayButtonListener(Button button, final TabAdapter tabAdapter) {
+    private void registerPayButtonListener(Button button) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,20 +121,11 @@ public class TabPageFragment extends Fragment implements TabAdapter.OnOrderClick
     }
 
     private void setTabAdapter() {
-        Tab tab = Tab.getInstance();
-        List<Tab.Order> orders = new ArrayList<>(tab.getOrderedOrders());
+        List<Tab.Order> orders = new ArrayList<>(getOrders());
         tabAdapter = new TabAdapter(orders);
         tabAdapter.setOrderClickListener(this);
         recyclerView.setAdapter(tabAdapter);
-
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        tabAdapter.notifyDataSetChanged();
-
     }
 
-    public static TabPageFragment newInstance() {
-        return new TabPageFragment();
-    }
+    protected abstract List<Tab.Order> getOrders();
 }

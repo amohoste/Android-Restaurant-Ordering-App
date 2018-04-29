@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.pay.orderdetail.OrderedTabPageFragment;
 
 public class TabFragment extends Fragment {
 
@@ -46,7 +47,7 @@ public class TabFragment extends Fragment {
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = new TabPageFragment();
+            Fragment fragment = new OrderedTabPageFragment();
             return fragment;
         }
 
