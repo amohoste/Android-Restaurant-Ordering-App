@@ -27,6 +27,9 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     TabAdapter tabAdapter;
     RecyclerView recyclerView;
     TextView total;
+    Button payButton;
+
+    private int price;
 
     private OrderSelectedListener orderSelectedListener;
 
@@ -73,14 +76,14 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
         View view = inflater.inflate(R.layout.fragment_tab_page, container, false);
         recyclerView = view.findViewById(R.id.tabRecyclerView);
         total = view.findViewById(R.id.total);
+        this.payButton = view.findViewById(R.id.pay_button);
 
-        setTabAdapter();
-        calculatePrice();
+        this.invalidated();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        registerPayButtonListener((Button) view.findViewById(R.id.pay_button));
+        registerPayButtonListener(this.payButton);
         tab.addListener(this);
 
         return view;
@@ -111,15 +114,16 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     public void invalidated() {
         setTabAdapter();
         calculatePrice();
+        this.payButton.setEnabled(this.price != 0);
     }
 
     private void calculatePrice() {
-        int prijs = 0;
+        this.price = 0;
         for (Tab.Order order : Tab.getInstance().getOrderedOrders()) {
-            prijs += order.getPrice();
+            this.price += order.getPrice();
         }
 
-        total.setText(total.getContext().getString(R.string.total_price, prijs));
+        total.setText(total.getContext().getString(R.string.total_price, this.price));
     }
 
     private void setTabAdapter() {
