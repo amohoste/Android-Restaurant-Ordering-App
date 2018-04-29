@@ -2,6 +2,7 @@ package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,12 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.menu.model.WaiterCall;
 import com.example.aggoetey.myapplication.model.ViewType;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Dries on 26/03/2018.
@@ -163,6 +173,9 @@ public class MenuFragment extends Fragment implements Listener {
         Log.e("MenuFragmentContainer ", item.getItemId() + "");
 
         switch (item.getItemId()) {
+            case R.id.call_waiter_button:
+                callWaiter();
+                return true;
             case R.id.to_grid_view:
                 if (viewType == ViewType.LIST_VIEW) {
                     viewType = ViewType.GRID_VIEW;
@@ -179,13 +192,49 @@ public class MenuFragment extends Fragment implements Listener {
                     pagerAdapter.updateViewType(viewType);
                     pagerAdapter.notifyDataSetChanged();
                     toggleViewTypeMenu(this.optionsMenu);
-
                 }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    /**
+     * First need to get WaiterCall-array before we can add a new WaiterCall
+     * TODO: change tableID when Sitt changes the model
+     */
+    public void callWaiter() {
+        menuInfo.getmDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ArrayList<Object> currentCalls;
+                if (documentSnapshot.exists()) {
+                    currentCalls = (ArrayList<Object>) documentSnapshot.get("waiterCalls");
+                } else {
+                    currentCalls = new ArrayList<>();
+                }
+                HashMap<String, Object> newEntry = new HashMap<>();
+                newEntry.put("tableID", "DIT IS EEN TABLE ID");
+                currentCalls.add(newEntry);
+                menuInfo.getmDocRef().update("waiterCalls", currentCalls).addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getContext(), getResources()
+                                        .getString(R.string.waiter_call_success), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        }
+                ).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), getResources()
+                                .getString(R.string.waiter_call_failure), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
 
