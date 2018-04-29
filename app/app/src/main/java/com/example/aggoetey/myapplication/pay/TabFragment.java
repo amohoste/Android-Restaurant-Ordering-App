@@ -2,6 +2,8 @@ package com.example.aggoetey.myapplication.pay;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -35,8 +37,12 @@ public class TabFragment extends Fragment {
         mViewPager = view.findViewById(R.id.tab_page_viewpager);
         mViewPager.setAdapter(mTabPageFragmentAdapter);
 
+        TabLayout tabs = view.findViewById(R.id.tab_page_tabs);
+        tabs.setupWithViewPager(mViewPager);
+
         return view;
     }
+
 
     public static TabFragment newInstance() {
         return new TabFragment();
@@ -45,9 +51,19 @@ public class TabFragment extends Fragment {
 
     public static class TabPageFragmentAdapter extends FragmentPagerAdapter {
         public enum Division {
-            ORDERED,
-            RECEIVED,
-            PAYED;
+            ORDERED("Ordered"),
+            RECEIVED("Received"),
+            PAYED("Payed");
+
+            private final String title;
+
+            Division(String title){
+                this.title = title;
+            }
+
+            public String getTitle() {
+                return title;
+            }
         }
 
         public TabPageFragmentAdapter(FragmentManager fm) {
@@ -75,6 +91,12 @@ public class TabFragment extends Fragment {
         @Override
         public int getCount() {
             return Division.values().length;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return Division.values()[position].getTitle();
         }
     }
 
