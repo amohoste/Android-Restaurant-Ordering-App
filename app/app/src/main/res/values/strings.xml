@@ -12,6 +12,7 @@
 
     <string name="menu_view_order_button">Order</string>
 
+    <string name="waiter_call_try">Calling a waiter...</string>
     <string name="waiter_call_success">Waiter successfully notified!</string>
     <string name="waiter_call_failure">Couldn\'t reach a waiter, please try again later!</string>
 

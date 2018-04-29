@@ -6,7 +6,7 @@
     <item
         android:id="@+id/call_waiter_button"
         android:icon="@drawable/waiter_call_button_bell"
-        android:visible="false"
+        android:visible="true"
         tools:visible="true"
         app:showAsAction="always" />
 

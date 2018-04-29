@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Order
                                 switchToPay();
                                 break;
                         }
-
-
                         return true;
                     }
                 }
