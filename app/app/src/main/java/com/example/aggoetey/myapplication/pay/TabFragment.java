@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -40,9 +42,16 @@ public class TabFragment extends Fragment {
         TabLayout tabs = view.findViewById(R.id.tab_page_tabs);
         tabs.setupWithViewPager(mViewPager);
 
+        setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
+
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.pay, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
 
     public static TabFragment newInstance() {
         return new TabFragment();
@@ -57,7 +66,7 @@ public class TabFragment extends Fragment {
 
             private final String title;
 
-            Division(String title){
+            Division(String title) {
                 this.title = title;
             }
 
