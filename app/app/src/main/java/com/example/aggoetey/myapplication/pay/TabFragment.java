@@ -26,6 +26,8 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
 
     private OrderSelectedListener orderSelectedListener;
 
+    private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
+
     public interface OrderSelectedListener {
         void onOrderSelected(Tab.Order order);
     }
@@ -71,6 +73,9 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     }
 
     private void payOrders() {
+        // show the dialog
+        PayChoiceDialogFragment.newInstance().show(getFragmentManager(), PAY_CHOICE_DIALOG_FRAGMENT_TAG);
+
         List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
         for (Tab.Order orderedOrder : orderedOrders) {
             Tab.getInstance().payOrder(orderedOrder);
