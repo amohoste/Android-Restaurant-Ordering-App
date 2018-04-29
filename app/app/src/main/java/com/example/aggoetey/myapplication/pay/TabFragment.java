@@ -11,24 +11,48 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.OrderedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.PayedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.ReceivedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 
-public class TabFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener{
 
     private ViewPager mViewPager;
     private TabPageFragmentAdapter mTabPageFragmentAdapter;
+
+    private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
 
     public TabFragment() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onPayChoiceSelection(int i) {
+        payConfirmation(i);
+
+        List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
+        for (Tab.Order orderedOrder : orderedOrders) {
+            Tab.getInstance().payOrder(orderedOrder);
+        }
+    }
+
+    private void payConfirmation(int i) {
+        String choice = getResources().getStringArray(R.array.pay_options)[i];
+        Toast.makeText(getContext(), getResources().getString(R.string.paychoiceconfirmation, choice)
+                , Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +75,24 @@ public class TabFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.pay, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_pay:
+                payOrders();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void payOrders() {
+        FragmentManager fr = getChildFragmentManager();
+        PayChoiceDialogFragment payChoiceDialogFragment = PayChoiceDialogFragment.newInstance();
+        payChoiceDialogFragment.show(fr, PAY_CHOICE_DIALOG_FRAGMENT_TAG);
+
     }
 
     public static TabFragment newInstance() {

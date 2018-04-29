@@ -3,53 +3,30 @@ package com.example.aggoetey.myapplication.pay.tabfragmentpage;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.pay.PayChoiceDialogFragment;
 import com.example.aggoetey.myapplication.pay.TabAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class TabPageFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener, PayChoiceDialogFragment.PayChoiceListener {
+public abstract class TabPageFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener {
 
     TabAdapter tabAdapter;
     RecyclerView recyclerView;
     TextView total;
-    Button payButton;
 
     private int price;
 
     private OrderSelectedListener orderSelectedListener;
-
-    private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
-
-    @Override
-    public void onPayChoiceSelection(int i) {
-        payConfirmation(i);
-
-        List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
-        for (Tab.Order orderedOrder : orderedOrders) {
-            Tab.getInstance().payOrder(orderedOrder);
-        }
-    }
-
-    private void payConfirmation(int i) {
-        String choice = getResources().getStringArray(R.array.pay_options)[i];
-        Toast.makeText(getContext(), getResources().getString(R.string.paychoiceconfirmation, choice)
-                , Toast.LENGTH_LONG).show();
-    }
 
     public interface OrderSelectedListener {
         void onOrderSelected(Tab.Order order);
@@ -76,33 +53,15 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
         View view = inflater.inflate(R.layout.fragment_tab_page, container, false);
         recyclerView = view.findViewById(R.id.tabRecyclerView);
         total = view.findViewById(R.id.total);
-        this.payButton = view.findViewById(R.id.pay_button);
 
         this.invalidated();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        registerPayButtonListener(this.payButton);
         tab.addListener(this);
 
         return view;
-    }
-
-    private void registerPayButtonListener(Button button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                payOrders();
-            }
-        });
-    }
-
-    private void payOrders() {
-        FragmentManager fr = getChildFragmentManager();
-        PayChoiceDialogFragment payChoiceDialogFragment = PayChoiceDialogFragment.newInstance();
-        payChoiceDialogFragment.show(fr, PAY_CHOICE_DIALOG_FRAGMENT_TAG);
-
     }
 
     @Override
@@ -114,7 +73,6 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     public void invalidated() {
         setTabAdapter();
         calculatePrice();
-        this.payButton.setEnabled(this.price != 0);
     }
 
     private void calculatePrice() {
