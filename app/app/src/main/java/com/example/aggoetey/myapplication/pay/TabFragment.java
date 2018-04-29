@@ -42,7 +42,9 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     }
 
     private void payConfirmation(int i) {
-        Toast.makeText(getContext(), "You have payed with " + getResources().getStringArray(R.array.pay_options)[i], 1000).show();
+        String choice = getResources().getStringArray(R.array.pay_options)[i];
+        Toast.makeText(getContext(), getResources().getString(R.string.paychoiceconfirmation, choice)
+                , Toast.LENGTH_LONG).show();
     }
 
     public interface OrderSelectedListener {

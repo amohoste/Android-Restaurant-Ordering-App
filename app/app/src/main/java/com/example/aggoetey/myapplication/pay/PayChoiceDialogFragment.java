@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
 import com.example.aggoetey.myapplication.R;
 
@@ -15,15 +14,12 @@ public class PayChoiceDialogFragment extends DialogFragment {
 
     private PayChoiceListener payChoiceListener;
 
-    public static final String PAY_CHOICE = "PAY_CHOICE";
-
     public interface PayChoiceListener {
         void onPayChoiceSelection(int i);
     }
 
     @Override
     public void onCreate(Bundle b) {
-        Log.d("test", "onCreate: ");
         onAttachToParentFragment(getParentFragment());
         super.onCreate(b);
     }

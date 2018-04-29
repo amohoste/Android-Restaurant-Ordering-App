@@ -32,8 +32,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="paychoicedialog_title">Op welke manier wenst u te betalen?</string>
+    <string name="paychoiceconfirmation">Je hebt betaald met %1$s</string>
 
 </resources>
