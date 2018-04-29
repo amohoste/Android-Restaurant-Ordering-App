@@ -43,27 +43,38 @@ public class TabFragment extends Fragment {
     }
 
 
-    public class TabPageFragmentAdapter extends FragmentPagerAdapter {
+    public static class TabPageFragmentAdapter extends FragmentPagerAdapter {
+        public enum Division {
+            ORDERED,
+            RECEIVED,
+            PAYED;
+        }
+
         public TabPageFragmentAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public TabPageFragment getItem(int i) {
+            Division d = Division.values()[i];
             TabPageFragment fragment = null;
-            if(i == 0){
-                fragment = new OrderedTabPageFragment();
-            } else if (i == 1){
-                fragment = new ReceivedTabPageFragment();
-            } else {
-                fragment = new PayedTabPageFragment();
+            switch (d) {
+                case PAYED:
+                    fragment = new PayedTabPageFragment();
+                    break;
+                case ORDERED:
+                    fragment = new OrderedTabPageFragment();
+                    break;
+                case RECEIVED:
+                    fragment = new ReceivedTabPageFragment();
+                    break;
             }
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return Division.values().length;
         }
     }
 
