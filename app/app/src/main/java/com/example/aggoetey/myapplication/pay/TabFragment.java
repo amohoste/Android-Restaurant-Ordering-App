@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.pay.orderdetail.OrderedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.OrderedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.PayedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.ReceivedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 
 public class TabFragment extends Fragment {
 
@@ -46,8 +49,15 @@ public class TabFragment extends Fragment {
         }
 
         @Override
-        public Fragment getItem(int i) {
-            Fragment fragment = new OrderedTabPageFragment();
+        public TabPageFragment getItem(int i) {
+            TabPageFragment fragment = null;
+            if(i == 0){
+                fragment = new OrderedTabPageFragment();
+            } else if (i == 1){
+                fragment = new ReceivedTabPageFragment();
+            } else {
+                fragment = new PayedTabPageFragment();
+            }
             return fragment;
         }
 

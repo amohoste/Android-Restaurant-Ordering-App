@@ -1,7 +1,6 @@
-package com.example.aggoetey.myapplication.pay.orderdetail;
+package com.example.aggoetey.myapplication.pay.tabfragmentpage;
 
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.pay.TabPageFragment;
 
 import java.util.List;
 
@@ -9,7 +8,6 @@ public class OrderedTabPageFragment extends TabPageFragment{
 
     @Override
     protected List<Tab.Order> getOrders(){
-
         return Tab.getInstance().getOrderedOrders();
     }
 

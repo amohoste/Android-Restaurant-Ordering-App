@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.pay;
+package com.example.aggoetey.myapplication.pay.tabfragmentpage;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.pay.PayChoiceDialogFragment;
+import com.example.aggoetey.myapplication.pay.TabAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
