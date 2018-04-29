@@ -7,9 +7,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
+import com.example.aggoetey.myapplication.discover.services.RestaurantLoader;
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
@@ -17,6 +19,17 @@ import com.example.aggoetey.myapplication.pay.PayFragment;
 import com.example.aggoetey.myapplication.pay.TabFragment;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
+
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements TabFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener {
