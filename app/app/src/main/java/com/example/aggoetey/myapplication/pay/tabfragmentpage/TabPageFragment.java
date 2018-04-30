@@ -20,9 +20,9 @@ import java.util.List;
 
 public abstract class TabPageFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener {
 
-    TabAdapter tabAdapter;
-    RecyclerView recyclerView;
-    TextView total;
+    private TabAdapter tabAdapter;
+    private RecyclerView recyclerView;
+    protected TextView total;
 
     private int price;
 
@@ -78,11 +78,11 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
 
     private void calculatePrice() {
         this.price = 0;
-        for (Tab.Order order : Tab.getInstance().getOrderedOrders()) {
+        for (Tab.Order order : getOrders()) {
             this.price += order.getPrice();
         }
 
-        total.setText(total.getContext().getString(R.string.total_price, this.price));
+        setTotalText(this.price);
     }
 
     private void setTabAdapter() {
@@ -93,4 +93,5 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     }
 
     protected abstract List<Tab.Order> getOrders();
+    protected abstract void setTotalText(double price);
 }

@@ -45,6 +45,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         payConfirmation(i);
 
         List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
+        orderedOrders.addAll(Tab.getInstance().getReceivedOrders());
         for (Tab.Order orderedOrder : orderedOrders) {
             Tab.getInstance().payOrder(orderedOrder);
         }
