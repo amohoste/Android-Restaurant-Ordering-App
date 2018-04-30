@@ -1,7 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.aggoetey.myapplication.Model;
 
@@ -33,7 +32,9 @@ public class Tab extends Model implements Serializable {
         return orderedOrders;
     }
 
-    public List<Order> getReceivedOrders() { return receivedOrders; }
+    public List<Order> getReceivedOrders() {
+        return receivedOrders;
+    }
 
     private Tab() {
     }
@@ -119,17 +120,31 @@ public class Tab extends Model implements Serializable {
 
         /**
          * Zet een lijst van orderItems om in een gegroepeerde lijst van orders
+         *
          * @return
          */
-        public static List<OrderItem[]> groupOrders(Order order){
-            for (OrderItem orderItem : order.orderItems) {
-                Log.d("KWK", "groupOrders: " + orderItem.menuItem.title);
-            }
+        public static List<List<OrderItem>> groupOrders(Order order) {
+            if (order.getOrderItems().size() == 0) return new ArrayList<>();
+
+            List<List<OrderItem>> orderItems = new ArrayList<>();
+
             Collections.sort(order.orderItems);
+
+            OrderItem last = order.orderItems.get(0);
+            List<OrderItem> items = new ArrayList<>();
+
             for (OrderItem orderItem : order.orderItems) {
-                Log.d("KWK", "groupOrders: " + orderItem.menuItem.title);
+                if (last.compareTo(orderItem) != 0) {
+                    // nieuw item, nieuwe lijst
+                    orderItems.add(items);
+                    items = new ArrayList<>();
+                }
+                items.add(orderItem);
+                last = orderItem;
             }
-            return null;
+            orderItems.add(items);
+
+            return orderItems;
         }
 
         /**

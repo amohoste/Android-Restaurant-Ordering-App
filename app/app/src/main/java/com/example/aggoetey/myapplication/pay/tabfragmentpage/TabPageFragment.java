@@ -82,6 +82,8 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
             this.price += order.getPrice();
         }
 
+        if(getOrders().size() != 0) Tab.Order.groupOrders(getOrders().get(0));
+
         setTotalText(this.price);
     }
 
