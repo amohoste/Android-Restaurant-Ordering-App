@@ -26,6 +26,7 @@ import com.example.aggoetey.myapplication.menu.model.WaiterCall;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -216,8 +217,10 @@ public class MenuFragment extends Fragment implements Listener {
     public void callWaiter() {
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
+        final DocumentReference mDocRef =  FirebaseFirestore.getInstance().document("places/"
+                .concat(menuInfo.getRestaurant().getGooglePlaceId()));
 
-        menuInfo.getmDocRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 ArrayList<Object> currentCalls;
@@ -231,7 +234,7 @@ public class MenuFragment extends Fragment implements Listener {
                 newEntry.put("timestamp", dateFormat.format(new Date()));
                 newEntry.put("tableID", "DIT IS EEN TABLE ID");
                 currentCalls.add(newEntry);
-                menuInfo.getmDocRef().update("waiterCalls", currentCalls).addOnSuccessListener(
+                mDocRef.update("waiterCalls", currentCalls).addOnSuccessListener(
                         new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
