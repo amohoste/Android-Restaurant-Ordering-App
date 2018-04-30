@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.OrderedTabPageFragment;
@@ -26,10 +27,11 @@ import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener{
+public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener, Listener {
 
     private ViewPager mViewPager;
     private TabPageFragmentAdapter mTabPageFragmentAdapter;
+    private MenuItem pay_action;
 
     private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
 
@@ -68,6 +70,8 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
 
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
+        Tab.getInstance().addListener(this);
+
         return view;
     }
 
@@ -75,12 +79,14 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.pay, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
+        pay_action = menu.findItem(R.id.action_pay_tab);
+        invalidated();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_pay:
+            case R.id.action_pay_tab:
                 payOrders();
                 return true;
             default:
@@ -89,14 +95,23 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     }
 
     private void payOrders() {
-        FragmentManager fr = getChildFragmentManager();
-        PayChoiceDialogFragment payChoiceDialogFragment = PayChoiceDialogFragment.newInstance();
-        payChoiceDialogFragment.show(fr, PAY_CHOICE_DIALOG_FRAGMENT_TAG);
-
+        if (Tab.getInstance().getOrderedOrders().size() != 0
+                || Tab.getInstance().getOrderedOrders().size() != 0) {
+            // er is iets om te betalen
+            FragmentManager fr = getChildFragmentManager();
+            PayChoiceDialogFragment payChoiceDialogFragment = PayChoiceDialogFragment.newInstance();
+            payChoiceDialogFragment.show(fr, PAY_CHOICE_DIALOG_FRAGMENT_TAG);
+        } else {
+            Toast.makeText(getContext(), R.string.nothing_to_pay, Toast.LENGTH_LONG).show();
+        }
     }
 
     public static TabFragment newInstance() {
         return new TabFragment();
+    }
+
+    @Override
+    public void invalidated() {
     }
 
 

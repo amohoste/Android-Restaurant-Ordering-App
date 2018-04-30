@@ -27,6 +27,7 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     private int price;
 
     private OrderSelectedListener orderSelectedListener;
+    private android.view.MenuItem payAction;
 
     public interface OrderSelectedListener {
         void onOrderSelected(Tab.Order order);
