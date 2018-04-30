@@ -1,12 +1,13 @@
 package com.example.aggoetey.myapplication.model;
 
+import android.support.annotation.NonNull;
+
 import com.example.aggoetey.myapplication.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by aggoetey on 3/20/18.
@@ -60,6 +61,8 @@ public class Tab extends Model implements Serializable {
         fireInvalidationEvent();
     }
 
+
+
     public static class Order extends Model implements Serializable {
 
         private List<OrderItem> orderItems = new ArrayList<>();
@@ -104,6 +107,15 @@ public class Tab extends Model implements Serializable {
         }
 
         /**
+         * Zet een lijst van orderItems om in een gegroepeerde lijst van orders
+         * @return
+         */
+        public static List<OrderItem[]> groupOrders(List<OrderItem> orderItems){
+            Collections.sort(orderItems);
+            return null;
+        }
+
+        /**
          * Lukt niet in 1 lijntje omdat we geen lambda's kunnen gebruiken...
          *
          * Verwijder een orderitem aan de hand van een OrderItem
@@ -134,7 +146,7 @@ public class Tab extends Model implements Serializable {
             return prijs;
         }
 
-        public static class OrderItem implements Serializable {
+        public static class OrderItem implements Serializable, Comparable<OrderItem> {
             private String note;
             private MenuItem menuItem;
 
@@ -157,6 +169,11 @@ public class Tab extends Model implements Serializable {
 
             public void setMenuItem(MenuItem menuItem) {
                 this.menuItem = menuItem;
+            }
+
+            @Override
+            public int compareTo(@NonNull OrderItem orderItem) {
+                return menuItem.title.compareTo(orderItem.menuItem.title);
             }
         }
 
