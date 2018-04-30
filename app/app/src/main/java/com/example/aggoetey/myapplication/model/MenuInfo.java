@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.menu.model;
+package com.example.aggoetey.myapplication.model;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

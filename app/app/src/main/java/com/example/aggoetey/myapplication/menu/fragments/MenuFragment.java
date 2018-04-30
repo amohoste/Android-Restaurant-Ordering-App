@@ -18,17 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
-import com.example.aggoetey.myapplication.MainActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
-import com.example.aggoetey.myapplication.menu.model.WaiterCall;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
