@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Tab;
 

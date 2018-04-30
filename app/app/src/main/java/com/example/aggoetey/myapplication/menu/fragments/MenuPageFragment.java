@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuCardsAdapter;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.example.aggoetey.myapplication.utils.UIUtility;
 

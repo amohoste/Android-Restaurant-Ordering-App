@@ -1,9 +1,6 @@
-package com.example.aggoetey.myapplication.menu.model;
+package com.example.aggoetey.myapplication.model;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
-
-import java.util.Date;
 
 public class WaiterCall {
     private ServerTimestamp timestamp;
