@@ -24,7 +24,8 @@
     <string name="total_price_ordered">Bestelde items: %1$.2f euro.</string>
 
     <string name="price_order">Prijs order: %.2f euro.</string>
-    <string name="price_order_short">€%1$f</string>
+    <string name="price_order_short">€%1$.2f</string>
+    
     <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
     <string name="title_activity_maps">Map</string>
 
