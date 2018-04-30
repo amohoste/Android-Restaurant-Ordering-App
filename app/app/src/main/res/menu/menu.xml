@@ -4,6 +4,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/call_waiter_button"
+        android:icon="@drawable/waiter_call_button_bell"
+        android:visible="true"
+        tools:visible="true"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/to_grid_view"
         android:title="@string/grid_view"
         android:icon="@drawable/ic_grid_on_white_24dp"

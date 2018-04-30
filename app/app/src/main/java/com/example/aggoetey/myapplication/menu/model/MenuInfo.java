@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
+import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
+import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
@@ -33,8 +35,21 @@ public class MenuInfo implements Serializable {
 
     private DocumentReference mDocRef;
 
+
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;
+
+        mDocRef = FirebaseFirestore.getInstance().document("places/"
+                                                            .concat(restaurant.getGooglePlaceId()));
+
+        // USE THIS DOCREF FOR TESTING (while waiting for amory to load restaurants from firestore)
+        //mDocRef = FirebaseFirestore.getInstance().document("places/DafgEIzMDi1g29rHHpqT");
+
+        // Load the restaurant's menu from the FireStore backend
+        if (restaurant.getMenu() == null) {
+            new RestaurantMenuLoader(restaurant);
+        }
+
         orderCountMap = new HashMap<>();
         mAdapters = new HashSet<>();
         currentOrder = Tab.getInstance().newOrder();
@@ -116,5 +131,9 @@ public class MenuInfo implements Serializable {
         } else {
             return "0";
         }
+    }
+
+    public DocumentReference getmDocRef() {
+        return mDocRef;
     }
 }

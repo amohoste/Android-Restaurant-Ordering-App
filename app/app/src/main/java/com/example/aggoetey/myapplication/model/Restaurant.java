@@ -96,5 +96,7 @@ public class Restaurant implements Serializable {
         return googlePlaceId;
     }
 
-
+    public void setGooglePlaceId(String googlePlaceId) {
+        this.googlePlaceId = googlePlaceId;
+    }
 }

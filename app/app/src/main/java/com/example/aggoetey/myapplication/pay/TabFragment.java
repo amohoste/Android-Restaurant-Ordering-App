@@ -89,7 +89,7 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
     }
 
     private void calculatePrice() {
-        int prijs = 0;
+        double prijs = 0;
         for (Tab.Order order : Tab.getInstance().getOrderedOrders()) {
             prijs += order.getPrice();
         }
