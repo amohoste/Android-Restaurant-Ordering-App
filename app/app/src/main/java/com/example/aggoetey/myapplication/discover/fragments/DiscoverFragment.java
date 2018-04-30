@@ -9,7 +9,7 @@ import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 /**
  * Abstract class for a fragment that has a location and restaurantprovider (list and map)
  */
-public abstract class DiscoverFragment extends Fragment {
+public abstract class DiscoverFragment extends Fragment implements RestaurantProvider.RestaurantListener {
 
     protected Callbacks mCallbacks;
     protected CurrentLocationProvider locationProvider;

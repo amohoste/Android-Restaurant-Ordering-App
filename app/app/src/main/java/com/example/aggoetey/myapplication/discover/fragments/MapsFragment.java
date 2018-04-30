@@ -40,6 +40,8 @@ import com.example.aggoetey.myapplication.discover.wrappers.RestaurantMapItem;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
 import com.example.aggoetey.myapplication.discover.views.MapIconsRenderer;
 
+import java.util.ArrayList;
+
 
 /**
  * Fragment that displays a map of restaurants
@@ -138,6 +140,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         selectAndStartRestCardView(chosenRestaurant);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
+        restaurantProvider.addRestaurantListener(this);
         locationProvider = mCallbacks.getLocationProvider();
 
         return v;
@@ -222,11 +225,11 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
             mMap.setOnCameraIdleListener(mClusterManager);
             mMap.setOnMarkerClickListener(manager);
+        }
 
-            // Add cluster items (markers) to the cluster manager.
-            if (restaurantProvider != null && restaurantProvider.getRestaurants() != null) {
-                addItemsToClusterManager();
-            }
+        // Add cluster items (markers) to the cluster manager.
+        if (restaurantProvider != null && restaurantProvider.getRestaurants() != null) {
+            addItemsToClusterManager();
         }
     }
 
@@ -330,6 +333,13 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     }
 
     @Override
+    public void onRestaurantUpdate(ArrayList<Restaurant> restaurants) {
+        addItemsToClusterManager();
+    }
+
+
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         if (mMap != null) {
             outState.putParcelable(CAMERA_STATE_KEY, mMap.getCameraPosition());
@@ -348,5 +358,13 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
             parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
         }
         //Toast.makeText(getContext(), "Menu", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStop() {
+        if (restaurantProvider != null) {
+            restaurantProvider.removeRestaurantListener(this);
+        }
+        super.onStop();
     }
 }
