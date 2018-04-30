@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.aggoetey.myapplication.Model;
 
@@ -110,8 +111,14 @@ public class Tab extends Model implements Serializable {
          * Zet een lijst van orderItems om in een gegroepeerde lijst van orders
          * @return
          */
-        public static List<OrderItem[]> groupOrders(List<OrderItem> orderItems){
-            Collections.sort(orderItems);
+        public static List<OrderItem[]> groupOrders(Order order){
+            for (OrderItem orderItem : order.orderItems) {
+                Log.d("KWK", "groupOrders: " + orderItem.menuItem.title);
+            }
+            Collections.sort(order.orderItems);
+            for (OrderItem orderItem : order.orderItems) {
+                Log.d("KWK", "groupOrders: " + orderItem.menuItem.title);
+            }
             return null;
         }
 
