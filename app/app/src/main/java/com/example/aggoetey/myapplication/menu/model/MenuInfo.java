@@ -33,17 +33,9 @@ public class MenuInfo implements Serializable {
     private HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
 
-    private DocumentReference mDocRef;
-
 
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;
-
-        mDocRef = FirebaseFirestore.getInstance().document("places/"
-                                                            .concat(restaurant.getGooglePlaceId()));
-
-        // USE THIS DOCREF FOR TESTING (while waiting for amory to load restaurants from firestore)
-        //mDocRef = FirebaseFirestore.getInstance().document("places/DafgEIzMDi1g29rHHpqT");
 
         // Load the restaurant's menu from the FireStore backend
         if (restaurant.getMenu() == null) {
@@ -131,9 +123,5 @@ public class MenuInfo implements Serializable {
         } else {
             return "0";
         }
-    }
-
-    public DocumentReference getmDocRef() {
-        return mDocRef;
     }
 }
