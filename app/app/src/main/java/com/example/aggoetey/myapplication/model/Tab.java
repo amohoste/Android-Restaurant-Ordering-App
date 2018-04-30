@@ -1,6 +1,8 @@
 package com.example.aggoetey.myapplication.model;
 
 import com.example.aggoetey.myapplication.Model;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
