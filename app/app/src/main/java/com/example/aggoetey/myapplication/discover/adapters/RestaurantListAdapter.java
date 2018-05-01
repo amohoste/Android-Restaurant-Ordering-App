@@ -1,8 +1,6 @@
 package com.example.aggoetey.myapplication.discover.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,23 +10,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.helpers.DayConverter;
-import com.example.aggoetey.myapplication.discover.helpers.KeyProvider;
-import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
 import com.example.aggoetey.myapplication.model.Restaurant;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -38,10 +26,6 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  */
 
 public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.ViewHolder> {
-
-    // Constants
-    private static String API_KEY;
-    private static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
 
     // Listener
     private OnRestaurantClickListener mListener;
@@ -60,7 +44,6 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
     public RestaurantListAdapter(Context context) {
         this.context = context;
-        API_KEY = KeyProvider.getPlacesApiKey(context);
     }
 
     public void setRestaurants(List<Restaurant> mRestaurants) {
@@ -94,30 +77,10 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         final ProgressBar progressBar = (ProgressBar) holder.progressbar;
 
-        // Load restaurant image if existent
-        if (restaurant.getPictureReference() != null && restaurant.getPictureReference() != "") {
-            Glide.with(context).load(BASE_URL + restaurant.getPictureReference() + "&key=" + API_KEY)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .apply(RequestOptions.bitmapTransform(multi))
-                    .into(holder.restaurantImageView);
-        } else {
-            Glide.with(context).clear(holder.restaurantImageView);
-            holder.restaurantImageView.setImageDrawable(null);
-            holder.progressbar.setVisibility(View.GONE);
-            holder.restaurantImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.restaurant_placeholder));
-        }
+        Glide.with(context).clear(holder.restaurantImageView);
+        holder.restaurantImageView.setImageDrawable(null);
+        holder.progressbar.setVisibility(View.GONE);
+        holder.restaurantImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.restaurant_placeholder));
     }
 
     @Override
@@ -179,20 +142,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 this.ratingTextView.setText("");
             }
 
-            HashMap<Integer,HashMap<String,String>> openingHours = restaurant.getOpeningHours();
-            if (openingHours != null) {
-                Calendar calendar = Calendar.getInstance();
-                int day = DayConverter.toGoogleDay(calendar.get(Calendar.DAY_OF_WEEK));
-                if (openingHours.get(day) != null) {
-                    hoursTextView.setText(openingHours.get(day).get("open") + " - " + openingHours.get(day).get("close"));
-                } else {
-                    hoursTextView.setText("Closed");
-                }
-            } else {
-                hoursTextView.setText("Hours not known");
-            }
-
-            placetype.setText(PlacetypeStringifier.stringify(restaurant.getType()));
+            hoursTextView.setText("8:00 - 16:00");
+            placetype.setText("Restaurant");
         }
 
         @Override
