@@ -17,16 +17,13 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
-import com.example.aggoetey.myapplication.model.Restaurant;
-
-import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants
  */
-public class DiscoverContainerFragment extends Fragment implements DiscoverFragment.Callbacks, RestaurantProvider.AsyncListener {
+public class DiscoverContainerFragment extends Fragment implements MapsFragment.Callbacks {
 
     // Constants
     public static final int MAPS_FRAGMENT_ID = 0;
@@ -51,9 +48,6 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
 
     // Interface to open menu
     private RestaurantSelectListener mListener;
-
-
-
     public interface RestaurantSelectListener {
         void onRestaurantSelect(MenuInfo menuInfo);
     }
@@ -193,6 +187,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
 
     }
 
+
     @Override
     public CurrentLocationProvider getLocationProvider() {
         return mLocationProvider;
@@ -223,26 +218,6 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
         if (currentFragmentId != -1) {
             outState.putInt(CURRENT_FRAGMENT_KEY, currentFragmentId);
         }
-
-    }
-
-    @Override
-    public void onPreExecute() {
-
-    }
-
-    @Override
-    public void onProgressUpdate(Integer... progress) {
-
-    }
-
-    @Override
-    public void onPostExecute(ArrayList<Restaurant> result) {
-
-    }
-
-    @Override
-    public void onCancelled(ArrayList<Restaurant> result) {
 
     }
 

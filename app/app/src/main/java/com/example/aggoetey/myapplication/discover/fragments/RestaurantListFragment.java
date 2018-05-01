@@ -75,7 +75,6 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         mRecyclerView.setAdapter(mAdapter);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
-        restaurantProvider.addRestaurantListener(this);
         ArrayList<Restaurant> restaurants = restaurantProvider.getRestaurants();
         if (restaurants != null) {
             mAdapter.setRestaurants(restaurants);
@@ -111,21 +110,6 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
             parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
         }
         // Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRestaurantUpdate(ArrayList<Restaurant> restaurants) {
-        if (mAdapter != null && restaurants != null) {
-            mAdapter.setRestaurants(restaurants);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        if (restaurantProvider != null) {
-            restaurantProvider.removeRestaurantListener(this);
-        }
-        super.onStop();
     }
 
 
