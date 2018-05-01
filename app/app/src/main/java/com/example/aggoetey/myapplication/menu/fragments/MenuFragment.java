@@ -19,8 +19,10 @@ import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -113,9 +115,8 @@ public class MenuFragment extends Fragment implements Listener {
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menuInfo.commitOrder(MenuFragment.this);
+                Tab.getInstance().commitOrder(menuInfo.getCurrentOrder(), MenuFragment.this);
                 Log.e("MenuFragmentContainer", "Adapter size " + menuInfo.getmAdapters().size());
-                setOrderButtonProperties();
             }
         });
 
@@ -207,7 +208,7 @@ public class MenuFragment extends Fragment implements Listener {
     /**
      * First need to get WaiterCall-array before we can add a new WaiterCall
      * TODO: change tableID when Sitt updates the model for the "online" version
-     * TODO: check whether the user is loged in to a table/has "permission" to call a waiter
+     * TODO: check whether the user is logged in to a table/has "permission" to call a waiter
      * TODO: check whether the restaurant supports this function
      */
     public void callWaiter() {
@@ -255,7 +256,7 @@ public class MenuFragment extends Fragment implements Listener {
                     }
                 });
             }
-        });
+        }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));;
     }
 
 

@@ -27,7 +27,7 @@ public abstract class Model {
         this.listeners = listeners;
     }
 
-    protected void fireInvalidationEvent(){
+    public void fireInvalidationEvent(){
         for (Listener listener : listeners) {
             listener.invalidated();
         }

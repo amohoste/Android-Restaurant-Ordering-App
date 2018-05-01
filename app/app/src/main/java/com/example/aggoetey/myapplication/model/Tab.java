@@ -1,11 +1,23 @@
 package com.example.aggoetey.myapplication.model;
 
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.widget.Toast;
+
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.Model;
+import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.ServerConnectionFailure;
+import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -50,10 +62,78 @@ public class Tab extends Model implements Serializable {
     /**
      * Hiermee wordt de order effectief geplaatst
      */
-    public void commitOrder(Order order) {
-        this.orderedOrders.add(order);
-        order.setOrderNumber(amountOfOrders);
-        amountOfOrders++;
+    public void commitOrder(final Order order, final MenuFragment menuFragment) {
+        final MenuInfo menuInfo = menuFragment.getMenuInfo();
+
+        // Disable order button
+        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(false);
+
+        final Toast try_toast = Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
+                .getString(R.string.order_send_try), Toast.LENGTH_LONG);
+        try_toast.show();
+
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
+                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/")
+                .concat(menuInfo.getTableID()));
+
+        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                // Retrieve tab array
+                ArrayList<Object> currentOrders;
+                if (documentSnapshot.exists() && documentSnapshot.get("ordered") != null ) {
+                    currentOrders = (ArrayList<Object>) documentSnapshot.get("ordered");
+                } else {
+                    currentOrders = new ArrayList<>();
+                }
+
+                // Create new order entry
+                for (Tab.Order.OrderItem item: menuInfo.getCurrentOrder().getOrderItems()) {
+                    HashMap<String, Object> newEntry = new HashMap<>();
+                    newEntry.put("itemID", item.getMenuItem().id);
+                    newEntry.put("item", item.getMenuItem().title);
+                    newEntry.put("price", Double.toString(item.getMenuItem().price));
+                    newEntry.put("category", item.getMenuItem().category);
+                    newEntry.put("note", item.getNote());
+                    currentOrders.add(newEntry);
+                }
+
+                // Upload to FireStore
+                mDocRef.update("ordered", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        try_toast.cancel();
+                        Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
+                                .getString(R.string.order_send_success), Toast.LENGTH_SHORT)
+                                .show();
+
+                        menuInfo.orderCommitted();
+
+                        List<Listener> listenerList = menuInfo.getCurrentOrder().getListeners();
+                        orderedOrders.add(order);
+                        order.setOrderNumber(amountOfOrders);
+                        amountOfOrders++;
+                        menuInfo.setCurrentOrder(newOrder());
+                        menuInfo.getCurrentOrder().setListeners(listenerList);
+                        menuInfo.getCurrentOrder().fireInvalidationEvent();
+                        menuInfo.getOrderCountMap().clear();
+                        menuInfo.notifyAllAdapters();
+
+                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        try_toast.cancel();
+                        Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
+                                .getString(R.string.order_send_failure), Toast.LENGTH_SHORT)
+                                .show();
+                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+                    }
+                });
+            }
+        }).addOnFailureListener(new ServerConnectionFailure(menuFragment, try_toast));
+
     }
 
     public void payOrder(Order order) {

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
 import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
 import com.example.aggoetey.myapplication.model.Menu;
@@ -73,68 +74,13 @@ public class MenuInfo implements Serializable {
         return currentOrder;
     }
 
-    public void commitOrder(final Fragment menuFragment) {
-        if (currentOrder.getOrderItems().size() > 0) {
-            final Toast try_toast = Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
-                    .getString(R.string.order_sent_try), Toast.LENGTH_LONG);
-            try_toast.show();
-
-            final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
-                    .concat(restaurant.getGooglePlaceId()).concat("/tables/").concat(tableID));
-
-            mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    // Retrieve tab array
-                    ArrayList<Object> currentOrders;
-                    if (documentSnapshot.exists() && documentSnapshot.get("ordered") != null ) {
-                        currentOrders = (ArrayList<Object>) documentSnapshot.get("ordered");
-                    } else {
-                        currentOrders = new ArrayList<>();
-                    }
-
-                    // Create new order entry
-                    for (Tab.Order.OrderItem item: currentOrder.getOrderItems()) {
-                        HashMap<String, Object> newEntry = new HashMap<>();
-                        newEntry.put("itemID", item.getMenuItem().id);
-                        newEntry.put("item", item.getMenuItem().title);
-                        newEntry.put("price", Double.toString(item.getMenuItem().price));
-                        newEntry.put("category", item.getMenuItem().category);
-                        newEntry.put("note", item.getNote());
-                        currentOrders.add(newEntry);
-                    }
-
-                    // Upload to FireStore
-                    mDocRef.update("ordered", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            try_toast.cancel();
-                            Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
-                                    .getString(R.string.order_sent_succes), Toast.LENGTH_LONG)
-                                    .show();
-
-                            List<Listener> listenerList = currentOrder.getListeners();
-                            Tab.getInstance().commitOrder(currentOrder);
-                            currentOrder = Tab.getInstance().newOrder();
-                            currentOrder.setListeners(listenerList);
-                            orderCountMap.clear();
-                            notifyAllAdapters();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            try_toast.cancel();
-                            Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
-                                    .getString(R.string.order_sent_failure), Toast.LENGTH_LONG)
-                                    .show();
-
-                        }
-                    });
-                }
-            });
-
-
-        }
+    public void orderCommitted() {
+        List<Listener> listenerList = currentOrder.getListeners();
+        currentOrder = Tab.getInstance().newOrder();
+        currentOrder.setListeners(listenerList);
+        currentOrder.fireInvalidationEvent();
+        orderCountMap.clear();
+        notifyAllAdapters();
     }
 
     public void notifyAllAdapters() {
@@ -190,5 +136,9 @@ public class MenuInfo implements Serializable {
 
     public String getTableID() {
         return tableID;
+    }
+
+    public void setCurrentOrder(Tab.Order currentOrder) {
+        this.currentOrder = currentOrder;
     }
 }
