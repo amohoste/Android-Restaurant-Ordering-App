@@ -23,7 +23,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/menu_view_order_button"
+            android:id="@+id/menu_view_login_order_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

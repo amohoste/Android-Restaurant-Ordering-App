@@ -42,8 +42,8 @@ public class MenuInfo implements Serializable {
     private HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
 
-    //TODO: INITIALISE THIS FIELD WHEN LOGGING IN TO THE TABLE (remove this test id)
-    private String  tableID = "tmWukxY8Z63kdneqvSjL";
+    //TODO: INITIALISE THIS FIELD WHEN LOGGING IN TO THE TABLE
+    private String  tableID;
 
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;

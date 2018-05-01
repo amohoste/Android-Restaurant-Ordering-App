@@ -100,9 +100,9 @@ public class MenuFragment extends Fragment implements Listener {
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(menuInfo.getRestaurant().getTitle());
 
-        mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
+        mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_login_order_button);
 
-        setOrderButtonProperties();
+        loggedInCheck();
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
@@ -111,7 +111,34 @@ public class MenuFragment extends Fragment implements Listener {
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        // MenuFragment order button action
+        return v;
+    }
+
+    // TODO: Call this after logging in
+    public void loggedInCheck() {
+        if (menuInfo.getTableID() == null) {    //user not logged in
+            setLogInButton();
+        } else {
+            setOrderButton();
+        }
+    }
+
+    public void setLogInButton() {
+        mMenuOrderButton.setText(R.string.menu_view_login_button);
+
+        // Login Button action - Open the QR scanner fragment
+        mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: COMPLETE THIS ONCE SITT IS FINISHED
+            }
+        });
+    }
+
+    public void setOrderButton() {
+        // Order button action
+        setOrderButtonProperties();
+
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,17 +146,14 @@ public class MenuFragment extends Fragment implements Listener {
                 Log.e("MenuFragmentContainer", "Adapter size " + menuInfo.getmAdapters().size());
             }
         });
-
-        return v;
     }
-
 
     public void setOrderButtonProperties() {
         if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
+            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_login_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
             mMenuOrderButton.setEnabled(true);
         } else {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
+            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_login_order_button));
             mMenuOrderButton.setEnabled(false);
         }
     }
