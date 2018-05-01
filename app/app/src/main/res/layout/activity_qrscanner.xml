@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/qr_constraint_container"
+    android:layout_height="match_parent"
+    android:padding="@dimen/text_margin"
+    tools:context="com.example.aggoetey.myapplication.qrscanner.QRScannerActivity">
+        <TextView
+            android:id="@+id/qr_scanner_title"
+            android:layout_width="wrap_content"
+            android:layout_height= "wrap_content"
+            android:textSize="@dimen/qr_scanner_textSize"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+
+            app:layout_constraintBottom_toTopOf="@id/qr_surface_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:text="@string/qr_hello"/>
+        <SurfaceView
+            android:id="@+id/qr_surface_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/qr_scanner_margin"
+            android:layout_marginEnd="@dimen/qr_scanner_margin"
+            app:layout_constraintTop_toBottomOf="@id/qr_scanner_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
+
+
+</android.support.constraint.ConstraintLayout>

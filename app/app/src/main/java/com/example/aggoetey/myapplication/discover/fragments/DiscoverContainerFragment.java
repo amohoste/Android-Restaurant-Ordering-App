@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.discover.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.qrscanner.QRScannerActivity;
 
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants
@@ -137,6 +139,8 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
                             Toast.LENGTH_SHORT).show();
                 } else if(item.getItemId() == R.id.action_qr){
                     //just print action
+                    Intent  qrIntent = new Intent(getActivity(), QRScannerActivity.class);
+                    startActivity(qrIntent);
                     Toast.makeText(getActivity().getApplicationContext(), "Open qr scanner",
                             Toast.LENGTH_SHORT).show();
                 }
