@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,22 +21,33 @@ import java.util.List;
 
 public class Restaurant implements Serializable {
 
-    private String title;
     //TODO: Remove transient once parcelable is achieved
-    private transient LatLng position;
+
+    // Menu
+    private Menu menu;
+    private List<Table> tables = new ArrayList<>();
+
+    // Info
+    private String title;
     private String address;
     private String phone;
     private double rating;
+    private LatLng position;
     private String googlePlaceId;
-    private Menu menu;
-    private List<Table> tables = new ArrayList<>();
+    private HashMap<Integer,HashMap<String,String>> openingHours;
+    private String pictureReference;
+    private String type;
+
+
+    public Restaurant() {
+
+    }
 
     public Restaurant(String title, String phone, String googlePlaceId) {
         this.title = title;
         this.phone = phone;
         this.googlePlaceId = googlePlaceId;
     }
-
 
     // TODO: remove this
     public Restaurant(String title, Menu menu, double lat, double lng, String address, String phone, double rating, String googlePlaceId) {
@@ -98,5 +110,45 @@ public class Restaurant implements Serializable {
 
     public void setGooglePlaceId(String googlePlaceId) {
         this.googlePlaceId = googlePlaceId;
+    }
+
+    public HashMap<Integer, HashMap<String, String>> getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(HashMap<Integer, HashMap<String, String>> openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public String getPictureReference() {
+        return pictureReference;
+    }
+
+    public void setPictureReference(String pictureReference) {
+        this.pictureReference = pictureReference;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setPosition(LatLng position) {
+        this.position = position;
     }
 }
