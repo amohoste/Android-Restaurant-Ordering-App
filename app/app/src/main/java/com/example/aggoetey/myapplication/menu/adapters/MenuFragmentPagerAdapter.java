@@ -3,10 +3,9 @@ package com.example.aggoetey.myapplication.menu.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.menu.fragments.MenuPageFragment;
 import com.example.aggoetey.myapplication.model.ViewType;
 

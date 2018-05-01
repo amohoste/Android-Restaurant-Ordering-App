@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
 
 import java.io.Serializable;
@@ -73,7 +73,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         public void bind(final MenuItem menuItem, final int position) {
-            mTitleTextView.setText(menuItem.title + " (€" + Integer.toString(menuItem.price) +")");
+            mTitleTextView.setText(menuItem.title + " (€" + Double.toString(menuItem.price) +")");
             setNewOrderCount(menuItem.id);
 
 

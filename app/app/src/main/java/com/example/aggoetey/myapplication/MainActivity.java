@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.PayFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
                                 switchToPay();
                                 break;
                         }
-
-
                         return true;
                     }
                 }

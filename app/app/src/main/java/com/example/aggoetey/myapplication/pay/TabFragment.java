@@ -115,7 +115,6 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     public void invalidated() {
     }
 
-
     public static class TabPageFragmentAdapter extends FragmentPagerAdapter {
         public enum Division {
             ORDERED("Ordered"),

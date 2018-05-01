@@ -5,10 +5,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 
 import com.example.aggoetey.myapplication.menu.views.MenuCardView;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
 
 import java.io.Serializable;

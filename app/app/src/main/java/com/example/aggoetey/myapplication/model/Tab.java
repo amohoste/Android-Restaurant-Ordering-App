@@ -134,8 +134,8 @@ public class Tab extends Model implements Serializable {
             }
         }
 
-        public int getPrice() {
-            int prijs = 0;
+        public double getPrice() {
+            double prijs = 0;
             for (OrderItem orderItem : orderItems) {
                 prijs += orderItem.getMenuItem().price;
             }

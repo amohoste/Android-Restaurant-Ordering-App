@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 
 /**
  * Created by Dries on 26/03/2018.

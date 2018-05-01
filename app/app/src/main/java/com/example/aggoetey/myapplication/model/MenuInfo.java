@@ -1,13 +1,18 @@
-package com.example.aggoetey.myapplication.menu.model;
+package com.example.aggoetey.myapplication.model;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
+import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
+import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.MenuItem;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -28,8 +33,15 @@ public class MenuInfo implements Serializable {
     private HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
 
+
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;
+
+        // Load the restaurant's menu from the FireStore backend
+        if (restaurant.getMenu() == null) {
+            new RestaurantMenuLoader(restaurant);
+        }
+
         orderCountMap = new HashMap<>();
         mAdapters = new HashSet<>();
         currentOrder = Tab.getInstance().newOrder();

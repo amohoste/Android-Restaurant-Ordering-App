@@ -2,6 +2,7 @@ package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,12 +15,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.ViewType;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Dries on 26/03/2018.
@@ -163,6 +175,12 @@ public class MenuFragment extends Fragment implements Listener {
         Log.e("MenuFragmentContainer ", item.getItemId() + "");
 
         switch (item.getItemId()) {
+            case R.id.call_waiter_button:
+                Toast.makeText(getContext(), getResources()
+                        .getString(R.string.waiter_call_try), Toast.LENGTH_SHORT)
+                        .show();
+                callWaiter();
+                return true;
             case R.id.to_grid_view:
                 if (viewType == ViewType.LIST_VIEW) {
                     viewType = ViewType.GRID_VIEW;
@@ -179,13 +197,60 @@ public class MenuFragment extends Fragment implements Listener {
                     pagerAdapter.updateViewType(viewType);
                     pagerAdapter.notifyDataSetChanged();
                     toggleViewTypeMenu(this.optionsMenu);
-
                 }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    /**
+     * First need to get WaiterCall-array before we can add a new WaiterCall
+     * TODO: change tableID when Sitt updates the model for the "online" version
+     * TODO: check whether the user is loged in to a table/has "permission" to call a waiter
+     * TODO: check whether the restaurant supports this function
+     */
+    public void callWaiter() {
+        final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
+        waiter_button.setEnabled(false);
+        final DocumentReference mDocRef =  FirebaseFirestore.getInstance().document("places/"
+                .concat(menuInfo.getRestaurant().getGooglePlaceId()));
+
+        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ArrayList<Object> currentCalls;
+                if (documentSnapshot.exists()) {
+                    currentCalls = (ArrayList<Object>) documentSnapshot.get("waiterCalls");
+                } else {
+                    currentCalls = new ArrayList<>();
+                }
+                HashMap<String, Object> newEntry = new HashMap<>();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  // TODO: use server time when FireStore supports timestamps in arrays
+                newEntry.put("timestamp", dateFormat.format(new Date()));
+                newEntry.put("tableID", "DIT IS EEN TABLE ID");
+                currentCalls.add(newEntry);
+                mDocRef.update("waiterCalls", currentCalls).addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getContext(), getResources()
+                                        .getString(R.string.waiter_call_success), Toast.LENGTH_LONG)
+                                        .show();
+                                waiter_button.setEnabled(true);
+                            }
+                        }
+                ).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), getResources()
+                                .getString(R.string.waiter_call_failure), Toast.LENGTH_SHORT).show();
+                        waiter_button.setEnabled(true);
+                    }
+                });
+            }
+        });
     }
 
 
@@ -212,5 +277,31 @@ public class MenuFragment extends Fragment implements Listener {
 
     public void setMenuInfo(MenuInfo menuInfo) {
         this.menuInfo = menuInfo;
+    }
+
+    // TODO: use this later for waiter call control
+    public void button_sleeper(final View btn, final int time) {
+        btn.setEnabled(false);
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        btn.setEnabled(true);
+
+                    }
+                });
+            }
+        }).start();
     }
 }
