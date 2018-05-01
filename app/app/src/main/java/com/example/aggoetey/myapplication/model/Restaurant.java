@@ -3,6 +3,7 @@ package com.example.aggoetey.myapplication.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ import java.util.List;
 //TODO: Make restaurant parcelable to be able to save restaurant in bundles without transient
 //TODO: since LatLng is only parcelable not serializable.
 
-public class Restaurant implements Serializable {
+public class Restaurant implements Serializable, SearchSuggestion {
 
     //TODO: Remove transient once parcelable is achieved
 
@@ -150,5 +151,23 @@ public class Restaurant implements Serializable {
 
     public void setPosition(LatLng position) {
         this.position = position;
+    }
+
+    // Enables autocompletion
+    // Search suggestions
+    @Override
+    public String getBody() {
+        return title;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeInt(0);
     }
 }

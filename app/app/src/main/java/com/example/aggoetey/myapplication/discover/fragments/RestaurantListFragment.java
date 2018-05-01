@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
+import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -78,6 +79,7 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         restaurantProvider.addRestaurantListener(this);
         ArrayList<Restaurant> restaurants = restaurantProvider.getRestaurants();
         if (restaurants != null) {
+            restaurants = SearchRestaurantHelper.sortResults(restaurants);
             mAdapter.setRestaurants(restaurants);
         }
 
@@ -128,5 +130,27 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         super.onStop();
     }
 
+    @Override
+    void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
+        if (clear) {
+            result = SearchRestaurantHelper.sortResults(result);
+        }
+        mAdapter.setRestaurants(result);
+    }
+
+    @Override
+    void filterResults() {
+        if (mAdapter != null && mAdapter.getRestaurants() != null) {
+            ArrayList<Restaurant> result = new ArrayList<>();
+
+            for (Restaurant restaurant : mAdapter.getRestaurants()) {
+                if (SearchRestaurantHelper.satisfiesFilter(restaurant)) {
+                    result.add(restaurant);
+                }
+            }
+            result = SearchRestaurantHelper.sortResults(result);
+            mAdapter.setRestaurants(result);
+        }
+    }
 
 }
