@@ -102,6 +102,8 @@ public class Tab extends Model implements Serializable {
                 mDocRef.update("ordered", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
                                 .getString(R.string.order_send_success), Toast.LENGTH_SHORT)
@@ -109,26 +111,20 @@ public class Tab extends Model implements Serializable {
 
                         menuInfo.orderCommitted();
 
-                        List<Listener> listenerList = menuInfo.getCurrentOrder().getListeners();
+                        menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
                         orderedOrders.add(order);
                         order.setOrderNumber(amountOfOrders);
                         amountOfOrders++;
-                        menuInfo.setCurrentOrder(newOrder());
-                        menuInfo.getCurrentOrder().setListeners(listenerList);
-                        menuInfo.getCurrentOrder().fireInvalidationEvent();
-                        menuInfo.getOrderCountMap().clear();
-                        menuInfo.notifyAllAdapters();
-
-                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
                                 .getString(R.string.order_send_failure), Toast.LENGTH_SHORT)
                                 .show();
-                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
                     }
                 });
             }
