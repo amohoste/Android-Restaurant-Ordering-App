@@ -391,9 +391,11 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                 if (mapsFragment != null) {
                     mapsFragment.filterResults();
                 }
+
                 if (listFragment != null) {
                     listFragment.filterResults();
                 }
+
             }
         }
     }

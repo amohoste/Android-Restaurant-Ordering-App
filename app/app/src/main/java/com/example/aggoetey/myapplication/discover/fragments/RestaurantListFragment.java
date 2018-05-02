@@ -132,6 +132,7 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
 
     @Override
     void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
+        this.searchedRestaurants = result;
         if (clear) {
             result = SearchRestaurantHelper.sortResults(result);
         }
@@ -140,10 +141,10 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
 
     @Override
     void filterResults() {
-        if (mAdapter != null && mAdapter.getRestaurants() != null) {
+        if (mAdapter != null && searchedRestaurants != null) {
             ArrayList<Restaurant> result = new ArrayList<>();
 
-            for (Restaurant restaurant : mAdapter.getRestaurants()) {
+            for (Restaurant restaurant : searchedRestaurants) {
                 if (SearchRestaurantHelper.satisfiesFilter(restaurant)) {
                     result.add(restaurant);
                 }

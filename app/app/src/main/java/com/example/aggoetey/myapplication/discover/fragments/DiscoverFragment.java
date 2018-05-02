@@ -17,6 +17,7 @@ public abstract class DiscoverFragment extends Fragment implements RestaurantPro
     protected Callbacks mCallbacks;
     protected CurrentLocationProvider locationProvider;
     protected RestaurantProvider restaurantProvider;
+    protected ArrayList<Restaurant> searchedRestaurants;
 
     public interface Callbacks {
         void setFragment(int fragment);

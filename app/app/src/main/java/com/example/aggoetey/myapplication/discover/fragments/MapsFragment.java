@@ -375,6 +375,11 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
     @Override
     void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
+        this.searchedRestaurants = result;
+        addRestaurants(result, clear);
+    }
+
+    private void addRestaurants(ArrayList<Restaurant> result, boolean clear) {
         if (clear) {
             removeMarkers();
         } else if (collection != null) {
@@ -436,14 +441,16 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
     @Override
     void filterResults() {
+        if (collection != null && searchedRestaurants != null) {
+            ArrayList<Restaurant> result = new ArrayList<>();
 
-        if (collection != null && collection.getMarkers() != null) {
-            for (Marker marker : collection.getMarkers()) {
-                Restaurant res = (Restaurant) marker.getTag();
-                if (! SearchRestaurantHelper.satisfiesFilter(res)) {
-                    collection.remove(marker);
+            for (Restaurant restaurant : searchedRestaurants) {
+                if (SearchRestaurantHelper.satisfiesFilter(restaurant)) {
+                    result.add(restaurant);
                 }
             }
+
+            addRestaurants(result, false);
         }
     }
 }
