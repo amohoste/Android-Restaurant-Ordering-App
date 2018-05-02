@@ -153,7 +153,10 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
             } else {
                 currentFragmentId = 0;
             }
-            filter = new Filter(Filter.SortMethod.DISTANCE, 0, false, 0);
+            if (filter == null) {
+                filter = new Filter(Filter.SortMethod.DISTANCE, 0, false, 0);
+            }
+            helper.setFilter(filter);
         }
 
         // Set up fragments
@@ -248,6 +251,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
         }
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+
         super.onStop();
     }
 
