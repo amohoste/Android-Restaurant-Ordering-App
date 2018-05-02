@@ -33,7 +33,7 @@ public class Restaurant implements Serializable, SearchSuggestion {
     private String address;
     private String phone;
     private double rating;
-    private LatLng position;
+    private transient LatLng position;
     private String googlePlaceId;
     private HashMap<Integer,HashMap<String,String>> openingHours;
     private String pictureReference;
