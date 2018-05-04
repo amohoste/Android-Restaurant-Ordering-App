@@ -19,8 +19,10 @@ import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -108,12 +110,13 @@ public class MenuFragment extends Fragment implements Listener {
         viewPager.setAdapter(pagerAdapter);
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        // MenuFragment order button action
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menuInfo.commitOrder();
+                Tab.getInstance().commitOrder(menuInfo.getCurrentOrder(), MenuFragment.this);
                 Log.e("MenuFragmentContainer", "Adapter size " + menuInfo.getmAdapters().size());
-                setOrderButtonProperties();
             }
         });
 
@@ -176,9 +179,6 @@ public class MenuFragment extends Fragment implements Listener {
 
         switch (item.getItemId()) {
             case R.id.call_waiter_button:
-                Toast.makeText(getContext(), getResources()
-                        .getString(R.string.waiter_call_try), Toast.LENGTH_SHORT)
-                        .show();
                 callWaiter();
                 return true;
             case R.id.to_grid_view:
@@ -208,33 +208,38 @@ public class MenuFragment extends Fragment implements Listener {
     /**
      * First need to get WaiterCall-array before we can add a new WaiterCall
      * TODO: change tableID when Sitt updates the model for the "online" version
-     * TODO: check whether the user is loged in to a table/has "permission" to call a waiter
+     * TODO: check whether the user is logged in to a table/has "permission" to call a waiter
      * TODO: check whether the restaurant supports this function
      */
     public void callWaiter() {
+        final Toast try_toast = Toast.makeText(getContext(), getResources()
+                .getString(R.string.waiter_call_try), Toast.LENGTH_SHORT);
+        try_toast.show();
+
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
         final DocumentReference mDocRef =  FirebaseFirestore.getInstance().document("places/"
-                .concat(menuInfo.getRestaurant().getGooglePlaceId()));
+                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/").concat(menuInfo.getTableID()));
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 ArrayList<Object> currentCalls;
-                if (documentSnapshot.exists()) {
+                if (documentSnapshot.exists() && documentSnapshot.get("waiterCalls") != null) {
                     currentCalls = (ArrayList<Object>) documentSnapshot.get("waiterCalls");
                 } else {
                     currentCalls = new ArrayList<>();
                 }
+
                 HashMap<String, Object> newEntry = new HashMap<>();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  // TODO: use server time when FireStore supports timestamps in arrays
                 newEntry.put("timestamp", dateFormat.format(new Date()));
-                newEntry.put("tableID", "DIT IS EEN TABLE ID");
                 currentCalls.add(newEntry);
                 mDocRef.update("waiterCalls", currentCalls).addOnSuccessListener(
                         new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                try_toast.cancel();
                                 Toast.makeText(getContext(), getResources()
                                         .getString(R.string.waiter_call_success), Toast.LENGTH_LONG)
                                         .show();
@@ -244,13 +249,14 @@ public class MenuFragment extends Fragment implements Listener {
                 ).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        try_toast.cancel();
                         Toast.makeText(getContext(), getResources()
                                 .getString(R.string.waiter_call_failure), Toast.LENGTH_SHORT).show();
                         waiter_button.setEnabled(true);
                     }
                 });
             }
-        });
+        }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));;
     }
 
 
