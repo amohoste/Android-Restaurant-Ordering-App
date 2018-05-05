@@ -42,5 +42,6 @@
     <string name="dismiss">DISMISS</string>
     <string name="qr_code_edit_label">Restaurant code</string>
     <string name="qr_code_edit_btn">Confirm</string>
+    <string name="qr_no_camera_permission">Camera Permission Needed</string>
 
 </resources>
