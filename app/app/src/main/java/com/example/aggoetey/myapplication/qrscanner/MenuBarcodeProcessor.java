@@ -57,6 +57,7 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
         }
     }
 
+
     /**
      * This method will be called each time google vision api detects a code
      * the scanner is set to detect.
@@ -65,6 +66,7 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
      *
      * @param detections detected codes from the scanner.
      */
+
     @Override
     public void receiveDetections(Detector.Detections<Barcode> detections) {
         SparseArray<Barcode> array = detections.getDetectedItems();
@@ -75,19 +77,26 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
                 case Barcode.URL:
                     final String message = String.format("Url: %1$s ,  Title: %1$s ", code.url.url, code.url.title);
                     Log.i("QRScanner", message);
+                    onScannedBarcode(code);
                     activity.runOnUiThread(() -> showSnackBar(message));
                     break;
                 default:
                     Log.i("QRScanner", code.rawValue);
                     activity.runOnUiThread(() -> showSnackBar("Invalid qr code scanned: " + code.rawValue));
-
                     break;
             }
         }
     }
 
+    //TODO implement to restart main activity with menu of the restaurant loaded.
+    public void onRestaurantCode(String code){
 
+    }
 
+    //TODO implement the function to get restaurant data from firebase and react on it
+    public void onScannedBarcode (Barcode barcode) {
+
+    }
 
 
     @Override
