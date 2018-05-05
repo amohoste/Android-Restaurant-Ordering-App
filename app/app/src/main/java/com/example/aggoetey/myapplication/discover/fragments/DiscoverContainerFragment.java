@@ -16,7 +16,7 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
-import com.example.aggoetey.myapplication.qrscanner.QRScannerActivity;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants

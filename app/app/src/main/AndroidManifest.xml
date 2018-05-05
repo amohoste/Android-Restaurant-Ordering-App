@@ -28,6 +28,7 @@
         </activity>
 
 
+
         <activity
             android:name=".Menu.MenuItemListActivity"
             android:label="@string/title_menuitem_list"
@@ -65,7 +66,11 @@
         <activity
             android:name=".discover.activities.FilterActivity"
             android:label="Filters" />
-        <activity android:name=".qrscanner.QRScannerActivity"></activity>
+        <activity android:name=".qrscanner.activity.QRScannerActivity"
+            android:screenOrientation="portrait"
+            android:label="QR Scanner"
+            android:parentActivityName=".MainActivity"
+            />
     </application>
 
 </manifest>

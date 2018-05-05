@@ -40,5 +40,7 @@
     <string name="paychoiceconfirmation">Je hebt betaald met %1$s</string>
     <string name="qr_hello">Scan the QR code</string>
     <string name="dismiss">DISMISS</string>
+    <string name="qr_code_edit_label">Restaurant code</string>
+    <string name="qr_code_edit_btn">Confirm</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.example.aggoetey.myapplication.qrscanner;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.SparseArray;
@@ -48,11 +49,22 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
             }
         });
     }
+
+
     private void showSnackBar (String text){
         if(!snackIsShown){
             snackbar.setText(text).show();
         }
     }
+
+    /**
+     * This method will be called each time google vision api detects a code
+     * the scanner is set to detect.
+     *
+     * The method is called from a thread separate from the ui-thread.
+     *
+     * @param detections detected codes from the scanner.
+     */
     @Override
     public void receiveDetections(Detector.Detections<Barcode> detections) {
         SparseArray<Barcode> array = detections.getDetectedItems();
@@ -73,6 +85,9 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
             }
         }
     }
+
+
+
 
 
     @Override
