@@ -11,7 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * Loads all
+ *
  */
 public class RestaurantLoader {
 
@@ -27,7 +27,6 @@ public class RestaurantLoader {
                         list.add(
                                 new Restaurant(
                                     document.getString("name"),  // Restaurant name
-                                    document.getString("phone"), // Restaurant phone
                                     document.getId()                // Restaurant google place id
                         ));
                     }

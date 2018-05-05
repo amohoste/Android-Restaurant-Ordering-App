@@ -16,9 +16,16 @@
     <string name="waiter_call_success">Waiter successfully notified!</string>
     <string name="waiter_call_failure">Couldn\'t reach a waiter, please try again later!</string>
 
+    <string name="order_send_try">Sending order...</string>
+    <string name="order_send_success">Order successfully sent!</string>
+    <string name="order_send_failure">Couldn\'t send the order, please try again later!</string>
+
     <string name="tab_order_position">Order # %1$d</string>
     <string name="tab_view_pay">Pay</string>
-    <string name="total_price">Totale prijs: %.2f euro.</string>
+    <string name="total_price_payed">Betaalde items: %1$.2f euro.</string>
+    <string name="total_price_received">Ontvangen items: %1$.2f euro.</string>
+    <string name="total_price_ordered">Bestelde items: %1$.2f euro.</string>
+
 
     <string name="price_order">Prijs order: %.2f euro.</string>
     <string name="price_order_short">€%1$.2f</string>
@@ -42,5 +49,10 @@
     <string name="dismiss">DISMISS</string>
     <string name="qr_code_edit_label">Restaurant code</string>
     <string name="qr_code_edit_btn">Confirm</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_pay">pay</string>
+    <string name="nothing_to_pay">Je moet eerst iets bestellen voor je kan betalen</string>
 
 </resources>
