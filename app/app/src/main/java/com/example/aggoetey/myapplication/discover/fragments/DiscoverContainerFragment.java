@@ -2,9 +2,11 @@ package com.example.aggoetey.myapplication.discover.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,8 @@ import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants
  */
@@ -28,6 +32,7 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     public static final int LIST_FRAGMENT_ID = 1;
 
     private static final String CURRENT_FRAGMENT_KEY = "CURRENT-FRAGMENT-KEY";
+    private static final String DISCOVER_VISIBLE_FRAGMENT = "DISCOVER_VISIBLE_FRAGMENT";
     private int currentFragmentId = -1;
 
     // Tags
@@ -83,6 +88,8 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+
         View v = inflater.inflate(R.layout.discover_fragment, container, false);
 
         fm = getChildFragmentManager();
@@ -106,6 +113,9 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
 
         if (savedInstanceState != null) {
             currentFragmentId = savedInstanceState.getInt(CURRENT_FRAGMENT_KEY);
+        } else if (getActivity() != null && getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE) != null) {
+            SharedPreferences prefs =  getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE);
+            currentFragmentId = prefs.getInt(CURRENT_FRAGMENT_KEY, 0);
         } else {
             currentFragmentId = 0;
         }
@@ -195,6 +205,13 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
 
     @Override
     public void onStop() {
+        if (getActivity() != null && getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE) != null) {
+            SharedPreferences.Editor editor = getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE).edit();
+            editor.putInt(CURRENT_FRAGMENT_KEY, currentFragmentId);
+            editor.apply();
+        }
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
         super.onStop();
     }
 

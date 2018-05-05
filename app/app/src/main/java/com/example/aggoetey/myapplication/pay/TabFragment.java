@@ -1,41 +1,51 @@
 package com.example.aggoetey.myapplication.pay;
 
-import android.content.Context;
+
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.OrderedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.PayedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.ReceivedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener, PayChoiceDialogFragment.PayChoiceListener {
+public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener, Listener {
 
-    private static final int PAY_CHOICE_REQUEST = 12;
-    TabAdapter tabAdapter;
-    RecyclerView recyclerView;
-    TextView total;
-
-    private OrderSelectedListener orderSelectedListener;
+    private ViewPager mViewPager;
+    private TabPageFragmentAdapter mTabPageFragmentAdapter;
+    private MenuItem pay_action;
 
     private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
+
+    public TabFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
     public void onPayChoiceSelection(int i) {
         payConfirmation(i);
 
         List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
+        orderedOrders.addAll(Tab.getInstance().getReceivedOrders());
         for (Tab.Order orderedOrder : orderedOrders) {
             Tab.getInstance().payOrder(orderedOrder);
         }
@@ -47,92 +57,114 @@ public class TabFragment extends Fragment implements TabAdapter.OnOrderClickList
                 , Toast.LENGTH_LONG).show();
     }
 
-    public interface OrderSelectedListener {
-        void onOrderSelected(Tab.Order order);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        orderSelectedListener = (OrderSelectedListener) context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        orderSelectedListener = null;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Tab tab = Tab.getInstance();
-
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
-        recyclerView = view.findViewById(R.id.tabRecyclerView);
-        total = view.findViewById(R.id.total);
 
-        setTabAdapter();
-        calculatePrice();
+        mTabPageFragmentAdapter = new TabPageFragmentAdapter(getChildFragmentManager());
+        mViewPager = view.findViewById(R.id.tab_page_viewpager);
+        mViewPager.setAdapter(mTabPageFragmentAdapter);
 
-        registerPayButtonListener((Button) view.findViewById(R.id.pay_button), tabAdapter);
-        tab.addListener(this);
+        TabLayout tabs = view.findViewById(R.id.tab_page_tabs);
+        tabs.setupWithViewPager(mViewPager);
+
+        setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
+
+        Tab.getInstance().addListener(this);
 
         return view;
     }
 
-    private void registerPayButtonListener(Button button, final TabAdapter tabAdapter) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.pay, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+        pay_action = menu.findItem(R.id.action_pay_tab);
+        invalidated();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_pay_tab:
                 payOrders();
-            }
-        });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void payOrders() {
-        FragmentManager fr = getChildFragmentManager();
-        PayChoiceDialogFragment payChoiceDialogFragment = PayChoiceDialogFragment.newInstance();
-        payChoiceDialogFragment.show(fr, PAY_CHOICE_DIALOG_FRAGMENT_TAG);
-
-    }
-
-    @Override
-    public void onOrderClick(Tab.Order order) {
-        orderSelectedListener.onOrderSelected(order);
-    }
-
-    @Override
-    public void invalidated() {
-        setTabAdapter();
-        calculatePrice();
-    }
-
-    private void calculatePrice() {
-        double prijs = 0;
-        for (Tab.Order order : Tab.getInstance().getOrderedOrders()) {
-            prijs += order.getPrice();
+        if (Tab.getInstance().getOrderedOrders().size() != 0
+                || Tab.getInstance().getOrderedOrders().size() != 0) {
+            // er is iets om te betalen
+            FragmentManager fr = getChildFragmentManager();
+            PayChoiceDialogFragment payChoiceDialogFragment = PayChoiceDialogFragment.newInstance();
+            payChoiceDialogFragment.show(fr, PAY_CHOICE_DIALOG_FRAGMENT_TAG);
+        } else {
+            Toast.makeText(getContext(), R.string.nothing_to_pay, Toast.LENGTH_LONG).show();
         }
-
-        total.setText(total.getContext().getString(R.string.total_price, prijs));
-    }
-
-    private void setTabAdapter() {
-        Tab tab = Tab.getInstance();
-        List<Tab.Order> orders = new ArrayList<>(tab.getOrderedOrders());
-        tabAdapter = new TabAdapter(orders);
-        tabAdapter.setOrderClickListener(this);
-        recyclerView.setAdapter(tabAdapter);
-
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        tabAdapter.notifyDataSetChanged();
-
     }
 
     public static TabFragment newInstance() {
         return new TabFragment();
     }
+
+    @Override
+    public void invalidated() {
+    }
+
+    public static class TabPageFragmentAdapter extends FragmentPagerAdapter {
+        public enum Division {
+            ORDERED("Ordered"),
+            RECEIVED("Received"),
+            PAYED("Payed");
+
+            private final String title;
+
+            Division(String title) {
+                this.title = title;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+        }
+
+        public TabPageFragmentAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public TabPageFragment getItem(int i) {
+            Division d = Division.values()[i];
+            TabPageFragment fragment = null;
+            switch (d) {
+                case PAYED:
+                    fragment = new PayedTabPageFragment();
+                    break;
+                case ORDERED:
+                    fragment = new OrderedTabPageFragment();
+                    break;
+                case RECEIVED:
+                    fragment = new ReceivedTabPageFragment();
+                    break;
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return Division.values().length;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return Division.values()[position].getTitle();
+        }
+    }
+
+
 }
