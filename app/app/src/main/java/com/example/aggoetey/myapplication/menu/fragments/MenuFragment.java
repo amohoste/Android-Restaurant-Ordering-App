@@ -2,6 +2,7 @@ package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ import java.util.HashMap;
  */
 public class MenuFragment extends Fragment implements Listener {
     private static final String ARG_MENUINFO = "menuinfo";
+    private static final int CANCEL_WINDOW = 5000;
     private MenuInfo menuInfo;
 
     private ViewPager viewPager;
@@ -115,12 +117,31 @@ public class MenuFragment extends Fragment implements Listener {
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Tab.getInstance().commitOrder(menuInfo.getCurrentOrder(), MenuFragment.this);
-                Log.e("MenuFragmentContainer", "Adapter size " + menuInfo.getmAdapters().size());
+                Toast gecancelled = Toast.makeText(getContext(), "Order is gecancelled", Toast.LENGTH_SHORT);
+                Toast confirm = Toast.makeText(getContext(), "Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen", Toast.LENGTH_SHORT);
+                if (mMenuOrderButton.getText().equals("Cancel")) {
+                    mMenuOrderButton.setText("Order");
+                    confirm.cancel();
+                    gecancelled.show();
+                } else {
+                    confirm.show();
+                    mMenuOrderButton.setText("Cancel");
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendOrder();
+                        }
+                    }, CANCEL_WINDOW);
+                }
             }
         });
-
         return v;
+    }
+
+    private void sendOrder() {
+        mMenuOrderButton.setText("Order");
+        Tab.getInstance().commitOrder(menuInfo.getCurrentOrder(), MenuFragment.this);
     }
 
 
@@ -218,7 +239,7 @@ public class MenuFragment extends Fragment implements Listener {
 
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
-        final DocumentReference mDocRef =  FirebaseFirestore.getInstance().document("places/"
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
                 .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/").concat(menuInfo.getTableID()));
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -256,7 +277,8 @@ public class MenuFragment extends Fragment implements Listener {
                     }
                 });
             }
-        }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));;
+        }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));
+        ;
     }
 
 
