@@ -105,7 +105,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         private void setNewOrderCount(String itemID) {
-
             mOrderCountTextView.setText(menuInfo.getOrderCount(itemID));
         }
     }

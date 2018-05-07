@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -135,13 +137,17 @@ public class MenuFragment extends Fragment implements Listener {
     }
 
     public void setLogInButton() {
+        mMenuOrderButton.setEnabled(true);
         mMenuOrderButton.setText(R.string.menu_view_login_button);
 
         // Login Button action - Open the QR scanner fragment
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: COMPLETE THIS ONCE SITT IS FINISHED
+                Intent qrIntent = new Intent(getActivity(), QRScannerActivity.class);
+                startActivityForResult(qrIntent, QRScannerActivity.QR_CODE_REQUEST);
+                Toast.makeText(getActivity().getApplicationContext(), "Open QR-scanner",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -160,12 +166,14 @@ public class MenuFragment extends Fragment implements Listener {
     }
 
     public void setOrderButtonProperties() {
-        if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_login_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
-            mMenuOrderButton.setEnabled(true);
-        } else {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_login_order_button));
-            mMenuOrderButton.setEnabled(false);
+        if (menuInfo.getTableID() != null) {
+            if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
+                mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
+                mMenuOrderButton.setEnabled(true);
+            } else {
+                mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
+                mMenuOrderButton.setEnabled(false);
+            }
         }
     }
 

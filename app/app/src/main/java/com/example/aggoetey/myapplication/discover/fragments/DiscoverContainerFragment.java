@@ -151,7 +151,7 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
                     //just print action
                     Intent  qrIntent = new Intent(getActivity(), QRScannerActivity.class);
                     startActivity(qrIntent);
-                    Toast.makeText(getActivity().getApplicationContext(), "Open qr scanner",
+                    Toast.makeText(getActivity().getApplicationContext(), "Open QR-scanner",
                             Toast.LENGTH_SHORT).show();
                 }
             }

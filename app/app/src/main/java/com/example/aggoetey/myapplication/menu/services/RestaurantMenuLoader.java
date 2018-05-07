@@ -19,12 +19,13 @@ import java.util.HashMap;
 public class RestaurantMenuLoader {
     private static final String MENU_LOAD_FAILURE = "MENU_LOAD_FAILURE";
     private Restaurant restaurant;
-    private DocumentReference mDocRef;
+    private DocumentReference mDocRef; //TODO: complete this
 
 
     public RestaurantMenuLoader(Restaurant restaurant) {
     }
 
+    //TODO: update this
     public void loadMenu() {
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

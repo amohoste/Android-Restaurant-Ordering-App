@@ -26,7 +26,8 @@ import java.io.IOException;
 
 public class QRScannerActivity extends AppCompatActivity {
 
-
+    public static final int QR_CODE_REQUEST = 0;
+    public static final String EXTRA_ANSWER_SHOWN = "QR_CODE_RESULT";
     private static final int PERMISSION_REQUEST_CAMERA = 50;
     private CameraSource cameraSource;
 
@@ -51,8 +52,7 @@ public class QRScannerActivity extends AppCompatActivity {
 
     private void setupManualCodeInput (EditText editText,  AppCompatButton confirmBtn, MenuBarcodeProcessor processor){
         confirmBtn.setOnClickListener((view) -> {
-
-            processor.onRestaurantCode(editText.getText().toString());
+            processor.onScannedCode(editText.getText().toString());
         });
     }
 

@@ -10,6 +10,7 @@ import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
+import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
 import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
 import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.MenuItem;

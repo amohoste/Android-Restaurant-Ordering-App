@@ -1,12 +1,14 @@
 package com.example.aggoetey.myapplication.qrscanner;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.EditText;
 
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 
@@ -95,20 +97,20 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
     public void onInvalidCode (Barcode code) {
 
     }
-    //TODO implement to restart main activity with menu of the restaurant loaded.
+
 
     /**
-     * The function will be called if the user puts in restaurant code manually in
-     * the editText field.
      * @param code
      */
-    public void onRestaurantCode(String code) {
-
+    public void onScannedCode(String code) {
+        //TODO: check if valid
+        Intent data = new Intent();
+        data.putExtra(QRScannerActivity.EXTRA_ANSWER_SHOWN, code);
+        activity.setResult(Activity.RESULT_OK, data);
     }
 
-    //TODO implement the function to get restaurant data from firebase and react on it
     public void onScannedBarcode(Barcode barcode) {
-
+        onScannedCode(barcode.toString());
     }
 
 

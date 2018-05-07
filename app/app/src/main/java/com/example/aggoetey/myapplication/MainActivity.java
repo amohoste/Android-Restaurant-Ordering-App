@@ -17,6 +17,9 @@ import com.example.aggoetey.myapplication.pay.PayFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener {
@@ -146,5 +149,33 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
         menuInfoChanged = menuInfo != this.menuInfo;
         this.menuInfo = menuInfo;
         findViewById(R.id.action_menu).performClick();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {{
+            return;
+        }}
+
+        if (requestCode == QRScannerActivity.QR_CODE_REQUEST) {
+            if (data == null) {
+                return;
+            }
+            String code = data.getStringExtra(QRScannerActivity.EXTRA_ANSWER_SHOWN);
+
+            // Split scanned code into restaurant_id and table_id
+            String[] ids = code.split(":");
+            String restaurant_id = ids[0];
+            String table_id = ids[1];
+
+            // Load restaurant into MenuInfo
+            //TODO: AMORY --> zet deze googleID om naar een restaurant object
+            DocumentReference restaurantDocRef = FirebaseFirestore.getInstance().document("places/".concat(restaurant_id));
+
+            // Load tableID into MenuInfo
+            // TODO: zet table_id in juiste MenuInfo
+
+        }
     }
 }
