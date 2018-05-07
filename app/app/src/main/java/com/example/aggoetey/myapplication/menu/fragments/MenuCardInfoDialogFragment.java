@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import com.example.aggoetey.myapplication.menu.views.MenuCardView;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.note.OrderNoteDialogFragment;
 
 import java.io.Serializable;
 

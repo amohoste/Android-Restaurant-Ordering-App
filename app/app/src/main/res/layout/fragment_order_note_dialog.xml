@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/card_padding"
     android:orientation="vertical"
-    tools:context="com.example.aggoetey.myapplication.menu.fragments.OrderNoteDialogFragment">
+    tools:context="com.example.aggoetey.myapplication.note.OrderNoteDialogFragment">
 
     <EditText
         android:id="@+id/note_body_text"
