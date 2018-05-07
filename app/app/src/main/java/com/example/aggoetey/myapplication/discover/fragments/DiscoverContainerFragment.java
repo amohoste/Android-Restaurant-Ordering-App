@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.discover.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -147,6 +149,8 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
                             Toast.LENGTH_SHORT).show();
                 } else if(item.getItemId() == R.id.action_qr){
                     //just print action
+                    Intent  qrIntent = new Intent(getActivity(), QRScannerActivity.class);
+                    startActivity(qrIntent);
                     Toast.makeText(getActivity().getApplicationContext(), "Open qr scanner",
                             Toast.LENGTH_SHORT).show();
                 }
