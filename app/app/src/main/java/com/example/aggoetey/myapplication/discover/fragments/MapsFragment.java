@@ -65,6 +65,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     private GoogleMap mMap;
     private ClusterManager<RestaurantMapItem> mClusterManager;
     MarkerManager.Collection collection;
+    private static boolean init = false;
 
     private ClickableImageView locationButton;
     private CameraPosition lastpos;
@@ -182,8 +183,9 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                 }
 
                 Location loc = locationProvider.getLastLocation();
-                if (loc != null) {
+                if (!init) {
                     zoomMapToPosition(loc, MY_LOCATION_ZOOM);
+                    init = true;
                 }
 
             }
