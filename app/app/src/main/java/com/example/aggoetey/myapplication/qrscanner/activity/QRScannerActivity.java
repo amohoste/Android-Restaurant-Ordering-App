@@ -1,20 +1,17 @@
 package com.example.aggoetey.myapplication.qrscanner.activity;
 
 import android.Manifest;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +37,7 @@ public class QRScannerActivity extends AppCompatActivity {
         SurfaceView cameraView = (SurfaceView) findViewById(R.id.qr_surface_view);
         EditText codeTxt = findViewById(R.id.qr_code_edit);
         AppCompatButton confirmBtn = findViewById(R.id.qr_code_edit_btn);
-        MenuBarcodeProcessor processor = new MenuBarcodeProcessor(this);
+        MenuBarcodeProcessor processor = new MenuBarcodeProcessor(this, codeTxt);
 
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this).setBarcodeFormats(Barcode.QR_CODE).build();
         cameraSource = new CameraSource.Builder(this, barcodeDetector)

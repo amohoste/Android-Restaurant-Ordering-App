@@ -1,17 +1,17 @@
 package com.example.aggoetey.myapplication.qrscanner;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import com.example.aggoetey.myapplication.R;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
+
+import java.security.InvalidParameterException;
+import java.util.IllegalFormatException;
 
 /**
  * Created by sitt on 01/05/18.
@@ -21,21 +21,23 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
 
     private Activity activity;
     private boolean snackIsShown;
-    private Snackbar snackbar ;
+    private EditText editText;
+    private Snackbar snackbar;
 
-    public MenuBarcodeProcessor(Activity context) {
+    public MenuBarcodeProcessor(Activity context, EditText textField) {
         if (context == null) {
             throw new IllegalArgumentException("Given context is null");
         }
 
         this.activity = context;
+        this.editText = textField;
         this.setSnackBar();
     }
 
-    private void setSnackBar(){
-        this.snackbar =  Snackbar.make(activity.findViewById(R.id.qr_constraint_container),"",Snackbar.LENGTH_INDEFINITE);
+    private void setSnackBar() {
+        this.snackbar = Snackbar.make(activity.findViewById(R.id.qr_constraint_container), "", Snackbar.LENGTH_INDEFINITE);
         this.snackbar.setAction(R.string.dismiss, v -> snackbar.dismiss());
-        this.snackbar.addCallback(new Snackbar.Callback(){
+        this.snackbar.addCallback(new Snackbar.Callback() {
             @Override
             public void onShown(Snackbar sb) {
                 snackIsShown = true;
@@ -51,8 +53,8 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
     }
 
 
-    private void showSnackBar (String text){
-        if(!snackIsShown){
+    private void showSnackBar(String text) {
+        if (!snackIsShown) {
             snackbar.setText(text).show();
         }
     }
@@ -61,7 +63,7 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
     /**
      * This method will be called each time google vision api detects a code
      * the scanner is set to detect.
-     *
+     * <p>
      * The method is called from a thread separate from the ui-thread.
      *
      * @param detections detected codes from the scanner.
@@ -70,31 +72,42 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
     @Override
     public void receiveDetections(Detector.Detections<Barcode> detections) {
         SparseArray<Barcode> array = detections.getDetectedItems();
-        for (int i = 0; i < array.size(); i++) {
-            Barcode code = array.valueAt(i);
+        if(array.size() > 0 ) {
+            Barcode code = array.valueAt(0);
+            Log.i("QRScanner", code.rawValue);
 
             switch (code.valueFormat) {
                 case Barcode.URL:
-                    final String message = String.format("Url: %1$s ,  Title: %1$s ", code.url.url, code.url.title);
-                    Log.i("QRScanner", message);
                     onScannedBarcode(code);
-                    activity.runOnUiThread(() -> showSnackBar(message));
                     break;
                 default:
-                    Log.i("QRScanner", code.rawValue);
-                    activity.runOnUiThread(() -> showSnackBar("Invalid qr code scanned: " + code.rawValue));
                     break;
             }
+
+
+            this.editText.post(() -> this.editText.setText(code.rawValue));
+            activity.runOnUiThread(() -> onScannedBarcode(code));
+
         }
     }
 
+    //TODO implement the function to do something when the given code is invalid
+    public void onInvalidCode (Barcode code) {
+
+    }
     //TODO implement to restart main activity with menu of the restaurant loaded.
-    public void onRestaurantCode(String code){
+
+    /**
+     * The function will be called if the user puts in restaurant code manually in
+     * the editText field.
+     * @param code
+     */
+    public void onRestaurantCode(String code) {
 
     }
 
     //TODO implement the function to get restaurant data from firebase and react on it
-    public void onScannedBarcode (Barcode barcode) {
+    public void onScannedBarcode(Barcode barcode) {
 
     }
 
