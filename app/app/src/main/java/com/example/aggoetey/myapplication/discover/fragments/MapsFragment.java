@@ -69,6 +69,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     private ClickableImageView locationButton;
     private CameraPosition lastpos;
     private LinearLayout restaurantCardLayout;
+    private static boolean mapReady = false;
 
     /**
      * Position of restaurant is stored separately as parcelable. This is because making
@@ -169,9 +170,25 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newCameraPosition(lastpos));
             }
         }
-
         // Start clustermanager and add markers
         setUpClusterManager();
+
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                mapReady = true;
+                if (searchedRestaurants != null) {
+                    addRestaurants(searchedRestaurants, false);
+                }
+
+                Location loc = locationProvider.getLastLocation();
+                if (loc != null) {
+                    zoomMapToPosition(loc, MY_LOCATION_ZOOM);
+                }
+
+            }
+        });
+
     }
 
 
@@ -376,13 +393,15 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     @Override
     void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
         this.searchedRestaurants = result;
-        addRestaurants(result, clear);
+        if (mapReady) {
+            addRestaurants(result, clear);
+        }
     }
 
     private void addRestaurants(ArrayList<Restaurant> result, boolean clear) {
         if (clear) {
             removeMarkers();
-        } else if (collection != null) {
+        } else if (collection != null && mapReady) {
             removeMarkers();
 
             if (result.size() > 1) {
@@ -449,8 +468,9 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                     result.add(restaurant);
                 }
             }
-
-            addRestaurants(result, false);
+            if (mapReady) {
+                addRestaurants(result, false);
+            }
         }
     }
 }

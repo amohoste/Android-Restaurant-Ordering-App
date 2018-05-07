@@ -291,11 +291,34 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
 
         helper.setRestaurants(mRestaurantProvider.getRestaurants());
 
+        mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
+                String query = helper.getLastQuery();
+                if (!query.equals("")) {
+                    mSearchView.setSearchText(query);
+                    helper.findSuggestions(getActivity(), query, 5,
+                            new SearchRestaurantHelper.OnFindSuggestionsListener() {
+
+                                @Override
+                                public void onResults(List<Restaurant> results) {
+                                    mSearchView.swapSuggestions(results);
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onFocusCleared() {
+                mSearchView.setSearchBarTitle(mSearchView.getQuery());
+            }
+        });
+
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
 
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
-
+                helper.setLastQuery(newQuery);
                 if (!oldQuery.equals("") && newQuery.equals("")) {
                     mSearchView.clearSuggestions();
                 } else {
@@ -347,6 +370,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                         });
             }
         });
+
 
         mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
             @Override

@@ -193,4 +193,14 @@ public class SearchRestaurantHelper {
         }
     }
 
+    private static String lastQuery = "";
+
+    public void setLastQuery(String query) {
+        lastQuery = query;
+    }
+
+    public String getLastQuery() {
+        return lastQuery;
+    }
+
 }
