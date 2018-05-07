@@ -401,6 +401,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     }
 
     private void addRestaurants(ArrayList<Restaurant> result, boolean clear) {
+        init = true;
         if (clear) {
             removeMarkers();
         } else if (collection != null && mapReady) {

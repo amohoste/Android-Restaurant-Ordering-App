@@ -100,7 +100,7 @@ public class SearchRestaurantHelper {
 
                 ArrayList<Restaurant> suggestionList = new ArrayList<>();
 
-                if (constraint != null) {
+                if (constraint != null && constraint.length() != 0) {
 
                     for (Restaurant restaurant : restaurants) {
                         if ((constraint.length() == 0 || restaurant.getTitle().toUpperCase().startsWith(constraint.toString().toUpperCase())) && satisfiesFilter(restaurant)) {

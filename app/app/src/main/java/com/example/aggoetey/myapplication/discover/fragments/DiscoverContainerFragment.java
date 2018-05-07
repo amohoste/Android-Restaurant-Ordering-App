@@ -362,7 +362,11 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                                         mapsFragment.onSearchResult(new ArrayList<Restaurant>(results), false);
                                     }
                                     if (listFragment != null) {
-                                        listFragment.onSearchResult(new ArrayList<Restaurant>(results), false);
+                                        if (results == null || results.size() == 0) {
+                                            listFragment.onSearchResult(mRestaurantProvider.getRestaurants(), true);
+                                        } else {
+                                            listFragment.onSearchResult(new ArrayList<Restaurant>(results), false);
+                                        }
                                     }
                                 }
                             }
