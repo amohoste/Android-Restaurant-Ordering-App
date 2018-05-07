@@ -39,7 +39,7 @@
                 android:value="com.example.aggoetey.myapplication.Menu.MenuItemListActivity" />
         </activity>
 
-        <activity android:name=".note.NotesActivity"
+        <activity android:name=".note.activity.NotesActivity"
             android:parentActivityName=".MainActivity"
             android:label="Notes"
 

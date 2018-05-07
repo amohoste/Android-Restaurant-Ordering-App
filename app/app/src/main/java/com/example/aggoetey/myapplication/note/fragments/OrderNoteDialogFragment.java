@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.note;
+package com.example.aggoetey.myapplication.note.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -62,6 +62,7 @@ public class OrderNoteDialogFragment extends DialogFragment {
         final View view = inflater.inflate(R.layout.fragment_order_note_dialog, null);
 
         final EditText editText = view.findViewById(R.id.note_body_text);
+
         builder.setTitle("Add notes to " +  menuItem.title);
         builder.setView(view)
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {

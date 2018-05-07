@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.note;
+package com.example.aggoetey.myapplication.note.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
