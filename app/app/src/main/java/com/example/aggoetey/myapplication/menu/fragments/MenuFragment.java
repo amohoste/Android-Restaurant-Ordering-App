@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -41,6 +42,9 @@ import java.util.HashMap;
  */
 public class MenuFragment extends Fragment implements Listener {
     private static final String ARG_MENUINFO = "menuinfo";
+    private static final String VIEW_TYPE_PREFERENCE = "VIEW_TYPE_PREFERENCE";
+    private static final String VIEW_TYPE_PREFERENCE_FILE = "VIEW_TYPE_PREFERENCE_FILE";
+
     private MenuInfo menuInfo;
 
     private ViewPager viewPager;
@@ -93,6 +97,13 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //Get view type from shared preferences
+        if(getActivity() != null) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE,  viewType.getViewTypeString());
+            viewType = ViewType.get(viewTypeString);
+        }
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
@@ -161,12 +172,23 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void onStop() {
         super.onStop();
+        if(getActivity() != null ){
+            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE );
+            if(sharedPref != null) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
+                editor.apply();
+            }
+        }
+
+
         toggleViewTypeMenu(this.optionsMenu);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.e("MenuFragment:", "Destroyed");
         menuInfo.clearAdapters();
     }
 

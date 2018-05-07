@@ -19,8 +19,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by aggoetey on 3/20/18.
@@ -34,6 +32,7 @@ public class Tab extends Model implements Serializable {
 
     private List<Order> payedOrders = new ArrayList<>();
     private List<Order> orderedOrders = new ArrayList<>();
+    private List<Order> receivedOrders = new ArrayList<>();
     private int amountOfOrders = 0;
 
     public List<Order> getPayedOrders() {
@@ -43,6 +42,8 @@ public class Tab extends Model implements Serializable {
     public List<Order> getOrderedOrders() {
         return orderedOrders;
     }
+
+    public List<Order> getReceivedOrders() { return receivedOrders; }
 
     private Tab() {
     }
@@ -134,7 +135,14 @@ public class Tab extends Model implements Serializable {
 
     public void payOrder(Order order) {
         orderedOrders.remove(order);
+        receivedOrders.remove(order);
         payedOrders.add(order);
+        fireInvalidationEvent();
+    }
+
+    public void receiveOrder(Order order) {
+        orderedOrders.remove(order);
+        receivedOrders.add(order);
         fireInvalidationEvent();
     }
 
@@ -170,8 +178,9 @@ public class Tab extends Model implements Serializable {
         public Order addOrderItem(OrderItem orderItem) {
             this.orderItems.add(orderItem);
             fireInvalidationEvent();
-            return  this;
+            return this;
         }
+
         /**
          * Verwijder een orderItem aan de hand van een OrderItem
          */
@@ -183,22 +192,21 @@ public class Tab extends Model implements Serializable {
 
         /**
          * Lukt niet in 1 lijntje omdat we geen lambda's kunnen gebruiken...
-         *
+         * <p>
          * Verwijder een orderitem aan de hand van een OrderItem
-         *
          */
         public void removeOrderItem(MenuItem menuItem) {
 //            orderItems.removeIf(orderItem -> orderItem.getMenuItem().equals(menuItem));
             OrderItem toDelete = null;
 
             // Pass 1 - collect delete candidates
-            for (OrderItem orderItem: orderItems) {
+            for (OrderItem orderItem : orderItems) {
                 if (orderItem.getMenuItem().equals(menuItem)) {
                     toDelete = orderItem;
                     break;
                 }
             }
-            if(toDelete != null) {
+            if (toDelete != null) {
                 orderItems.remove(toDelete);
                 fireInvalidationEvent();
             }
