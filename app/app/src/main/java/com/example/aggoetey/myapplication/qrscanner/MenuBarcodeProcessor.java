@@ -110,7 +110,7 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
     }
 
     public void onScannedBarcode(Barcode barcode) {
-        onScannedCode(barcode.toString());
+        onScannedCode(barcode.rawValue);
     }
 
 

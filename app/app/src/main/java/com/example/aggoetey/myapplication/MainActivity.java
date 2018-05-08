@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -175,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             String code = data.getStringExtra(QRScannerActivity.EXTRA_ANSWER_SHOWN);
 
             // Split scanned code into restaurant_id and table_id
+            Log.d("QR RESULTS", code);
             String[] ids = code.split(":");
             String restaurant_id = ids[0];
             String table_id = ids[1];
