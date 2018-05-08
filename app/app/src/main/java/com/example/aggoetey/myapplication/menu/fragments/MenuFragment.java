@@ -1,7 +1,9 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,8 +21,10 @@ import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +43,10 @@ import java.util.HashMap;
  */
 public class MenuFragment extends Fragment implements Listener {
     private static final String ARG_MENUINFO = "menuinfo";
+    private static final int CANCEL_WINDOW = 5000;
+    private static final String VIEW_TYPE_PREFERENCE = "VIEW_TYPE_PREFERENCE";
+    private static final String VIEW_TYPE_PREFERENCE_FILE = "VIEW_TYPE_PREFERENCE_FILE";
+
     private MenuInfo menuInfo;
 
     private ViewPager viewPager;
@@ -92,6 +100,13 @@ public class MenuFragment extends Fragment implements Listener {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //Get view type from shared preferences
+        if(getActivity() != null) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE,  viewType.getViewTypeString());
+            viewType = ViewType.get(viewTypeString);
+        }
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
 
@@ -108,16 +123,36 @@ public class MenuFragment extends Fragment implements Listener {
         viewPager.setAdapter(pagerAdapter);
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        // MenuFragment order button action
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menuInfo.commitOrder();
-                Log.e("MenuFragmentContainer", "Adapter size " + menuInfo.getmAdapters().size());
-                setOrderButtonProperties();
+                Toast gecancelled = Toast.makeText(getContext(), "Order is gecancelled", Toast.LENGTH_SHORT);
+                Toast confirm = Toast.makeText(getContext(), "Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen", Toast.LENGTH_SHORT);
+                if (mMenuOrderButton.getText().equals("Cancel")) {
+                    mMenuOrderButton.setText("Order");
+                    confirm.cancel();
+                    gecancelled.show();
+                } else {
+                    confirm.show();
+                    mMenuOrderButton.setText("Cancel");
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendOrder();
+                        }
+                    }, CANCEL_WINDOW);
+                }
             }
         });
-
         return v;
+    }
+
+    private void sendOrder() {
+        mMenuOrderButton.setText("Order");
+        Tab.getInstance().commitOrder(menuInfo.getCurrentOrder(), MenuFragment.this);
     }
 
 
@@ -134,12 +169,23 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void onStop() {
         super.onStop();
+        if(getActivity() != null ){
+            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE );
+            if(sharedPref != null) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
+                editor.apply();
+            }
+        }
+
+
         toggleViewTypeMenu(this.optionsMenu);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.e("MenuFragment:", "Destroyed");
         menuInfo.clearAdapters();
     }
 
@@ -176,9 +222,6 @@ public class MenuFragment extends Fragment implements Listener {
 
         switch (item.getItemId()) {
             case R.id.call_waiter_button:
-                Toast.makeText(getContext(), getResources()
-                        .getString(R.string.waiter_call_try), Toast.LENGTH_SHORT)
-                        .show();
                 callWaiter();
                 return true;
             case R.id.to_grid_view:
@@ -208,33 +251,38 @@ public class MenuFragment extends Fragment implements Listener {
     /**
      * First need to get WaiterCall-array before we can add a new WaiterCall
      * TODO: change tableID when Sitt updates the model for the "online" version
-     * TODO: check whether the user is loged in to a table/has "permission" to call a waiter
+     * TODO: check whether the user is logged in to a table/has "permission" to call a waiter
      * TODO: check whether the restaurant supports this function
      */
     public void callWaiter() {
+        final Toast try_toast = Toast.makeText(getContext(), getResources()
+                .getString(R.string.waiter_call_try), Toast.LENGTH_SHORT);
+        try_toast.show();
+
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
-        final DocumentReference mDocRef =  FirebaseFirestore.getInstance().document("places/"
-                .concat(menuInfo.getRestaurant().getGooglePlaceId()));
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
+                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/").concat(menuInfo.getTableID()));
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 ArrayList<Object> currentCalls;
-                if (documentSnapshot.exists()) {
+                if (documentSnapshot.exists() && documentSnapshot.get("waiterCalls") != null) {
                     currentCalls = (ArrayList<Object>) documentSnapshot.get("waiterCalls");
                 } else {
                     currentCalls = new ArrayList<>();
                 }
+
                 HashMap<String, Object> newEntry = new HashMap<>();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  // TODO: use server time when FireStore supports timestamps in arrays
                 newEntry.put("timestamp", dateFormat.format(new Date()));
-                newEntry.put("tableID", "DIT IS EEN TABLE ID");
                 currentCalls.add(newEntry);
                 mDocRef.update("waiterCalls", currentCalls).addOnSuccessListener(
                         new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                try_toast.cancel();
                                 Toast.makeText(getContext(), getResources()
                                         .getString(R.string.waiter_call_success), Toast.LENGTH_LONG)
                                         .show();
@@ -244,13 +292,15 @@ public class MenuFragment extends Fragment implements Listener {
                 ).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        try_toast.cancel();
                         Toast.makeText(getContext(), getResources()
                                 .getString(R.string.waiter_call_failure), Toast.LENGTH_SHORT).show();
                         waiter_button.setEnabled(true);
                     }
                 });
             }
-        });
+        }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));
+        ;
     }
 
 

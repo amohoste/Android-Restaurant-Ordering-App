@@ -16,12 +16,17 @@
     <string name="waiter_call_success">Waiter successfully notified!</string>
     <string name="waiter_call_failure">Couldn\'t reach a waiter, please try again later!</string>
 
+    <string name="order_send_try">Sending order...</string>
+    <string name="order_send_success">Order successfully sent!</string>
+    <string name="order_send_failure">Couldn\'t send the order, please try again later!</string>
+
     <string name="tab_order_position">Order # %1$d</string>
     <string name="tab_view_pay">Pay</string>
 
     <string name="total_price_payed">Betaalde items: %1$.2f euro.</string>
     <string name="total_price_received">Ontvangen items: %1$.2f euro.</string>
     <string name="total_price_ordered">Bestelde items: %1$.2f euro.</string>
+
 
     <string name="price_order">Prijs order: %.2f euro.</string>
     <string name="price_order_short">€%1$.2f</string>
