@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,8 +119,12 @@ public class QRScannerActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == PERMISSION_REQUEST_CAMERA){
             if(grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
                 this.recreate();
             }else{
+                SurfaceView cameraView = (SurfaceView) findViewById(R.id.qr_surface_view);
+                cameraView.setVisibility(View.GONE);
                 TextView  textView =  findViewById(R.id.qr_scanner_title);
                 textView.setText(R.string.qr_no_camera_permission);
             }
