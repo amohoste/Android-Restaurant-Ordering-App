@@ -20,6 +20,7 @@ public class MenuFragmentContainer extends Fragment {
     private static final String MENU_INFO_KEY = "MENU_INFO_KEY";
     private static final String MENU_FRAGMENT_TAG = "MENU_FRAGMENT_TAG";
     private static final String NO_MENU_SELECTED_FRAGMENT_TAG = "NO_MENU_SELECTED_FRAGMENT_TAG";
+    private static final String MENU_NOT_LOADED_FRAGMENT_TAG = "MENU_NOT_LOADED_FRAGMENT_TAG";
     private MenuInfo menuInfo;
 
     public MenuFragmentContainer() {

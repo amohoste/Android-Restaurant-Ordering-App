@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
@@ -20,7 +21,7 @@ import java.io.Serializable;
  * Adapter voor de recyclerview voor menuitems.
  */
 
-public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> implements Serializable {
+public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> implements Serializable, Listener {
 
     public interface MenuListClickListener {
         void onMenuListLongClick(MenuItem menuItem, MenuInfo menuInfo, int position);
@@ -35,8 +36,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         this.menuInfo = menuInfo;
         this.category = category;
         this.listClickListener = listClickListener;
+
     }
 
+    @Override
+    public void invalidated() {
+        notifyDataSetChanged();
+    }
 
     @Override
     public MenuItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {

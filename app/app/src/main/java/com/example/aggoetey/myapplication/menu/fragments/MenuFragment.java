@@ -24,6 +24,7 @@ import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
+import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
@@ -57,7 +58,7 @@ public class MenuFragment extends Fragment implements Listener {
     private TextView mMenuRestaurantNameView;
     private Menu optionsMenu;
     private Button mMenuOrderButton;
-
+    private View v;
 
     private static ViewType viewType = ViewType.LIST_VIEW;
 
@@ -66,6 +67,7 @@ public class MenuFragment extends Fragment implements Listener {
     }
 
     public static MenuFragment newInstance(MenuInfo menuInfo) {
+        Log.d("MENUFRAGMENT", "new");
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_MENUINFO, menuInfo);
@@ -110,7 +112,7 @@ public class MenuFragment extends Fragment implements Listener {
         }
 
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_menu, container, false);
+        v = inflater.inflate(R.layout.fragment_menu, container, false);
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(menuInfo.getRestaurant().getTitle());
@@ -119,14 +121,24 @@ public class MenuFragment extends Fragment implements Listener {
 
         loggedInCheck();
 
+        // Load the restaurant's menu from the FireStore backend if not loaded already
+        if (menuInfo.getRestaurant().getMenu() == null) {
+            new RestaurantMenuLoader(menuInfo, this);
+        } else {
+            setupViewPager();
+        }
+
+        return v;
+    }
+
+
+    public void setupViewPager() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         pagerAdapter = new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo, viewType);
         viewPager.setAdapter(pagerAdapter);
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        return v;
     }
 
     // TODO: Call this after logging in

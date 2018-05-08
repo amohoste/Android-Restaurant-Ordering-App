@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
+import com.example.aggoetey.myapplication.Model;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
@@ -36,8 +37,7 @@ import java.util.List;
  * te kunnen tonen op de menuview van een restaurant.
  */
 
-public class MenuInfo implements Serializable {
-
+public class MenuInfo extends Model implements Serializable {
     private Restaurant restaurant;
     private HashMap<String, Integer> orderCountMap;
     // Adapters can be transient since trying to invalidate old adapters after being serialized doesn't make
@@ -50,11 +50,6 @@ public class MenuInfo implements Serializable {
 
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;
-
-        // Load the restaurant's menu from the FireStore backend
-        if (restaurant.getMenu() == null) {
-            new RestaurantMenuLoader(restaurant);
-        }
 
         orderCountMap = new HashMap<>();
         mAdapters = new HashSet<>();
@@ -78,6 +73,7 @@ public class MenuInfo implements Serializable {
     }
 
     public void orderCommitted() {
+
         List<Listener> listenerList = currentOrder.getListeners();
         currentOrder = Tab.getInstance().newOrder();
         currentOrder.setListeners(listenerList);
@@ -143,5 +139,10 @@ public class MenuInfo implements Serializable {
 
     public void setCurrentOrder(Tab.Order currentOrder) {
         this.currentOrder = currentOrder;
+    }
+
+    @Override
+    public void fireInvalidationEvent() {
+        super.fireInvalidationEvent();
     }
 }
