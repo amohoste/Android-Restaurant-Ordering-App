@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
+import com.example.aggoetey.myapplication.MainActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
@@ -158,10 +159,7 @@ public class MenuFragment extends Fragment implements Listener {
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent qrIntent = new Intent(getActivity(), QRScannerActivity.class);
-                startActivityForResult(qrIntent, QRScannerActivity.QR_CODE_REQUEST);
-                Toast.makeText(getActivity().getApplicationContext(), "Open QR-scanner",
-                        Toast.LENGTH_SHORT).show();
+                ((MainActivity) getActivity()).startQRScannerActivity();
             }
         });
     }

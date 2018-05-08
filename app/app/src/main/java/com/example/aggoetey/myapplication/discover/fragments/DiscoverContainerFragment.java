@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.example.aggoetey.myapplication.MainActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.activities.FilterActivity;
 import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
@@ -189,10 +190,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                     startActivityForResult(in, REQUEST_CODE_FILTER);
                 } else if(item.getItemId() == R.id.action_qr){
                     //just print action
-                    Intent  qrIntent = new Intent(getActivity(), QRScannerActivity.class);
-                    startActivity(qrIntent);
-                    Toast.makeText(getActivity().getApplicationContext(), "Open QR-scanner",
-                            Toast.LENGTH_SHORT).show();
+                    ((MainActivity) getActivity()).startQRScannerActivity();
                 }
             }
         });
