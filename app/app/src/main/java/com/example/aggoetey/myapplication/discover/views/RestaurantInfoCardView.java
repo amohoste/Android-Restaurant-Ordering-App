@@ -1,7 +1,9 @@
 package com.example.aggoetey.myapplication.discover.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
@@ -121,7 +123,10 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
             navigation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Navigation clicked", Toast.LENGTH_SHORT).show();
+                    Uri navigationURI = Uri.parse("google.navigation:q=" + restaurant.getPosition().latitude + "," + restaurant.getPosition().longitude);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, navigationURI);
+                    mapIntent.setPackage(getResources().getString(R.string.google_map_app));
+                    getContext().startActivity(mapIntent);
                 }
             });
         }
