@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -99,10 +100,25 @@ public class MenuFragment extends Fragment implements Listener {
                              Bundle savedInstanceState) {
 
         //Get view type from shared preferences
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
-            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE,  viewType.getViewTypeString());
+            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
             viewType = ViewType.get(viewTypeString);
+        }
+        if (menuInfo != null) {
+            String title = menuInfo.getRestaurant().getTitle();
+            Log.e("MenuFragment", getActivity().getActionBar() + "");
+
+            if (getActivity() instanceof AppCompatActivity) {
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                if (activity.getSupportActionBar() != null) {
+                    activity.getSupportActionBar().setTitle(title);
+                }
+            }else{
+                if(getActivity().getActionBar() != null) {
+                    getActivity().getActionBar().setTitle(title);
+                }
+            }
         }
 
         // Inflate the layout for this fragment
@@ -148,9 +164,9 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void onStop() {
         super.onStop();
-        if(getActivity() != null ){
-            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE );
-            if(sharedPref != null) {
+        if (getActivity() != null) {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            if (sharedPref != null) {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
                 editor.apply();
@@ -240,7 +256,7 @@ public class MenuFragment extends Fragment implements Listener {
 
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
-        final DocumentReference mDocRef =  FirebaseFirestore.getInstance().document("places/"
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
                 .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/").concat(menuInfo.getTableID()));
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -278,7 +294,8 @@ public class MenuFragment extends Fragment implements Listener {
                     }
                 });
             }
-        }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));;
+        }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));
+        ;
     }
 
 
