@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.aggoetey.myapplication.discover.helpers.KeyProvider;
+import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -81,11 +82,14 @@ public class RestaurantProvider extends Fragment {
         return restaurantList;
     }
 
+    private static final RestaurantProvider ourInstance = new RestaurantProvider();
 
-    public static RestaurantProvider newInstance() {
-        RestaurantProvider myFragment = new RestaurantProvider();
+    public static RestaurantProvider getInstance() {
+        return ourInstance;
+    }
+
+    public RestaurantProvider() {
         restaurantListeners = new ArrayList<>();
-        return myFragment;
     }
 
     @Override
@@ -262,5 +266,18 @@ public class RestaurantProvider extends Fragment {
             return restaurant;
         }
 
+    }
+
+    public Restaurant getRestaurant(String id) {
+        if (restaurantList != null) {
+            for (Restaurant restaurant : restaurantList) {
+                if (restaurant.getGooglePlaceId().equals(id)) {
+                    return restaurant;
+                }
+            }
+            return null;
+        } else {
+            return null;
+        }
     }
 }

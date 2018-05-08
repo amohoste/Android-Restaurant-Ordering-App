@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -136,7 +137,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
         // Setup restaurant provider
         mRestaurantProvider = (RestaurantProvider) fm.findFragmentByTag(RESTAURANT_FRAG);
         if (mRestaurantProvider == null) {
-            mRestaurantProvider = RestaurantProvider.newInstance();
+            mRestaurantProvider = RestaurantProvider.getInstance();
             fm.beginTransaction().add(mRestaurantProvider, RESTAURANT_FRAG).commit();
         } else if (mRestaurantProvider.getRestaurants() != null) {
             setupSearchbar();
@@ -280,6 +281,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
         if (result != null) {
             setupSearchbar();
         }
+        setQrButtonEnabled(true);
     }
 
     @Override
@@ -436,6 +438,19 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
     public void onLocationUpdate(Location location) {
         if (helper != null) {
             helper.setLastLocation(location);
+        }
+    }
+
+    private void setQrButtonEnabled(boolean enabled) {
+        // Enable qr scanner
+         List<MenuItemImpl> list = mSearchView.getCurrentMenuItems();
+
+        if (list != null) {
+            for (MenuItem item : list) {
+                if (item.getItemId() == R.id.action_qr) {
+                    item.setEnabled(enabled);
+                }
+            }
         }
     }
 
