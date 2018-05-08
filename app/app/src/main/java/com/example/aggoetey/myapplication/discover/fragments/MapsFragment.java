@@ -8,14 +8,19 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 
+import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.views.RestaurantInfoCardView;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -29,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
@@ -39,6 +45,8 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.wrappers.RestaurantMapItem;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
 import com.example.aggoetey.myapplication.discover.views.MapIconsRenderer;
+
+import java.util.ArrayList;
 
 
 /**
@@ -57,10 +65,12 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     private GoogleMap mMap;
     private ClusterManager<RestaurantMapItem> mClusterManager;
     MarkerManager.Collection collection;
+    private static boolean init = false;
 
     private ClickableImageView locationButton;
     private CameraPosition lastpos;
     private LinearLayout restaurantCardLayout;
+    private static boolean mapReady = false;
 
     /**
      * Position of restaurant is stored separately as parcelable. This is because making
@@ -138,6 +148,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         selectAndStartRestCardView(chosenRestaurant);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
+        restaurantProvider.addRestaurantListener(this);
         locationProvider = mCallbacks.getLocationProvider();
 
         return v;
@@ -160,9 +171,26 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newCameraPosition(lastpos));
             }
         }
-
         // Start clustermanager and add markers
         setUpClusterManager();
+
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                mapReady = true;
+                if (searchedRestaurants != null) {
+                    addRestaurants(searchedRestaurants, false);
+                }
+
+                Location loc = locationProvider.getLastLocation();
+                if (!init) {
+                    zoomMapToPosition(loc, MY_LOCATION_ZOOM);
+                    init = true;
+                }
+
+            }
+        });
+
     }
 
 
@@ -177,10 +205,9 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     Restaurant res = (Restaurant) marker.getTag();
-                    if (res != null) {
-                        Log.v("Menu", res.getTitle());
-                    }
-                    return false;
+                    resetChosenRestaurant();
+                    selectAndStartRestCardView(res);
+                    return true;
                 }
             });
 
@@ -222,11 +249,11 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
 
             mMap.setOnCameraIdleListener(mClusterManager);
             mMap.setOnMarkerClickListener(manager);
+        }
 
-            // Add cluster items (markers) to the cluster manager.
-            if (restaurantProvider != null && restaurantProvider.getRestaurants() != null) {
-                addItemsToClusterManager();
-            }
+        // Add cluster items (markers) to the cluster manager.
+        if (restaurantProvider != null && restaurantProvider.getRestaurants() != null) {
+            addItemsToClusterManager();
         }
     }
 
@@ -330,6 +357,13 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     }
 
     @Override
+    public void onRestaurantUpdate(ArrayList<Restaurant> restaurants) {
+        addItemsToClusterManager();
+    }
+
+
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         if (mMap != null) {
             outState.putParcelable(CAMERA_STATE_KEY, mMap.getCameraPosition());
@@ -348,5 +382,98 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
             parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
         }
         //Toast.makeText(getContext(), "Menu", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStop() {
+        if (restaurantProvider != null) {
+            restaurantProvider.removeRestaurantListener(this);
+        }
+        super.onStop();
+    }
+
+    @Override
+    void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
+        this.searchedRestaurants = result;
+        if (mapReady) {
+            addRestaurants(result, clear);
+        }
+    }
+
+    private void addRestaurants(ArrayList<Restaurant> result, boolean clear) {
+        init = true;
+        if (clear) {
+            removeMarkers();
+        } else if (collection != null && mapReady) {
+            removeMarkers();
+
+            if (result.size() > 1) {
+                LatLngBounds.Builder builder = LatLngBounds.builder();
+                for (Restaurant restaurant : result) {
+                    builder.include(restaurant.getPosition());
+                    Marker myMarker = collection.addMarker(new MarkerOptions().position(restaurant.getPosition()).title(restaurant.getTitle()).zIndex(2));
+                    myMarker.setTag(restaurant);
+                    dropPinEffect(myMarker);
+                }
+                final LatLngBounds bounds = builder.build();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 300));
+
+            } else if (result.size() == 1) {
+                Restaurant restaurant = result.get(0);
+                Marker myMarker = collection.addMarker(new MarkerOptions().position(restaurant.getPosition()).title(restaurant.getTitle()).zIndex(2));
+                myMarker.setTag(restaurant);
+                dropPinEffect(myMarker);
+                Location loc = new Location("");
+                loc.setLatitude(restaurant.getPosition().latitude);
+                loc.setLongitude(restaurant.getPosition().longitude);
+                zoomMapToPosition(loc, 16);
+            }
+        }
+    }
+
+    // Source: https://stackoverflow.com/questions/13189054/implement-falling-pin-animation-on-google-maps-android/20241972#20241972
+    private void dropPinEffect(final Marker marker) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final long duration = 1000;
+
+        final Interpolator interpolator = new BounceInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = Math.max(
+                        1 - interpolator.getInterpolation((float) elapsed
+                                / duration), 0);
+                marker.setAnchor(0.5f, 1.0f + 4 * t);
+
+                if (t > 0.0) {
+                    handler.postDelayed(this, 15);
+                }
+            }
+        });
+    }
+
+    private void removeMarkers() {
+        if (collection != null) {
+            collection.clear();
+        }
+    }
+
+    @Override
+    void filterResults() {
+        if (collection != null && searchedRestaurants != null) {
+            ArrayList<Restaurant> result = new ArrayList<>();
+
+            for (Restaurant restaurant : searchedRestaurants) {
+                if (SearchRestaurantHelper.satisfiesFilter(restaurant)) {
+                    result.add(restaurant);
+                }
+            }
+            if (mapReady) {
+                addRestaurants(result, false);
+            }
+        }
     }
 }
