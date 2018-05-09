@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
+
 import com.example.aggoetey.myapplication.Model;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.ServerConnectionFailure;
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,7 +45,10 @@ public class Tab extends Model implements Serializable {
         return orderedOrders;
     }
 
-    public List<Order> getReceivedOrders() { return receivedOrders; }
+    public List<Order> getReceivedOrders() {
+        return receivedOrders;
+    }
+
 
     private Tab() {
     }
@@ -67,15 +72,15 @@ public class Tab extends Model implements Serializable {
         final MenuInfo menuInfo = menuFragment.getMenuInfo();
 
         // Disable order button
-        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(false);
+        menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(false);
 
         final Toast try_toast = Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
                 .getString(R.string.order_send_try), Toast.LENGTH_LONG);
         try_toast.show();
 
-        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
-                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/")
-                .concat(menuInfo.getTableID()));
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
+                .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
+                .document(menuInfo.getTableID());
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -103,7 +108,7 @@ public class Tab extends Model implements Serializable {
                 mDocRef.update("ordered", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+                        menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(true);
 
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
@@ -120,7 +125,7 @@ public class Tab extends Model implements Serializable {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+                        menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(true);
 
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
@@ -191,6 +196,35 @@ public class Tab extends Model implements Serializable {
         }
 
         /**
+         * Zet een lijst van orderItems om in een gegroepeerde lijst van orders
+         *
+         * @return
+         */
+        public static List<List<OrderItem>> groupOrders(Order order) {
+            if (order.getOrderItems().size() == 0) return new ArrayList<>();
+
+            List<List<OrderItem>> orderItems = new ArrayList<>();
+
+            Collections.sort(order.orderItems);
+
+            OrderItem last = order.orderItems.get(0);
+            List<OrderItem> items = new ArrayList<>();
+
+            for (OrderItem orderItem : order.orderItems) {
+                if (last.compareTo(orderItem) != 0) {
+                    // nieuw item, nieuwe lijst
+                    orderItems.add(items);
+                    items = new ArrayList<>();
+                }
+                items.add(orderItem);
+                last = orderItem;
+            }
+            orderItems.add(items);
+
+            return orderItems;
+        }
+
+        /**
          * Lukt niet in 1 lijntje omdat we geen lambda's kunnen gebruiken...
          * <p>
          * Verwijder een orderitem aan de hand van een OrderItem
@@ -220,7 +254,7 @@ public class Tab extends Model implements Serializable {
             return prijs;
         }
 
-        public static class OrderItem implements Serializable {
+        public static class OrderItem implements Serializable, Comparable<OrderItem> {
             private String note;
             private MenuItem menuItem;
 
@@ -243,6 +277,11 @@ public class Tab extends Model implements Serializable {
 
             public void setMenuItem(MenuItem menuItem) {
                 this.menuItem = menuItem;
+            }
+
+            @Override
+            public int compareTo(@NonNull OrderItem orderItem) {
+                return menuItem.title.compareTo(orderItem.menuItem.title);
             }
         }
 

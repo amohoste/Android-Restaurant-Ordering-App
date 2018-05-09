@@ -18,7 +18,6 @@ import com.example.aggoetey.myapplication.model.MenuItem;
  *
  * View initializer for menu cards in grid view.
  *
- * //TODO: Make this class extend a view group instead of working with view initializer
  */
 
 public class MenuCardView extends CardView implements DataView<MenuItem>{
@@ -111,7 +110,7 @@ public class MenuCardView extends CardView implements DataView<MenuItem>{
     private void updateTextView (final MenuItem item){
         mDescriptionTextView.setText(item.description);
         mNameTextView.setText(item.title);
-        mPriceTextView.setText(String.format("€ %d", item.price));
+        mPriceTextView.setText(String.format("€ %.2f", item.price));
 
         // TEMPORARY IMAGE
         mDishImageView.setImageResource(R.drawable.kimchi1);

@@ -7,16 +7,23 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
+import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.PayFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener {
@@ -146,5 +153,46 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
         menuInfoChanged = menuInfo != this.menuInfo;
         this.menuInfo = menuInfo;
         findViewById(R.id.action_menu).performClick();
+    }
+
+    public void startQRScannerActivity() {
+        Intent qrIntent = new Intent(this, QRScannerActivity.class);
+        startActivityForResult(qrIntent, QRScannerActivity.QR_CODE_REQUEST);
+        Toast.makeText(getApplicationContext(), "Open QR-scanner",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {{
+            return;
+        }}
+
+        if (requestCode == QRScannerActivity.QR_CODE_REQUEST) {
+            if (data == null) {
+                return;
+            }
+            String code = data.getStringExtra(QRScannerActivity.EXTRA_ANSWER_SHOWN);
+
+            // Split scanned code into restaurant_id and table_id
+            Log.d("QR RESULTS", code);
+            String[] ids = code.split(":");
+            String restaurant_id = ids[0];
+            String table_id =  ids.length == 2 ? ids[1] : null;
+
+
+            // TODO SITT: move this validation check to QRActivity
+            // TODO: add table validation check (+ make it possible to only scan table once restaurant is filled)
+            Restaurant restaurant = RestaurantProvider.getInstance().getRestaurant(restaurant_id);
+
+            if (restaurant == null) {
+                Toast.makeText(this, R.string.qr_code_not_recognized, Toast.LENGTH_SHORT)
+                                                                                            .show();
+            } else {
+                // Load restaurant into MenuInfo
+                onRestaurantSelect(new MenuInfo(restaurant, table_id));
+            }
+        }
     }
 }

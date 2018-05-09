@@ -33,6 +33,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     private int mPage;
     private String category;
 
+    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mMenuRecyclerAdapter;
     private MenuViewStateListener menuViewStateListener;
 
@@ -60,8 +61,8 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu_page, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler_view);
-        initViewType(recyclerView);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler_view);
+        initViewType(mRecyclerView);
 
         return view;
     }
@@ -86,6 +87,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
         recyclerView.setAdapter(adapter);
         mMenuRecyclerAdapter = adapter;
     }
+
 
 
     @Override

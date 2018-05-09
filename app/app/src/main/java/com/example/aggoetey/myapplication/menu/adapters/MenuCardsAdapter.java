@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
@@ -19,7 +20,7 @@ import com.example.aggoetey.myapplication.model.MenuItem;
  * Adapter to show menu in cards form.
  */
 
-public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> {
+public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> implements Listener {
 
     public interface OnAddNoteButtonClickListener {
          void onAddNoteButtonClick(MenuItem menuItem);
@@ -34,7 +35,11 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         this.menuInfo = menuInfo;
         this.category = category;
         this.listener = listener;
+    }
 
+    @Override
+    public void invalidated() {
+        notifyDataSetChanged();
     }
 
     @Override

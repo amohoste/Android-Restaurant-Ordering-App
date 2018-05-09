@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,12 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
+import com.example.aggoetey.myapplication.MainActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
+import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -59,6 +63,7 @@ public class MenuFragment extends Fragment implements Listener {
     private Handler handler = new Handler();
     private SendAfterTime sendAfterTime = new SendAfterTime();
 
+    private View v;
 
     private static ViewType viewType = ViewType.LIST_VIEW;
 
@@ -67,6 +72,7 @@ public class MenuFragment extends Fragment implements Listener {
     }
 
     public static MenuFragment newInstance(MenuInfo menuInfo) {
+        Log.d("MENUFRAGMENT", "new");
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_MENUINFO, menuInfo);
@@ -111,23 +117,61 @@ public class MenuFragment extends Fragment implements Listener {
         }
 
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_menu, container, false);
+        v = inflater.inflate(R.layout.fragment_menu, container, false);
 
         mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
         mMenuRestaurantNameView.setText(menuInfo.getRestaurant().getTitle());
 
-        mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
+        mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_login_order_button);
 
-        setOrderButtonProperties();
+        loggedInCheck();
 
+        // Load the restaurant's menu from the FireStore backend if not loaded already
+        if (menuInfo.getRestaurant().getMenu() == null) {
+            new RestaurantMenuLoader(menuInfo, this);
+        } else {
+            setupViewPager();
+        }
+
+        return v;
+    }
+
+
+    public void setupViewPager() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         pagerAdapter = new MenuFragmentPagerAdapter(getChildFragmentManager(), menuInfo, viewType);
         viewPager.setAdapter(pagerAdapter);
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
 
-        // MenuFragment order button action
+    // TODO: Call this after logging in
+    public void loggedInCheck() {
+        if (menuInfo.getTableID() == null) {    //user not logged in
+            setLogInButton();
+        } else {
+            setOrderButton();
+        }
+    }
+
+    public void setLogInButton() {
+        mMenuOrderButton.setEnabled(true);
+        mMenuOrderButton.setText(R.string.menu_view_login_button);
+
+        // Login Button action - Open the QR scanner fragment
+        mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).startQRScannerActivity();
+            }
+        });
+    }
+
+    public void setOrderButton() {
+        // Order button action
+        setOrderButtonProperties();
+
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -148,7 +192,6 @@ public class MenuFragment extends Fragment implements Listener {
                 }
             }
         });
-        return v;
     }
 
     private void sendOrder() {
@@ -156,14 +199,15 @@ public class MenuFragment extends Fragment implements Listener {
         Tab.getInstance().commitOrder(menuInfo.getCurrentOrder(), MenuFragment.this);
     }
 
-
     public void setOrderButtonProperties() {
-        if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
-            mMenuOrderButton.setEnabled(true);
-        } else {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
-            mMenuOrderButton.setEnabled(false);
+        if (menuInfo.getTableID() != null) {
+            if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
+                mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
+                mMenuOrderButton.setEnabled(true);
+            } else {
+                mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
+                mMenuOrderButton.setEnabled(false);
+            }
         }
     }
 
@@ -262,8 +306,9 @@ public class MenuFragment extends Fragment implements Listener {
 
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
-        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
-                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/").concat(menuInfo.getTableID()));
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
+                .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
+                .document(menuInfo.getTableID());
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
