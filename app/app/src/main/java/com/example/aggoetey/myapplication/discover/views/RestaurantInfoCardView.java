@@ -3,6 +3,7 @@ package com.example.aggoetey.myapplication.discover.views;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
@@ -15,15 +16,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
+import com.example.aggoetey.myapplication.discover.helpers.DayConverter;
+import com.example.aggoetey.myapplication.discover.helpers.KeyProvider;
+import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
 import com.example.aggoetey.myapplication.model.DataView;
 import com.example.aggoetey.myapplication.model.Restaurant;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -36,6 +47,11 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  */
 
 public class RestaurantInfoCardView extends LinearLayout implements DataView<Restaurant>{
+
+    // Constants
+    private static String API_KEY;
+    private static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
+
     // View fields
     private TextView nameTextView;
     private TextView ratingTextView;
@@ -49,6 +65,7 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
     private CardView cardView;
 
     private Restaurant mRestaurant;
+    private Context context;
 
     // Listener
     private OnCardClickListener mListener;
@@ -63,6 +80,8 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
 
     public RestaurantInfoCardView(Context context) {
         super(context);
+        API_KEY = KeyProvider.getPlacesApiKey(context);
+        this.context = context;
         init();
     }
 
@@ -131,27 +150,57 @@ public class RestaurantInfoCardView extends LinearLayout implements DataView<Res
             });
         }
 
-        //TODO: get data from backend
-        hoursTextView.setText("08:00 - 16:00");
-        placetype.setText("Restaurant");
+        HashMap<Integer,HashMap<String,String>> openingHours = restaurant.getOpeningHours();
+        if (openingHours != null) {
+            Calendar calendar = Calendar.getInstance();
+            int day = DayConverter.toGoogleDay(calendar.get(Calendar.DAY_OF_WEEK));
+            if (openingHours.get(day) != null) {
+                hoursTextView.setText(openingHours.get(day).get("open") + " - " + openingHours.get(day).get("close"));
+            } else {
+                hoursTextView.setText("Closed");
+            }
+        } else {
+            hoursTextView.setText("Hours not known");
+        }
+
+        placetype.setText(PlacetypeStringifier.stringify(restaurant.getType()));
 
         loadRestaurantPicture(restaurant);
     }
 
-    private void loadRestaurantPicture(Restaurant restaurant) {
+    private void loadRestaurantPicture( Restaurant restaurant) {
         // Transformation to round corners etc.
-        MultiTransformation<Bitmap> multi;
+        MultiTransformation<android.graphics.Bitmap> multi;
         multi = new MultiTransformation<>(
                 new FitCenter(),
                 new CenterCrop(),
                 new RoundedCornersTransformation(7, 0));
 
-        final ProgressBar progressBar = (ProgressBar) progressbar;
+        final ProgressBar progressBar = (ProgressBar) this.progressbar;
 
-        Glide.with(getContext()).clear(restaurantImageView);
-        restaurantImageView.setImageDrawable(null);
-        progressbar.setVisibility(View.GONE);
-        restaurantImageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.restaurant_placeholder));
+        // Load restaurant image if existent
+        if (restaurant.getPictureReference() != null && restaurant.getPictureReference() != "") {
+            Glide.with(context).load(BASE_URL + restaurant.getPictureReference() + "&key=" + API_KEY)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .apply(RequestOptions.bitmapTransform(multi))
+                    .into(this.restaurantImageView);
+        } else {
+            Glide.with(context).clear(this.restaurantImageView);
+            this.restaurantImageView.setImageDrawable(null);
+            this.progressbar.setVisibility(View.GONE);
+            this.restaurantImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.restaurant_placeholder));
+        }
     }
-
 }

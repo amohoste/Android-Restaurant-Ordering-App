@@ -1,7 +1,11 @@
 package com.example.aggoetey.myapplication.discover.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,20 +14,32 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.discover.activities.FilterActivity;
+import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
+import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Restaurant;
+import com.example.aggoetey.myapplication.discover.models.Filter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Fragment which includes a searchbar and can hold a map / listview with restaurants
  */
-public class DiscoverContainerFragment extends Fragment implements MapsFragment.Callbacks {
+public class DiscoverContainerFragment extends Fragment implements DiscoverFragment.Callbacks, RestaurantProvider.AsyncListener, CurrentLocationProvider.LocationListener {
 
     // Constants
     public static final int MAPS_FRAGMENT_ID = 0;
@@ -39,15 +55,24 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     private static final String TAG_MAPS = "MapsFragment";
     private static final String TAG_LIST = "ListFragment";
 
+    private static final int REQUEST_CODE_FILTER = 0;
+    public static final String EXTRA_DISCOVERFILTER = "com.menu.discover.extra_filter";
+    private static final String SAVE_FILTER = "com.menu.discover.save_filter";
+
     // Providers
     private CurrentLocationProvider mLocationProvider;
     private RestaurantProvider mRestaurantProvider;
 
     private FragmentManager fm;
     private FloatingSearchView mSearchView;
+    private final SearchRestaurantHelper helper = SearchRestaurantHelper.getInstance();
+    private Filter filter;
 
     // Interface to open menu
     private RestaurantSelectListener mListener;
+    private static boolean clicksuggestion = false;
+
+
     public interface RestaurantSelectListener {
         void onRestaurantSelect(MenuInfo menuInfo);
     }
@@ -85,6 +110,12 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
     }
 
     @Override
+    public void onResume() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
@@ -101,21 +132,32 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
             mLocationProvider = CurrentLocationProvider.newInstance();
             fm.beginTransaction().add(mLocationProvider, TAG_LOCATION_PROVIDER).commit();
         }
+        mLocationProvider.addLocationListener(this);
 
         // Setup restaurant provider
         mRestaurantProvider = (RestaurantProvider) fm.findFragmentByTag(RESTAURANT_FRAG);
         if (mRestaurantProvider == null) {
             mRestaurantProvider = RestaurantProvider.newInstance();
             fm.beginTransaction().add(mRestaurantProvider, RESTAURANT_FRAG).commit();
+        } else if (mRestaurantProvider.getRestaurants() != null) {
+            setupSearchbar();
         }
 
         if (savedInstanceState != null) {
             currentFragmentId = savedInstanceState.getInt(CURRENT_FRAGMENT_KEY);
-        } else if (getActivity() != null && getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE) != null) {
-            SharedPreferences prefs =  getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE);
-            currentFragmentId = prefs.getInt(CURRENT_FRAGMENT_KEY, 0);
-        } else {
-            currentFragmentId = 0;
+            filter = savedInstanceState.getParcelable(SAVE_FILTER);
+            helper.setFilter(filter);
+        }  else {
+            if (getActivity() != null && getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE) != null) {
+                SharedPreferences prefs =  getActivity().getSharedPreferences(DISCOVER_VISIBLE_FRAGMENT, MODE_PRIVATE);
+                currentFragmentId = prefs.getInt(CURRENT_FRAGMENT_KEY, 0);
+            } else {
+                currentFragmentId = 0;
+            }
+            if (filter == null) {
+                filter = new Filter(Filter.SortMethod.DISTANCE, 0, false, 0);
+            }
+            helper.setFilter(filter);
         }
 
         // Set up fragments
@@ -137,14 +179,13 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
 
         showCurrentFragment();
 
-        // Listen to search view clicks
         mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
                 if (item.getItemId() == R.id.action_filter) {
-                    //just print action
-                    Toast.makeText(getActivity().getApplicationContext(), "Open filter",
-                            Toast.LENGTH_SHORT).show();
+                    Intent in = new Intent(getContext(), FilterActivity.class);
+                    in.putExtra(EXTRA_DISCOVERFILTER, filter);
+                    startActivityForResult(in, REQUEST_CODE_FILTER);
                 } else if(item.getItemId() == R.id.action_qr){
                     //just print action
                     Toast.makeText(getActivity().getApplicationContext(), "Open qr scanner",
@@ -187,7 +228,6 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
 
     }
 
-
     @Override
     public CurrentLocationProvider getLocationProvider() {
         return mLocationProvider;
@@ -207,18 +247,206 @@ public class DiscoverContainerFragment extends Fragment implements MapsFragment.
             editor.apply();
         }
 
+        if (mLocationProvider != null) {
+            mLocationProvider.removeLocationListener(this);
+        }
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+
         super.onStop();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
+        outState.putParcelable(SAVE_FILTER, filter);
         if (currentFragmentId != -1) {
             outState.putInt(CURRENT_FRAGMENT_KEY, currentFragmentId);
         }
 
+    }
+
+    @Override
+    public void onPreExecute() {
+
+    }
+
+    @Override
+    public void onProgressUpdate(Integer... progress) {
+
+    }
+
+    @Override
+    public void onPostExecute(ArrayList<Restaurant> result) {
+        if (result != null) {
+            setupSearchbar();
+        }
+    }
+
+    @Override
+    public void onCancelled(ArrayList<Restaurant> result) {
+
+    }
+
+    public void setupSearchbar() {
+
+        helper.setRestaurants(mRestaurantProvider.getRestaurants());
+
+        mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
+                String query = helper.getLastQuery();
+                if (!query.equals("")) {
+                    mSearchView.setSearchText(query);
+                    helper.findSuggestions(getActivity(), query, 5,
+                            new SearchRestaurantHelper.OnFindSuggestionsListener() {
+
+                                @Override
+                                public void onResults(List<Restaurant> results) {
+                                    mSearchView.swapSuggestions(results);
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onFocusCleared() {
+                mSearchView.setSearchBarTitle(mSearchView.getQuery());
+            }
+        });
+
+        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+
+            @Override
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+                helper.setLastQuery(newQuery);
+                if (!oldQuery.equals("") && newQuery.equals("") || clicksuggestion) {
+                    mSearchView.clearSuggestions();
+                    clicksuggestion = false;
+                } else {
+                    helper.findSuggestions(getActivity(), newQuery, 5,
+                            new SearchRestaurantHelper.OnFindSuggestionsListener() {
+
+                                @Override
+                                public void onResults(List<Restaurant> results) {
+                                    mSearchView.swapSuggestions(results);
+                                }
+                            });
+                }
+            }
+        });
+
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(final SearchSuggestion searchSuggestion) {
+
+                ArrayList<Restaurant> result = new ArrayList<>();
+                Restaurant res = (Restaurant) searchSuggestion;
+                result.add(res);
+                clicksuggestion = true;
+                mSearchView.setSearchBarTitle(res.getTitle());
+                mSearchView.clearSuggestions();
+                mSearchView.clearSearchFocus();
+
+                if (currentFragmentId != -1) {
+                    if (mapsFragment != null) {
+                        mapsFragment.onSearchResult(result, false);
+                    }
+                    if (listFragment != null) {
+                        listFragment.onSearchResult(result, false);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onSearchAction(String query) {
+                helper.findRestaurants(getActivity(), query,
+                        new SearchRestaurantHelper.onFindRestaurantsListener() {
+
+                            @Override
+                            public void onResults(List<Restaurant> results) {
+                                if (currentFragmentId != -1) {
+                                    if (mapsFragment != null) {
+                                        mapsFragment.onSearchResult(new ArrayList<Restaurant>(results), false);
+                                    }
+                                    if (listFragment != null) {
+                                        if (results == null || results.size() == 0) {
+                                            listFragment.onSearchResult(mRestaurantProvider.getRestaurants(), true);
+                                        } else {
+                                            listFragment.onSearchResult(new ArrayList<Restaurant>(results), false);
+                                        }
+                                    }
+                                }
+                            }
+
+                        });
+            }
+        });
+
+
+        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+            @Override
+            public void onBindSuggestion(View suggestionView, ImageView leftIcon, TextView textView, SearchSuggestion item, int itemPosition) {
+                Restaurant restaurantSuggestion = (Restaurant) item;
+
+                leftIcon.setAlpha(0.54f);
+                leftIcon.setImageDrawable(getResources().getDrawable(PlacetypeStringifier.getIcon(restaurantSuggestion.getType())));
+
+                textView.setTextColor(Color.parseColor("#95000000"));
+                textView.setText(restaurantSuggestion.getBody());
+            }
+
+        });
+
+        mSearchView.setOnClearSearchActionListener(new FloatingSearchView.OnClearSearchActionListener() {
+            @Override
+            public void onClearSearchClicked() {
+                if (currentFragmentId != -1 && mRestaurantProvider != null) {
+                    if (currentFragmentId == MAPS_FRAGMENT_ID) {
+                        mapsFragment.onSearchResult(mRestaurantProvider.getRestaurants(), true);
+                    } else {
+                        listFragment.onSearchResult(mRestaurantProvider.getRestaurants(), true);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_CODE_FILTER) {
+            if (data == null) {
+                return;
+            }
+            Filter filter = data.getParcelableExtra(FilterActivity.EXTRA_FILTER);
+            if (filter != null) {
+                this.filter = filter;
+                helper.setFilter(filter);
+                if (mapsFragment != null) {
+                    mapsFragment.filterResults();
+                }
+
+                if (listFragment != null) {
+                    listFragment.filterResults();
+                }
+
+            }
+        }
+    }
+
+    @Override
+    public void onLocationUpdate(Location location) {
+        if (helper != null) {
+            helper.setLastLocation(location);
+        }
     }
 
 }
