@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
@@ -27,12 +26,11 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.activities.FilterActivity;
 import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
 import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
+import com.example.aggoetey.myapplication.discover.models.Filter;
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
-import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.example.aggoetey.myapplication.model.Restaurant;
-import com.example.aggoetey.myapplication.discover.models.Filter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -339,7 +337,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                             });
                 }
             }
-        });
+        }});
 
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
