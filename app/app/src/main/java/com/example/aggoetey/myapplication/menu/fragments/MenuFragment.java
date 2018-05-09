@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
+import com.example.aggoetey.myapplication.note.activity.NotesActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -54,7 +56,7 @@ public class MenuFragment extends Fragment implements Listener {
     private TextView mMenuRestaurantNameView;
     private Menu optionsMenu;
     private Button mMenuOrderButton;
-
+    private Button mCheckOrderButton;
 
     private static ViewType viewType = ViewType.LIST_VIEW;
 
@@ -129,7 +131,9 @@ public class MenuFragment extends Fragment implements Listener {
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
 
-        setOrderButtonProperties();
+        mCheckOrderButton = (Button) v.findViewById(R.id.menu_view_check_button);
+
+        setButtonProperties();
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
@@ -137,6 +141,15 @@ public class MenuFragment extends Fragment implements Listener {
         viewPager.setAdapter(pagerAdapter);
         tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+
+        mCheckOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(getContext(), NotesActivity.class);
+
+            }
+        });
 
         // MenuFragment order button action
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +164,7 @@ public class MenuFragment extends Fragment implements Listener {
     }
 
 
-    public void setOrderButtonProperties() {
+    public void setButtonProperties() {
         if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
             mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
             mMenuOrderButton.setEnabled(true);
@@ -159,6 +172,9 @@ public class MenuFragment extends Fragment implements Listener {
             mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
             mMenuOrderButton.setEnabled(false);
         }
+
+        mCheckOrderButton.setEnabled(menuInfo.getCurrentOrder().getOrderItems().size() > 0 );
+
     }
 
     @Override
@@ -313,7 +329,7 @@ public class MenuFragment extends Fragment implements Listener {
 
     @Override
     public void invalidated() {
-        setOrderButtonProperties();
+        setButtonProperties();
     }
 
     public MenuInfo getMenuInfo() {
