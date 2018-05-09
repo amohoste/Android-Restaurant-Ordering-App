@@ -16,10 +16,10 @@ import java.util.List;
 
 public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.ViewHolder>{
 
-    private List<Tab.Order.OrderItem> orderItemList;
+    private List<List<Tab.Order.OrderItem>> orderItemList;
 
-    public OrderItemAdapter(List<Tab.Order.OrderItem> orderItems) {
-        this.orderItemList = orderItems;
+    public OrderItemAdapter(Tab.Order order) {
+        this.orderItemList = Tab.Order.groupOrders(order);
     }
 
     @Override
@@ -40,24 +40,25 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private Tab.Order.OrderItem orderItem;
+        private List<Tab.Order.OrderItem> orderItems;
 
         private TextView name;
         private TextView price;
-        private TextView note;
+        private TextView amount;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.order_item_item, parent, false));
             name = (TextView) itemView.findViewById(R.id.name);
             price = (TextView) itemView.findViewById(R.id.price);
-            note = itemView.findViewById(R.id.item_note);
+            amount = (TextView) itemView.findViewById(R.id.amount);
         }
 
-        public void bind(Tab.Order.OrderItem orderItem) {
-            this.orderItem = orderItem;
-            name.setText(orderItem.getMenuItem().title);
-            note.setText(orderItem.getNote());
-            price.setText(String.valueOf(this.orderItem.getMenuItem().price));
+        public void bind(List<Tab.Order.OrderItem> orderItems) {
+            this.orderItems = orderItems;
+            name.setText(orderItems.get(0).getMenuItem().title);
+            price.setText(String.valueOf(this.orderItems.get(0).getMenuItem().price
+                    * this.orderItems.size()));
+            amount.setText(String.valueOf(this.orderItems.size()) + "x");
         }
 
     }

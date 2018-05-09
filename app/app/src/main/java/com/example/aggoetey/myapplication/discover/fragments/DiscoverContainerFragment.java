@@ -71,6 +71,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
 
     // Interface to open menu
     private RestaurantSelectListener mListener;
+    private static boolean clicksuggestion = false;
 
 
     public interface RestaurantSelectListener {
@@ -324,6 +325,9 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                 helper.setLastQuery(newQuery);
                 if (!oldQuery.equals("") && newQuery.equals("")) {
                     mSearchView.clearSuggestions();
+                if (!oldQuery.equals("") && newQuery.equals("") || clicksuggestion) {
+                    mSearchView.clearSuggestions();
+                    clicksuggestion = false;
                 } else {
                     helper.findSuggestions(getActivity(), newQuery, 5,
                             new SearchRestaurantHelper.OnFindSuggestionsListener() {
@@ -342,7 +346,13 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
             public void onSuggestionClicked(final SearchSuggestion searchSuggestion) {
 
                 ArrayList<Restaurant> result = new ArrayList<>();
-                result.add((Restaurant) searchSuggestion);
+                Restaurant res = (Restaurant) searchSuggestion;
+                result.add(res);
+                clicksuggestion = true;
+                mSearchView.setSearchBarTitle(res.getTitle());
+                mSearchView.clearSuggestions();
+                mSearchView.clearSearchFocus();
+
                 if (currentFragmentId != -1) {
                     if (mapsFragment != null) {
                         mapsFragment.onSearchResult(result, false);

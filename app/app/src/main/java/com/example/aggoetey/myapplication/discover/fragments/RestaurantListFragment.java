@@ -80,7 +80,8 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         ArrayList<Restaurant> restaurants = restaurantProvider.getRestaurants();
         if (restaurants != null) {
             restaurants = SearchRestaurantHelper.sortResults(restaurants);
-            mAdapter.setRestaurants(restaurants);
+            this.searchedRestaurants = restaurants;
+            filterResults();
         }
 
         locationProvider = mCallbacks.getLocationProvider();

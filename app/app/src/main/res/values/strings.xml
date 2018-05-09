@@ -24,6 +24,7 @@
 
     <string name="tab_order_position">Order # %1$d</string>
     <string name="tab_view_pay">Pay</string>
+
     <string name="total_price_payed">Betaalde items: %1$.2f euro.</string>
     <string name="total_price_received">Ontvangen items: %1$.2f euro.</string>
     <string name="total_price_ordered">Bestelde items: %1$.2f euro.</string>
@@ -31,6 +32,7 @@
 
     <string name="price_order">Prijs order: %.2f euro.</string>
     <string name="price_order_short">€%1$.2f</string>
+    
     <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
     <string name="title_activity_maps">Map</string>
 

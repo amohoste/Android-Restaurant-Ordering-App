@@ -41,7 +41,7 @@ public class OrderDetailFragment extends Fragment {
             if (order != null) {
                 mOrderNr.setText(mOrderNr.getContext().getString(R.string.tab_order_position, order.getOrderNumber()));
                 mPrice.setText(mPrice.getContext().getString(R.string.price_order, order.getPrice()));
-                mOrderItems.setAdapter(new OrderItemAdapter(order.getOrderItems()));
+                mOrderItems.setAdapter(new OrderItemAdapter(order));
                 mOrderItems.setLayoutManager(new LinearLayoutManager(getContext()));
             }
         }
