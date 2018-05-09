@@ -39,7 +39,9 @@ public class MenuInfo implements Serializable {
 
     private Restaurant restaurant;
     private HashMap<String, Integer> orderCountMap;
-    private HashSet<RecyclerView.Adapter> mAdapters;
+    // Adapters can be transient since trying to invalidate old adapters after being serialized doesn't make
+    // sense and adapters here are listeners after all.
+    private transient HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
 
     //TODO: INITIALISE THIS FIELD WHEN LOGGING IN TO THE TABLE (remove this test id)
