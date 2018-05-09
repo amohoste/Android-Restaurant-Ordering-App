@@ -31,7 +31,6 @@ import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.example.aggoetey.myapplication.note.activity.NotesActivity;
-import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -61,11 +60,8 @@ public class MenuFragment extends Fragment implements Listener {
     private TextView mMenuRestaurantNameView;
     private Menu optionsMenu;
     private Button mMenuOrderButton;
-<<<<<<< HEAD
     private Button mCheckOrderButton;
-=======
     private View v;
->>>>>>> develop
 
     private static ViewType viewType = ViewType.LIST_VIEW;
 
@@ -127,6 +123,9 @@ public class MenuFragment extends Fragment implements Listener {
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_login_order_button);
 
+        mCheckOrderButton = (Button) v.findViewById(R.id.menu_view_check_button);
+
+        setCheckButtonProperties();
         loggedInCheck();
 
         // Load the restaurant's menu from the FireStore backend if not loaded already
@@ -139,12 +138,6 @@ public class MenuFragment extends Fragment implements Listener {
         return v;
     }
 
-<<<<<<< HEAD
-        mCheckOrderButton = (Button) v.findViewById(R.id.menu_view_check_button);
-
-        setButtonProperties();
-=======
->>>>>>> develop
 
     public void setupViewPager() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -181,20 +174,8 @@ public class MenuFragment extends Fragment implements Listener {
         // Order button action
         setOrderButtonProperties();
 
-<<<<<<< HEAD
-
-        mCheckOrderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =  new Intent(getContext(), NotesActivity.class);
-                intent.putExtra(NotesActivity.ARG_MENU_INFO, menuInfo);
-                startActivity(intent);
-            }
-        });
-
         // MenuFragment order button action
-=======
->>>>>>> develop
+
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -242,16 +223,21 @@ public class MenuFragment extends Fragment implements Listener {
         Tab.getInstance().commitOrder(menuInfo.getCurrentOrder(), MenuFragment.this);
     }
 
-<<<<<<< HEAD
 
-    public void setButtonProperties() {
-        if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
-            mMenuOrderButton.setEnabled(true);
-        } else {
-            mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
-            mMenuOrderButton.setEnabled(false);
-=======
+    public void setCheckButtonProperties() {
+
+        mCheckOrderButton.setEnabled(menuInfo.getCurrentOrder().getOrderItems().size() > 0 );
+
+        mCheckOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(getContext(), NotesActivity.class);
+                intent.putExtra(NotesActivity.ARG_MENU_INFO, menuInfo);
+                startActivity(intent);
+            }
+        });
+    }
+
     public void setOrderButtonProperties() {
         if (menuInfo.getTableID() != null) {
             if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
@@ -261,11 +247,7 @@ public class MenuFragment extends Fragment implements Listener {
                 mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
                 mMenuOrderButton.setEnabled(false);
             }
->>>>>>> develop
         }
-
-        mCheckOrderButton.setEnabled(menuInfo.getCurrentOrder().getOrderItems().size() > 0 );
-
     }
 
     @Override
@@ -421,7 +403,7 @@ public class MenuFragment extends Fragment implements Listener {
 
     @Override
     public void invalidated() {
-        setButtonProperties();
+        setCheckButtonProperties();
     }
 
     public MenuInfo getMenuInfo() {
