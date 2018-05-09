@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,6 +44,11 @@ public class Tab extends Model implements Serializable {
 
     public List<Order> getOrderedOrders() {
         final DocumentReference table = getTableDocumentReference();
+        table.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+            }
+        });
         return orderedOrders;
     }
 
@@ -120,6 +126,7 @@ public class Tab extends Model implements Serializable {
                     newEntry.put("price", Double.toString(item.getMenuItem().price));
                     newEntry.put("category", item.getMenuItem().category);
                     newEntry.put("note", item.getNote());
+                    newEntry.put("time", System.currentTimeMillis()/1000);
                     currentOrders.add(newEntry);
                 }
 
@@ -178,8 +185,18 @@ public class Tab extends Model implements Serializable {
 
         private List<OrderItem> orderItems = new ArrayList<>();
         private int orderNumber;
+        private Date time;
 
         private Order() {
+            time = new Date();
+        }
+
+        public Date getTime() {
+            return time;
+        }
+
+        public void setTime(Date time) {
+            this.time = time;
         }
 
         public int getOrderNumber() {

@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.pay;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,19 +54,19 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
         private Tab.Order order;
 
-        private TextView number;
+        private TextView time;
         private TextView price;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.order_item, parent, false));
             itemView.setOnClickListener(this);
-            number = (TextView) itemView.findViewById(R.id.title);
+            time = (TextView) itemView.findViewById(R.id.title);
             price = (TextView) itemView.findViewById(R.id.price);
         }
 
         public void bind(Tab.Order order) {
             this.order = order;
-            number.setText(number.getContext().getString(R.string.tab_order_position, this.order.getOrderNumber()));
+            time.setText(DateFormat.format("hh:mm", order.getTime()));
             price.setText(price.getContext().getString(R.string.price_order_short, this.order.getPrice()));
         }
 
