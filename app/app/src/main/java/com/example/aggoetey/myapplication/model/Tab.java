@@ -73,9 +73,9 @@ public class Tab extends Model implements Serializable {
                 .getString(R.string.order_send_try), Toast.LENGTH_LONG);
         try_toast.show();
 
-        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
-                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/")
-                .concat(menuInfo.getTableID()));
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
+                .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
+                .document(menuInfo.getTableID());
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

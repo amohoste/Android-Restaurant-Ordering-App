@@ -304,8 +304,9 @@ public class MenuFragment extends Fragment implements Listener {
 
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
-        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
-                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/").concat(menuInfo.getTableID()));
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
+                .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
+                .document(menuInfo.getTableID());
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

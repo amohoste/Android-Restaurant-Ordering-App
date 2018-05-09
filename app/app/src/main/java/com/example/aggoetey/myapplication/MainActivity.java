@@ -181,8 +181,10 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             String restaurant_id = ids[0];
             String table_id = ids[1];
 
-
+            // TODO SITT: move this validation check to QRActivity
+            // TODO: add table validation check
             Restaurant restaurant = RestaurantProvider.getInstance().getRestaurant(restaurant_id);
+
             if (restaurant == null) {
                 Toast.makeText(this, R.string.qr_code_not_recognized, Toast.LENGTH_SHORT)
                                                                                             .show();
