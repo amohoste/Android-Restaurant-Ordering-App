@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/call_waiter_button"
-        android:icon="@drawable/waiter_call_button_bell"
+        android:icon="@drawable/ic_bell"
         android:visible="true"
         tools:visible="true"
         app:showAsAction="always" />
@@ -13,7 +13,7 @@
     <item
         android:id="@+id/to_grid_view"
         android:title="@string/grid_view"
-        android:icon="@drawable/ic_grid_on_white_24dp"
+        android:icon="@drawable/ic_grid"
         android:visible="false"
         tools:visible="true"
         app:showAsAction="ifRoom" />
@@ -21,7 +21,7 @@
     <item
         android:id="@+id/to_list_view"
         android:title="@string/list_view"
-        android:icon="@drawable/ic_view_list_white_24dp"
+        android:icon="@drawable/ic_list"
         android:visible="false"
         tools:visible="true"
         app:showAsAction="ifRoom"

@@ -3,51 +3,60 @@ package com.example.aggoetey.myapplication.menu.services;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
 import com.example.aggoetey.myapplication.model.Menu;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
-import com.example.aggoetey.myapplication.model.Restaurant;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RestaurantMenuLoader {
-    private static final String MENU_LOAD_FAILURE = "MENU_LOAD_FAILURE";
-    private Restaurant restaurant;
-    private DocumentReference mDocRef;
+    private static final String MENU_LOAD = "MENU_LOAD";
+    private static final String MENU_LOAD_SUCCESS = "MENU_LOAD_SUCCESS";
+    private static final String MENU_LOAD_FETCHING = "MENU_LOAD_FETCHING";
+    private MenuFragment menuFragment;
+    private MenuInfo menuInfo;
+    private CollectionReference mColRef;
 
 
-    public RestaurantMenuLoader(Restaurant restaurant) {
+    public RestaurantMenuLoader(MenuInfo menuInfo, MenuFragment menuFragment) {
+        this.menuFragment = menuFragment;
+        this.menuInfo = menuInfo;
+        mColRef = FirebaseFirestore.getInstance().collection("places")
+                        .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("menus");
+        loadMenu();
     }
 
     public void loadMenu() {
-        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        Log.d(MENU_LOAD, MENU_LOAD_FETCHING);
+        mColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
                     Menu menu = new Menu();
-                    for (HashMap<String, String> item: (ArrayList<HashMap<String, String>>) documentSnapshot.get("menu")) {
+                    for (QueryDocumentSnapshot item: task.getResult()) {
                         menu.addMenuItem(new MenuItem(
-                                item.get("name"),
-                                Double.parseDouble(item.get("price")),
-                                item.get("description"),
-                                item.get("category")
+                                (String) item.get("title"),
+                                Double.parseDouble((String) item.get("price")),
+                                (String) item.get("description"),
+                                (String) item.get("category")
                         ));
                     }
-                    restaurant.setMenu(menu);
-                    Log.d("MENULOADER", "SUCCESS");
+                    menuInfo.getRestaurant().setMenu(menu);
+                    Log.d(MENU_LOAD, MENU_LOAD_SUCCESS);
+                    menuFragment.setupViewPager();
                 }
-
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(MENU_LOAD_FAILURE, e.toString());
+                Log.d(MENU_LOAD, e.toString());
                 e.printStackTrace();
             }
         });

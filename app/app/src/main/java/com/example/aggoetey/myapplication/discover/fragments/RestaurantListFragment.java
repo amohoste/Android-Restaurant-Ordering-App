@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
+import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
@@ -75,9 +76,12 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         mRecyclerView.setAdapter(mAdapter);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
+        restaurantProvider.addRestaurantListener(this);
         ArrayList<Restaurant> restaurants = restaurantProvider.getRestaurants();
         if (restaurants != null) {
-            mAdapter.setRestaurants(restaurants);
+            restaurants = SearchRestaurantHelper.sortResults(restaurants);
+            this.searchedRestaurants = restaurants;
+            filterResults();
         }
 
         locationProvider = mCallbacks.getLocationProvider();
@@ -112,5 +116,40 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         // Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onRestaurantUpdate(ArrayList<Restaurant> restaurants) {
+        if (mAdapter != null && restaurants != null) {
+            mAdapter.setRestaurants(restaurants);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (restaurantProvider != null) {
+            restaurantProvider.removeRestaurantListener(this);
+        }
+        super.onStop();
+    }
+
+    @Override
+    void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
+        this.searchedRestaurants = result;
+        filterResults();
+    }
+
+    @Override
+    void filterResults() {
+        if (mAdapter != null && searchedRestaurants != null) {
+            ArrayList<Restaurant> result = new ArrayList<>();
+
+            for (Restaurant restaurant : searchedRestaurants) {
+                if (SearchRestaurantHelper.satisfiesFilter(restaurant)) {
+                    result.add(restaurant);
+                }
+            }
+            result = SearchRestaurantHelper.sortResults(result);
+            mAdapter.setRestaurants(result);
+        }
+    }
 
 }
