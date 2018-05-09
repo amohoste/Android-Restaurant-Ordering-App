@@ -56,6 +56,9 @@ public class MenuFragment extends Fragment implements Listener {
     private Menu optionsMenu;
     private Button mMenuOrderButton;
 
+    private Handler handler = new Handler();
+    private SendAfterTime sendAfterTime = new SendAfterTime();
+
 
     private static ViewType viewType = ViewType.LIST_VIEW;
 
@@ -101,9 +104,9 @@ public class MenuFragment extends Fragment implements Listener {
                              Bundle savedInstanceState) {
 
         //Get view type from shared preferences
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
-            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE,  viewType.getViewTypeString());
+            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
             viewType = ViewType.get(viewTypeString);
         }
 
@@ -126,24 +129,22 @@ public class MenuFragment extends Fragment implements Listener {
 
         // MenuFragment order button action
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Toast gecancelled = Toast.makeText(getContext(), "Order is gecancelled", Toast.LENGTH_SHORT);
                 Toast confirm = Toast.makeText(getContext(), "Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen", Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
                     mMenuOrderButton.setText("Order");
+                    sendAfterTime.cancel = true;
+                    menuInfo.orderCommitted();
                     confirm.cancel();
                     gecancelled.show();
                 } else {
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendOrder();
-                        }
-                    }, CANCEL_WINDOW);
+                    handler.postDelayed(sendAfterTime, CANCEL_WINDOW);
+                    handler.removeCallbacks(sendAfterTime);
                 }
             }
         });
@@ -169,9 +170,9 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void onStop() {
         super.onStop();
-        if(getActivity() != null ){
-            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE );
-            if(sharedPref != null) {
+        if (getActivity() != null) {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            if (sharedPref != null) {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
                 editor.apply();
@@ -353,5 +354,16 @@ public class MenuFragment extends Fragment implements Listener {
                 });
             }
         }).start();
+    }
+
+    class SendAfterTime implements Runnable {
+        boolean cancel;
+
+        @Override
+        public void run() {
+            if (!cancel) {
+                sendOrder();
+            }
+        }
     }
 }
