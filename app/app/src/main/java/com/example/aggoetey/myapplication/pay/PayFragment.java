@@ -22,6 +22,8 @@ public class PayFragment extends Fragment {
         View v;
         if (Tab.getInstance().getRestaurant() == null) {
             v = inflater.inflate(R.layout.fragment_no_menu_selected, parent, false);
+        } else if (Tab.getInstance().getTable() == null) {
+            v = inflater.inflate(R.layout.fragment_no_table_selected, parent, false);
         } else {
 
             v = inflater.inflate(R.layout.pay_fragment, parent, false);

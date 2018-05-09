@@ -35,17 +35,24 @@ public class Tab extends Model implements Serializable {
     private int amountOfOrders = 0;
 
     private Restaurant restaurant;
+    private Table table;
 
     public List<Order> getPayedOrders() {
         return payedOrders;
     }
 
     public List<Order> getOrderedOrders() {
+        final DocumentReference table = getTableDocumentReference();
         return orderedOrders;
     }
 
     public List<Order> getReceivedOrders() {
         return receivedOrders;
+    }
+
+    private DocumentReference getTableDocumentReference() {
+        return FirebaseFirestore.getInstance().collection("places").document(restaurant.getGooglePlaceId())
+                .collection("tables").document(table.getTableId());
     }
 
 
@@ -54,6 +61,14 @@ public class Tab extends Model implements Serializable {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public void setTable(Table table) {
+        this.table = table;
     }
 
     public static Tab getInstance() {
@@ -91,14 +106,14 @@ public class Tab extends Model implements Serializable {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Retrieve tab array
                 ArrayList<Object> currentOrders;
-                if (documentSnapshot.exists() && documentSnapshot.get("ordered") != null ) {
+                if (documentSnapshot.exists() && documentSnapshot.get("ordered") != null) {
                     currentOrders = (ArrayList<Object>) documentSnapshot.get("ordered");
                 } else {
                     currentOrders = new ArrayList<>();
                 }
 
                 // Create new order entry
-                for (Tab.Order.OrderItem item: menuInfo.getCurrentOrder().getOrderItems()) {
+                for (Tab.Order.OrderItem item : menuInfo.getCurrentOrder().getOrderItems()) {
                     HashMap<String, Object> newEntry = new HashMap<>();
                     newEntry.put("itemID", item.getMenuItem().id);
                     newEntry.put("item", item.getMenuItem().title);
