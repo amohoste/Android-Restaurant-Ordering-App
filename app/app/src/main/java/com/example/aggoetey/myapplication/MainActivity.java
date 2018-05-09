@@ -179,8 +179,9 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             Log.d("QR RESULTS", code);
             String[] ids = code.split(":");
             String restaurant_id = ids[0];
-            String table_id = ids[1];
+            String table_id =  ids.length == 2 ? ids[1] : null;
 
+            
             // TODO SITT: move this validation check to QRActivity
             // TODO: add table validation check
             Restaurant restaurant = RestaurantProvider.getInstance().getRestaurant(restaurant_id);
