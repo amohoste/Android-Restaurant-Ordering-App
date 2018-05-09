@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.orderdetail.NoOrderSelectedFragment;
 
-public class PayFragment extends Fragment  {
+public class PayFragment extends Fragment {
 
     public PayFragment() {
     }
@@ -18,15 +19,20 @@ public class PayFragment extends Fragment  {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, Bundle savedInstanceState) {
+        View v;
+        if (Tab.getInstance().getRestaurant() == null) {
+            v = inflater.inflate(R.layout.fragment_no_menu_selected, parent, false);
+        } else {
 
-        View v = inflater.inflate(R.layout.pay_fragment, parent, false);
+            v = inflater.inflate(R.layout.pay_fragment, parent, false);
 
-        // kijken of de OrderSelectedFragment ook open staat
-        getChildFragmentManager().beginTransaction().replace(R.id.tab_fragment_container, TabFragment.newInstance()).commit();
-        if (v.findViewById(R.id.order_detail_fragment_container) != null) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.order_detail_fragment_container, NoOrderSelectedFragment.newInstance())
-                    .commit();
+            // kijken of de OrderSelectedFragment ook open staat
+            getChildFragmentManager().beginTransaction().replace(R.id.tab_fragment_container, TabFragment.newInstance()).commit();
+            if (v.findViewById(R.id.order_detail_fragment_container) != null) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.order_detail_fragment_container, NoOrderSelectedFragment.newInstance())
+                        .commit();
+            }
         }
 
         return v;

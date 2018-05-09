@@ -155,6 +155,10 @@ public class Tab extends Model implements Serializable {
         fireInvalidationEvent();
     }
 
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
     public static class Order extends Model implements Serializable {
 
         private List<OrderItem> orderItems = new ArrayList<>();
