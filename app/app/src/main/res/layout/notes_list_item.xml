@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/notes_detail"
-        tools:text="@string/lorem_ipsum"
+        tools:text="@string/notes_description"
         android:textColor="@color/colorPrimaryTextDefaultMaterialLight"
         android:layout_marginStart="@dimen/card_padding"
         app:layout_constraintStart_toEndOf="@id/notes_number"
@@ -25,5 +25,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <com.example.aggoetey.myapplication.discover.views.ClickableImageView
+        android:src="@drawable/zoomin"
+        app:layout_constraintEnd_toEndOf="parent"
+        
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
 
 </android.support.constraint.ConstraintLayout>
