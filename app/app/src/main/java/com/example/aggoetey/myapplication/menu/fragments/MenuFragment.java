@@ -1,7 +1,6 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +28,6 @@ import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
-import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -147,6 +145,7 @@ public class MenuFragment extends Fragment implements Listener {
         if (menuInfo.getTableID() == null) {    //user not logged in
             setLogInButton();
         } else {
+            Tab.getInstance().setRestaurant(menuInfo.getRestaurant());
             setOrderButton();
         }
     }

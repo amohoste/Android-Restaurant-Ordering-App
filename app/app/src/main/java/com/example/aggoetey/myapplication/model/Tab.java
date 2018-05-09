@@ -1,10 +1,7 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
-
-import com.example.aggoetey.myapplication.Listener;
 
 import com.example.aggoetey.myapplication.Model;
 import com.example.aggoetey.myapplication.R;
@@ -37,6 +34,8 @@ public class Tab extends Model implements Serializable {
     private List<Order> receivedOrders = new ArrayList<>();
     private int amountOfOrders = 0;
 
+    private Restaurant restaurant;
+
     public List<Order> getPayedOrders() {
         return payedOrders;
     }
@@ -51,6 +50,10 @@ public class Tab extends Model implements Serializable {
 
 
     private Tab() {
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public static Tab getInstance() {
@@ -70,6 +73,7 @@ public class Tab extends Model implements Serializable {
      */
     public void commitOrder(final Order order, final MenuFragment menuFragment) {
         final MenuInfo menuInfo = menuFragment.getMenuInfo();
+
 
         // Disable order button
         menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(false);
