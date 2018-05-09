@@ -48,6 +48,11 @@ public class MenuInfo extends Model implements Serializable {
     //TODO: INITIALISE THIS FIELD WHEN LOGGING IN TO THE TABLE
     private String  tableID;
 
+    public MenuInfo(Restaurant restaurant, String tableID) {
+        this(restaurant);
+        this.tableID = tableID;
+    }
+
     public MenuInfo(Restaurant restaurant) {
         this.restaurant = restaurant;
 

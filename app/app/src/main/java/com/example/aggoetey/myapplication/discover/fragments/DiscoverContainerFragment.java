@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.example.aggoetey.myapplication.MainActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.activities.FilterActivity;
 import com.example.aggoetey.myapplication.discover.helpers.PlacetypeStringifier;
@@ -138,7 +140,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
         // Setup restaurant provider
         mRestaurantProvider = (RestaurantProvider) fm.findFragmentByTag(RESTAURANT_FRAG);
         if (mRestaurantProvider == null) {
-            mRestaurantProvider = RestaurantProvider.newInstance();
+            mRestaurantProvider = RestaurantProvider.getInstance();
             fm.beginTransaction().add(mRestaurantProvider, RESTAURANT_FRAG).commit();
         } else if (mRestaurantProvider.getRestaurants() != null) {
             setupSearchbar();
@@ -189,10 +191,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                     startActivityForResult(in, REQUEST_CODE_FILTER);
                 } else if(item.getItemId() == R.id.action_qr){
                     //just print action
-                    Intent  qrIntent = new Intent(getActivity(), QRScannerActivity.class);
-                    startActivity(qrIntent);
-                    Toast.makeText(getActivity().getApplicationContext(), "Open QR-scanner",
-                            Toast.LENGTH_SHORT).show();
+                    ((MainActivity) getActivity()).startQRScannerActivity();
                 }
             }
         });
@@ -284,6 +283,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
         if (result != null) {
             setupSearchbar();
         }
+        setQrButtonEnabled(true);
     }
 
     @Override
@@ -449,6 +449,19 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
     public void onLocationUpdate(Location location) {
         if (helper != null) {
             helper.setLastLocation(location);
+        }
+    }
+
+    private void setQrButtonEnabled(boolean enabled) {
+        // Enable qr scanner
+         List<MenuItemImpl> list = mSearchView.getCurrentMenuItems();
+
+        if (list != null) {
+            for (MenuItem item : list) {
+                if (item.getItemId() == R.id.action_qr) {
+                    item.setEnabled(enabled);
+                }
+            }
         }
     }
 

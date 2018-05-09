@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
+import com.example.aggoetey.myapplication.MainActivity;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
@@ -158,10 +159,7 @@ public class MenuFragment extends Fragment implements Listener {
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent qrIntent = new Intent(getActivity(), QRScannerActivity.class);
-                startActivityForResult(qrIntent, QRScannerActivity.QR_CODE_REQUEST);
-                Toast.makeText(getActivity().getApplicationContext(), "Open QR-scanner",
-                        Toast.LENGTH_SHORT).show();
+                ((MainActivity) getActivity()).startQRScannerActivity();
             }
         });
     }
@@ -306,8 +304,9 @@ public class MenuFragment extends Fragment implements Listener {
 
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
-        final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("places/"
-                .concat(menuInfo.getRestaurant().getGooglePlaceId()).concat("/tables/").concat(menuInfo.getTableID()));
+        final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
+                .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
+                .document(menuInfo.getTableID());
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

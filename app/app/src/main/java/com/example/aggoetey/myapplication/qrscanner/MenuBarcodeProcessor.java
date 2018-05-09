@@ -93,7 +93,7 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
         }
     }
 
-    //TODO implement the function to do something when the given code is invalid
+    //TODO: SITT implement the function to do something when the given code is invalid
     public void onInvalidCode (Barcode code) {
 
     }
@@ -103,14 +103,14 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
      * @param code
      */
     public void onScannedCode(String code) {
-        //TODO: check if valid
         Intent data = new Intent();
         data.putExtra(QRScannerActivity.EXTRA_ANSWER_SHOWN, code);
         activity.setResult(Activity.RESULT_OK, data);
+        activity.finish();
     }
 
     public void onScannedBarcode(Barcode barcode) {
-        onScannedCode(barcode.toString());
+        onScannedCode(barcode.rawValue);
     }
 
 
