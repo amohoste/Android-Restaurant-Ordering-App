@@ -109,27 +109,13 @@ public class MenuFragment extends Fragment implements Listener {
             String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
             viewType = ViewType.get(viewTypeString);
         }
-        if (menuInfo != null) {
-            String title = menuInfo.getRestaurant().getTitle();
-            Log.e("MenuFragment", getActivity().getActionBar() + "");
 
-            if (getActivity() instanceof AppCompatActivity) {
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                if (activity.getSupportActionBar() != null) {
-                    activity.getSupportActionBar().setTitle(title);
-                }
-            }else{
-                if(getActivity().getActionBar() != null) {
-                    getActivity().getActionBar().setTitle(title);
-                }
-            }
-        }
+        // Set the title in the actionbar.
+        setTitle();
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        mMenuRestaurantNameView = (TextView) v.findViewById(R.id.menu_restaurant_name_view);
-        mMenuRestaurantNameView.setText(menuInfo.getRestaurant().getTitle());
 
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_order_button);
 
@@ -149,7 +135,8 @@ public class MenuFragment extends Fragment implements Listener {
             @Override
             public void onClick(View v) {
                 Intent intent =  new Intent(getContext(), NotesActivity.class);
-
+                intent.putExtra(NotesActivity.ARG_MENU_INFO, menuInfo);
+                startActivity(intent);
             }
         });
 
@@ -177,6 +164,24 @@ public class MenuFragment extends Fragment implements Listener {
             }
         });
         return v;
+    }
+
+    private void setTitle() {
+        if (menuInfo != null) {
+            String title = menuInfo.getRestaurant().getTitle();
+            Log.e("MenuFragment", getActivity().getActionBar() + "");
+
+            if (getActivity() instanceof AppCompatActivity) {
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                if (activity.getSupportActionBar() != null) {
+                    activity.getSupportActionBar().setTitle(title);
+                }
+            }else{
+                if(getActivity().getActionBar() != null) {
+                    getActivity().getActionBar().setTitle(title);
+                }
+            }
+        }
     }
 
     private void sendOrder() {
