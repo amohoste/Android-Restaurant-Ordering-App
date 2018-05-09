@@ -123,10 +123,10 @@ public class QRScannerActivity extends AppCompatActivity {
 
                 this.recreate();
             }else{
-                SurfaceView cameraView = (SurfaceView) findViewById(R.id.qr_surface_view);
-                cameraView.setVisibility(View.GONE);
-                TextView  textView =  findViewById(R.id.qr_scanner_title);
-                textView.setText(R.string.qr_no_camera_permission);
+
+                findViewById(R.id.qr_scanner_title).setVisibility(View.INVISIBLE);
+                findViewById(R.id.qr_scanner_permission_title).setVisibility(View.VISIBLE);
+
             }
         }
     }
