@@ -9,7 +9,9 @@
     <string name="title_menuitem_list">MenuItems</string>
     <string name="title_menuitem_detail">MenuItem Detail</string>
     <string name="no_restaurant_selected">Gelieve een restaurant te selecteren in de discover tab.</string>
+    <string name="menu_loading">Loading menu...</string>
 
+    <string name="menu_view_login_button">Log in</string>
     <string name="menu_view_order_button">Order</string>
 
     <string name="waiter_call_try">Calling a waiter...</string>
@@ -47,6 +49,11 @@
 
     <string name="paychoicedialog_title">Op welke manier wenst u te betalen?</string>
     <string name="paychoiceconfirmation">Je hebt betaald met %1$s</string>
+    <string name="qr_hello">Scan the QR code</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="qr_code_edit_label">Restaurant code</string>
+    <string name="qr_code_edit_btn">Confirm</string>
+    <string name="qr_no_camera_permission">Camera Permission Needed</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -20,6 +21,7 @@ import java.util.List;
 //TODO: Make restaurant parcelable to be able to save restaurant in bundles without transient
 //TODO: since LatLng is only parcelable not serializable.
 
+@SuppressLint("ParcelCreator")
 public class Restaurant implements Serializable, SearchSuggestion {
 
     //TODO: Remove transient once parcelable is achieved

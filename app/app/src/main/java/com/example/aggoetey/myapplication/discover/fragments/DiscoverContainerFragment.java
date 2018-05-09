@@ -28,6 +28,7 @@ import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelpe
 import com.example.aggoetey.myapplication.discover.services.CurrentLocationProvider;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.discover.models.Filter;
 
@@ -188,7 +189,9 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                     startActivityForResult(in, REQUEST_CODE_FILTER);
                 } else if(item.getItemId() == R.id.action_qr){
                     //just print action
-                    Toast.makeText(getActivity().getApplicationContext(), "Open qr scanner",
+                    Intent  qrIntent = new Intent(getActivity(), QRScannerActivity.class);
+                    startActivity(qrIntent);
+                    Toast.makeText(getActivity().getApplicationContext(), "Open QR-scanner",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -320,6 +323,8 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
                 helper.setLastQuery(newQuery);
+                if (!oldQuery.equals("") && newQuery.equals("")) {
+                    mSearchView.clearSuggestions();
                 if (!oldQuery.equals("") && newQuery.equals("") || clicksuggestion) {
                     mSearchView.clearSuggestions();
                     clicksuggestion = false;
@@ -356,8 +361,6 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                         listFragment.onSearchResult(result, false);
                     }
                 }
-
-
             }
 
             @Override

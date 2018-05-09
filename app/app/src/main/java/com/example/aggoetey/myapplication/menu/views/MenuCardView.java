@@ -18,7 +18,6 @@ import com.example.aggoetey.myapplication.model.MenuItem;
  *
  * View initializer for menu cards in grid view.
  *
- * //TODO: Make this class extend a view group instead of working with view initializer
  */
 
 public class MenuCardView extends CardView implements DataView<MenuItem>{

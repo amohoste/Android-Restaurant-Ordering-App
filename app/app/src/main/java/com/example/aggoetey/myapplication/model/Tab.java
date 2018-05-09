@@ -72,7 +72,7 @@ public class Tab extends Model implements Serializable {
         final MenuInfo menuInfo = menuFragment.getMenuInfo();
 
         // Disable order button
-        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(false);
+        menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(false);
 
         final Toast try_toast = Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
                 .getString(R.string.order_send_try), Toast.LENGTH_LONG);
@@ -108,7 +108,7 @@ public class Tab extends Model implements Serializable {
                 mDocRef.update("ordered", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+                        menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(true);
 
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
@@ -125,7 +125,7 @@ public class Tab extends Model implements Serializable {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        menuFragment.getActivity().findViewById(R.id.menu_view_order_button).setEnabled(true);
+                        menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(true);
 
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
