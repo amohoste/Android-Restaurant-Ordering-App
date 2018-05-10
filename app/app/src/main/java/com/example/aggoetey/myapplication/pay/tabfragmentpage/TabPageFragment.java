@@ -15,6 +15,7 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.TabAdapter;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class TabPageFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener {
@@ -94,6 +95,8 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     }
 
     private void setTabAdapter() {
+        Collections.sort(this.orders);
+        Collections.reverse(this.orders);
         tabAdapter = new TabAdapter(this.orders);
         tabAdapter.setOrderClickListener(this);
         recyclerView.setAdapter(tabAdapter);

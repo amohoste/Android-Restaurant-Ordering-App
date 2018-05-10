@@ -229,7 +229,7 @@ public class Tab extends Model implements Serializable {
     }
 
     private void putOrdersOnServer(Collection collection, List<Order> orders) {
-        if(orders.size() != 0) {
+        if (orders.size() != 0) {
             DocumentReference document = getTableCollection(collection).document();
             document.set(new HashMap<>());
             document.update("orders", orderCollectionToFireBase(orders))
@@ -283,7 +283,7 @@ public class Tab extends Model implements Serializable {
         return restaurant;
     }
 
-    public static class Order extends Model implements Serializable {
+    public static class Order extends Model implements Serializable, Comparable<Order> {
 
         private List<OrderItem> orderItems = new ArrayList<>();
         private int orderNumber;
@@ -398,6 +398,11 @@ public class Tab extends Model implements Serializable {
                 prijs += orderItem.getMenuItem().price;
             }
             return prijs;
+        }
+
+        @Override
+        public int compareTo(@NonNull Order order) {
+            return time.compareTo(order.getTime());
         }
 
         public static class OrderItem implements Serializable, Comparable<OrderItem> {
