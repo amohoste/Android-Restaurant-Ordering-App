@@ -1,17 +1,13 @@
 package com.example.aggoetey.myapplication.note.activity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.note.adapters.NotesFragmentPagerAdapter;
 
@@ -35,10 +31,10 @@ public class NotesActivity extends AppCompatActivity {
 
     private void setupViewPager(MenuInfo menuInfo) {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = findViewById(R.id.notes_view_pager);
         NotesFragmentPagerAdapter pagerAdapter = new NotesFragmentPagerAdapter(getSupportFragmentManager(), menuInfo);
         viewPager.setAdapter(pagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = findViewById(R.id.notes_sliding_tab);
         tabLayout.setupWithViewPager(viewPager);
     }
 }

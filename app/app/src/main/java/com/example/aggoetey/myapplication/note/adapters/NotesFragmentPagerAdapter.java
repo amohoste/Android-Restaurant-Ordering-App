@@ -33,7 +33,7 @@ public class NotesFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return NotesPageFragment.newInstance(menuInfo);
+        return NotesPageFragment.newInstance(menuInfo, position);
     }
 
     @Override

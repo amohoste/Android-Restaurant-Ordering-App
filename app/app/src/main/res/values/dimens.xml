@@ -11,4 +11,5 @@
     <dimen name="qr_scanner_height">300dp</dimen>
     <dimen name="qr_scanner_textSize">30sp</dimen>
     <dimen name="qr_scanner_margin">40dp</dimen>
+    <dimen name="note_expand_arrow">20dp</dimen>
 </resources>

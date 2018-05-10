@@ -64,5 +64,6 @@
     <string name="confirm_order">Confirm Order</string>
     <string name="google_map_app">com.google.android.apps.maps</string>
     <string name="notes_description">It sucks</string>
+    <string name="note_number_tag">#</string>
 
 </resources>
