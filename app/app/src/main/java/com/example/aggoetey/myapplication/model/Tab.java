@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Model;
@@ -111,13 +112,10 @@ public class Tab extends Model implements Serializable {
         });
     }
 
-
-
     private CollectionReference getTableCollection(Collection c) {
         return FirebaseFirestore.getInstance().collection("places").document(restaurant.getGooglePlaceId())
                 .collection("tables").document(table.getTableId()).collection(c.collection);
     }
-
 
     private Tab() {
     }
@@ -226,6 +224,14 @@ public class Tab extends Model implements Serializable {
         fireInvalidationEvent();
     }
 
+    public void payAllOrders() {
+        List<Tab.Order> orders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
+        orders.addAll(Tab.getInstance().getReceivedOrders());
+        for (Tab.Order order : orders) {
+            Tab.getInstance().payOrder(order);
+        }
+    }
+
     public void receiveOrder(Order order) {
         orderedOrders.remove(order);
         receivedOrders.add(order);
@@ -236,13 +242,22 @@ public class Tab extends Model implements Serializable {
     /**
      * Update alles van de tab naar de server
      */
-    private void updateToServer(){
+    private void updateToServer() {
         this.getTableCollection(Collection.ORDERED).document().update("orders", orderCollectionToFireBase(this.orderedOrders));
         this.getTableCollection(Collection.PAYED).document().update("orders", orderCollectionToFireBase(this.payedOrders));
         this.getTableCollection(Collection.RECEIVED).document().update("orders", orderCollectionToFireBase(this.receivedOrders));
+        Log.d(DEBUG_TAG, "updateToServer: " + Collection.PAYED.collection);
+
+        fireInvalidationEvent();
     }
 
-    private static List<HashMap<String, Object>> orderCollectionToFireBase(List<Order> orders){
+    public void loadAllCollections(){
+        this.loadOrderSet(Collection.RECEIVED);
+        this.loadOrderSet(Collection.PAYED);
+        this.loadOrderSet(Collection.ORDERED);
+    }
+
+    private static List<HashMap<String, Object>> orderCollectionToFireBase(List<Order> orders) {
         List<HashMap<String, Object>> firebase = new ArrayList<>();
         for (Order order : orders) {
             for (Order.OrderItem orderItem : order.getOrderItems()) {
@@ -274,7 +289,7 @@ public class Tab extends Model implements Serializable {
             time = new Date(timestamp);
         }
 
-        private Order(){
+        private Order() {
             time = new Date();
         }
 

@@ -24,9 +24,6 @@ import com.example.aggoetey.myapplication.pay.tabfragmentpage.PayedTabPageFragme
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.ReceivedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener, Listener {
 
     private ViewPager mViewPager;
@@ -43,20 +40,8 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     @Override
     public void onPayChoiceSelection(int i) {
         payConfirmation(i);
-
-        List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
-        orderedOrders.addAll(Tab.getInstance().getReceivedOrders());
-        for (Tab.Order orderedOrder : orderedOrders) {
-            Tab.getInstance().payOrder(orderedOrder);
-        }
-
-        this.loadAllOrderSets();
-    }
-
-    private void loadAllOrderSets() {
-        Tab.getInstance().loadOrderSet(Tab.Collection.ORDERED);
-        Tab.getInstance().loadOrderSet(Tab.Collection.PAYED);
-        Tab.getInstance().loadOrderSet(Tab.Collection.RECEIVED);
+        Tab.getInstance().payAllOrders();
+        Tab.getInstance().loadAllCollections();
     }
 
     private void payConfirmation(int i) {
@@ -80,7 +65,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
         Tab.getInstance().addListener(this);
-        this.loadAllOrderSets();
+        Tab.getInstance().loadAllCollections();
 
         return view;
     }
