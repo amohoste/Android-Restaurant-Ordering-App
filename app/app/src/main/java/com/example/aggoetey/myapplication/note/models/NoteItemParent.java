@@ -12,7 +12,17 @@ import java.util.List;
 
 public class NoteItemParent implements ParentObject {
     private String name;
+    private int groupNo = 0;
     private List<Object> mChildrenList;
+
+    public NoteItemParent(String name, int groupNo) {
+        this.name = name;
+        this.groupNo = groupNo;
+    }
+
+    public int getGroupNo() {
+        return groupNo;
+    }
 
     public NoteItemParent(String name){
         this.name = name;

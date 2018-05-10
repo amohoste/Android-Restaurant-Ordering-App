@@ -2,6 +2,7 @@ package com.example.aggoetey.myapplication.note.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,15 +60,22 @@ public class NotesPageFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
         List<ParentObject> parents = getNoteParents();
-        NoteExpandableRecyclerAdapter adapter = new NoteExpandableRecyclerAdapter(this.getContext(), parents);
-        adapter.setCustomParentAnimationViewId(R.id.note_expand_btn);
-        adapter.setParentAndIconExpandOnClick(true);
-        adapter.setParentClickableViewAnimationDefaultDuration();
+        NoteExpandableRecyclerAdapter adapter = createNoteExpandableRecyclerAdapter(parents);
 
         recyclerView.setAdapter(adapter);
         return view;
     }
 
+    @NonNull
+    private NoteExpandableRecyclerAdapter createNoteExpandableRecyclerAdapter(List<ParentObject> parents) {
+        NoteExpandableRecyclerAdapter adapter = new NoteExpandableRecyclerAdapter(this.getContext(), parents, position == PENDING_POS);
+        adapter.setCustomParentAnimationViewId(R.id.note_expand_btn);
+        adapter.setParentAndIconExpandOnClick(true);
+        adapter.setParentClickableViewAnimationDefaultDuration();
+        return adapter;
+    }
+
+    @NonNull
     private List<ParentObject> getNoteParents() {
         switch (position) {
             case PENDING_POS:
@@ -80,6 +88,8 @@ public class NotesPageFragment extends Fragment {
         }
         return new ArrayList<>();
     }
+
+
 
     private List<ParentObject> getPendingOrders() {
         Tab.Order pending = mMenuInfo.getCurrentOrder();

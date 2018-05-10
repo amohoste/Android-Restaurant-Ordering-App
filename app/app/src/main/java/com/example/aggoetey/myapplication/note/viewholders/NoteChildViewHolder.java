@@ -26,9 +26,11 @@ public class NoteChildViewHolder extends ChildViewHolder {
         editBtn =  itemView.findViewById(R.id.notes_child_add_note_btn);
     }
 
-    public void bind (Tab.Order.OrderItem orderItem, int number){
+    public void bind (Tab.Order.OrderItem orderItem, int number, boolean isPending){
         this.number.setText(String.format("%d",number));
         this.noteDescription.setText(orderItem.getNote());
-
+        if(!isPending) {
+            this.editBtn.setVisibility(View.GONE);
+        }
     }
 }

@@ -65,5 +65,7 @@
     <string name="google_map_app">com.google.android.apps.maps</string>
     <string name="notes_description">It sucks</string>
     <string name="note_number_tag">#</string>
+    <string name="note_parent_amount">Amount:</string>
+    <string name="note_group_text">Group:</string>
 
 </resources>

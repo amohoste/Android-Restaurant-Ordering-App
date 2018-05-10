@@ -22,11 +22,12 @@ import java.util.List;
 public class NoteExpandableRecyclerAdapter extends ExpandableRecyclerAdapter<NoteParentViewHolder, NoteChildViewHolder> {
 
     private LayoutInflater mLayoutInflater;
+    private boolean isEditable = true;
 
-
-    public NoteExpandableRecyclerAdapter(Context context, List<ParentObject> parentItemList) {
+    public NoteExpandableRecyclerAdapter(Context context, List<ParentObject> parentItemList, boolean isEditable) {
         super(context, parentItemList);
 
+        this.isEditable = isEditable;
         mLayoutInflater =  LayoutInflater.from(context);
     }
 
@@ -42,11 +43,12 @@ public class NoteExpandableRecyclerAdapter extends ExpandableRecyclerAdapter<Not
 
     @Override
     public void onBindParentViewHolder(NoteParentViewHolder noteParentViewHolder, int i, Object o) {
-            noteParentViewHolder.bind((NoteItemParent) o);
+        NoteItemParent parent = (NoteItemParent) o ;
+            noteParentViewHolder.bind(parent, parent.getGroupNo(),isEditable );
     }
 
     @Override
     public void onBindChildViewHolder(NoteChildViewHolder noteChildViewHolder, int i, Object o) {
-            noteChildViewHolder.bind((Tab.Order.OrderItem) o, i);
+            noteChildViewHolder.bind((Tab.Order.OrderItem) o, i, isEditable);
     }
 }

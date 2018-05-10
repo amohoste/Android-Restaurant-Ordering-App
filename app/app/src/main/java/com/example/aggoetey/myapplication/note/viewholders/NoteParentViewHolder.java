@@ -14,16 +14,24 @@ import com.example.aggoetey.myapplication.note.models.NoteItemParent;
 
 public class NoteParentViewHolder extends ParentViewHolder {
     private TextView itemName;
+    private TextView itemAmount;
+    private TextView itemGroup;
     private ImageButton collapseBtn;
     public NoteParentViewHolder(View itemView) {
         super(itemView);
 
         itemName = itemView.findViewById(R.id.note_item_name);
+        itemAmount = itemView.findViewById(R.id.note_parent_amount);
+        itemGroup = itemView.findViewById(R.id.note_item_order_group);
         collapseBtn = itemView.findViewById(R.id.note_expand_btn);
     }
 
-    public void bind (NoteItemParent noteItemParent){
+    public void bind (NoteItemParent noteItemParent, int groupNo, boolean isPending){
+        itemAmount.setText(noteItemParent.getChildObjectList().size());
         itemName.setText(noteItemParent.getName());
+        if(!isPending){
+            itemGroup.setText(itemView.getResources().getText(R.string.note_group_text) + " " + groupNo);
+        }
     }
 
 

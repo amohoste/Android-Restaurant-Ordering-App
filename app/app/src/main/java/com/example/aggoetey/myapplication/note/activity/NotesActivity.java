@@ -35,6 +35,6 @@ public class NotesActivity extends AppCompatActivity {
         NotesFragmentPagerAdapter pagerAdapter = new NotesFragmentPagerAdapter(getSupportFragmentManager(), menuInfo);
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = findViewById(R.id.notes_sliding_tab);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager,true);
     }
 }
