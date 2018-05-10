@@ -62,4 +62,17 @@
     <string name="nothing_to_pay">Je moet eerst iets bestellen voor je kan betalen</string>
     <string name="google_map_app">com.google.android.apps.maps</string>
 
+    <!-- Discover -->
+    <string name="searchbar_hint">Search restaurants</string>
+    <string name="filter_sort_method_title">Sort list results by</string>
+    <string name="filter_sort_method_distance">Distance</string>
+    <string name="filter_sort_method_alphabetical">Alphabetical</string>
+    <string name="filter_min_rating_title">Rating at least</string>
+    <string name="filter_filter_title">Filter</string>
+    <string name="filter_open_today">Open today</string>
+    <string name="filter_distance">Distance</string>
+    <string name="filter_confirm">CONFIRM</string>
+    <string name="restaurant_closed">Closed</string>
+    <string name="restaurant_hours_not_known">Hours not known</string>
+
 </resources>
