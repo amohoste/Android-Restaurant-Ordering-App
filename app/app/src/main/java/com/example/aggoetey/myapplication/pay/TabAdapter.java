@@ -1,7 +1,6 @@
 package com.example.aggoetey.myapplication.pay;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,9 @@ import android.widget.TextView;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -66,7 +68,10 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
         public void bind(Tab.Order order) {
             this.order = order;
-            time.setText(DateFormat.format("hh:mm", order.getTime()));
+            DateFormat format = new SimpleDateFormat("hh:mm");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(order.getTime().getTime() * 1000);
+            time.setText(format.format(order.getTime()));
             price.setText(price.getContext().getString(R.string.price_order_short, this.order.getPrice()));
         }
 

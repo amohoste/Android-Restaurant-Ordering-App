@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Model;
@@ -81,8 +82,8 @@ public class Tab extends Model implements Serializable {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot fireBaseOrderDocument : queryDocumentSnapshots) {
-                    Order order = new Order();
                     List<HashMap<String, String>> firebaseOrder = (List<HashMap<String, String>>) fireBaseOrderDocument.getData().get("orders");
+                    Order order = new Order(1000 * Long.parseLong(String.valueOf(firebaseOrder.get(0).get("time"))));
                     for (HashMap<String, String> orderMap : firebaseOrder) {
                         Order.OrderItem orderItem = new Order.OrderItem(orderMap.get("note"), new MenuItem(
                                 orderMap.get("item"), Double.parseDouble(orderMap.get("price")), orderMap.get("description"), orderMap.get("category")
@@ -240,7 +241,11 @@ public class Tab extends Model implements Serializable {
         private int orderNumber;
         private Date time;
 
-        private Order() {
+        private Order(long timestamp) {
+            time = new Date(timestamp);
+        }
+
+        private Order(){
             time = new Date();
         }
 
