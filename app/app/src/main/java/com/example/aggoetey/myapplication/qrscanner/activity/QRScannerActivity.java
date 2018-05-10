@@ -69,7 +69,7 @@ public class QRScannerActivity extends AppCompatActivity {
                     Toast.makeText(this, "Exiting QR Scanner",  Toast.LENGTH_SHORT).show();
                     AsyncTask.execute(() -> cameraSource.release());
                 }
-                this.onBackPressed();
+                finish();
 
             default:
                 return super.onOptionsItemSelected(item);
