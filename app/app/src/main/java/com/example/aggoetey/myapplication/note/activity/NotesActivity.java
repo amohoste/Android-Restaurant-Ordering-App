@@ -28,7 +28,6 @@ public class NotesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         menuInfo =  (MenuInfo) intent.getSerializableExtra(ARG_MENU_INFO);
-        Log.d("NotesActivity", "" +  menuInfo.getCurrentOrder().getOrderItems().size());
         setContentView(R.layout.activity_notes);
         setupViewPager(menuInfo);
     }

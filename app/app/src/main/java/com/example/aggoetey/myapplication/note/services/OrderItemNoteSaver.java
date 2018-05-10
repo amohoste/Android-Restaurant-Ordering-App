@@ -21,7 +21,6 @@ public class OrderItemNoteSaver implements NoteSaver {
 
     @Override
     public void saveNote(String note) {
-        Log.e("NoteSaver",  orderItem.toString());
         orderItem.setNote(note);
     }
 
