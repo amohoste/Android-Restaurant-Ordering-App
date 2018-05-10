@@ -21,16 +21,17 @@ public class NoteParentViewHolder extends ParentViewHolder {
         super(itemView);
 
         itemName = itemView.findViewById(R.id.note_item_name);
-        itemAmount = itemView.findViewById(R.id.note_parent_amount);
+        itemAmount = itemView.findViewById(R.id.note_item_amount);
         itemGroup = itemView.findViewById(R.id.note_item_order_group);
         collapseBtn = itemView.findViewById(R.id.note_expand_btn);
     }
 
     public void bind (NoteItemParent noteItemParent, int groupNo, boolean isPending){
-        itemAmount.setText(noteItemParent.getChildObjectList().size());
+        itemAmount.setText(String.format("%d", noteItemParent.getChildObjectList().size())  );
         itemName.setText(noteItemParent.getName());
+        String text = itemView.getResources().getString(R.string.note_group_text);
         if(!isPending){
-            itemGroup.setText(itemView.getResources().getText(R.string.note_group_text) + " " + groupNo);
+            itemGroup.setText( text + " " + groupNo);
         }
     }
 

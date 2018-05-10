@@ -3,6 +3,7 @@ package com.example.aggoetey.myapplication.note.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,8 @@ import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.note.adapters.NoteExpandableRecyclerAdapter;
 import com.example.aggoetey.myapplication.note.models.NoteItemParent;
+import com.example.aggoetey.myapplication.note.services.OrderItemNoteSaver;
+import com.example.aggoetey.myapplication.note.viewholders.NoteChildViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +71,27 @@ public class NotesPageFragment extends Fragment {
 
     @NonNull
     private NoteExpandableRecyclerAdapter createNoteExpandableRecyclerAdapter(List<ParentObject> parents) {
+
+
         NoteExpandableRecyclerAdapter adapter = new NoteExpandableRecyclerAdapter(this.getContext(), parents, position == PENDING_POS);
+        NoteChildViewHolder.OnNoteItemEditBtnClickListener listener
+                = orderItem ->
+                showDialog(OrderNoteDialogFragment.newInstance(new OrderItemNoteSaver(orderItem, adapter), orderItem.getMenuItem().title));
         adapter.setCustomParentAnimationViewId(R.id.note_expand_btn);
         adapter.setParentAndIconExpandOnClick(true);
         adapter.setParentClickableViewAnimationDefaultDuration();
+        adapter.setmListener(listener);
         return adapter;
+    }
+
+    private void showDialog(DialogFragment fragment){
+        if(getFragmentManager() != null) {
+            fragment.show(getFragmentManager(), this.toString());
+        }else{
+            fragment.show(getChildFragmentManager(), this.toString());
+        }
+
+
     }
 
     @NonNull

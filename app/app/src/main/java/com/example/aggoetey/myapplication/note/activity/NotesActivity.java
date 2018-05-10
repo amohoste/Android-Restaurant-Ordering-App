@@ -3,9 +3,11 @@ package com.example.aggoetey.myapplication.note.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuInfo;
@@ -19,7 +21,6 @@ public class NotesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
         MenuInfo menuInfo =  (MenuInfo) intent.getSerializableExtra(ARG_MENU_INFO);
         Log.d("NotesActivity", "" +  menuInfo.getCurrentOrder().getOrderItems().size());
@@ -27,6 +28,7 @@ public class NotesActivity extends AppCompatActivity {
 
         setupViewPager(menuInfo);
     }
+
 
 
     private void setupViewPager(MenuInfo menuInfo) {

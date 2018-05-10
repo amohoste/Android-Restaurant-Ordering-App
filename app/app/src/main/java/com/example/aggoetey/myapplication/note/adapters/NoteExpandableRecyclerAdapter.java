@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.note.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -23,12 +24,16 @@ public class NoteExpandableRecyclerAdapter extends ExpandableRecyclerAdapter<Not
 
     private LayoutInflater mLayoutInflater;
     private boolean isEditable = true;
+    private NoteChildViewHolder.OnNoteItemEditBtnClickListener mListener;
 
     public NoteExpandableRecyclerAdapter(Context context, List<ParentObject> parentItemList, boolean isEditable) {
         super(context, parentItemList);
-
         this.isEditable = isEditable;
-        mLayoutInflater =  LayoutInflater.from(context);
+        mLayoutInflater = LayoutInflater.from(context);
+    }
+
+    public void setmListener (NoteChildViewHolder.OnNoteItemEditBtnClickListener listener){
+        this.mListener = listener;
     }
 
     @Override
@@ -38,17 +43,23 @@ public class NoteExpandableRecyclerAdapter extends ExpandableRecyclerAdapter<Not
 
     @Override
     public NoteChildViewHolder onCreateChildViewHolder(ViewGroup viewGroup) {
-        return new NoteChildViewHolder(mLayoutInflater.inflate(R.layout.notes_list_item, viewGroup, false));
+        if(mListener== null){
+
+            throw new  IllegalStateException("Listener is null: You need to call setmListener first");
+        }
+
+        return new NoteChildViewHolder(mLayoutInflater.inflate(R.layout.notes_list_item, viewGroup, false), mListener);
     }
 
     @Override
     public void onBindParentViewHolder(NoteParentViewHolder noteParentViewHolder, int i, Object o) {
-        NoteItemParent parent = (NoteItemParent) o ;
-            noteParentViewHolder.bind(parent, parent.getGroupNo(),isEditable );
+        NoteItemParent parent = (NoteItemParent) o;
+        noteParentViewHolder.bind(parent, parent.getGroupNo(), isEditable);
     }
 
     @Override
     public void onBindChildViewHolder(NoteChildViewHolder noteChildViewHolder, int i, Object o) {
-            noteChildViewHolder.bind((Tab.Order.OrderItem) o, i, isEditable);
+        noteChildViewHolder.bind((Tab.Order.OrderItem) o, i, isEditable);
+
     }
 }

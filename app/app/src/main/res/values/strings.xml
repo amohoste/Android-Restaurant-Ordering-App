@@ -66,6 +66,6 @@
     <string name="notes_description">It sucks</string>
     <string name="note_number_tag">#</string>
     <string name="note_parent_amount">Amount:</string>
-    <string name="note_group_text">Group:</string>
+    <string name="note_group_text">Order group:</string>
 
 </resources>
