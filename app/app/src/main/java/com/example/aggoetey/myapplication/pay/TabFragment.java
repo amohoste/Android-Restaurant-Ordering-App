@@ -49,8 +49,13 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         for (Tab.Order orderedOrder : orderedOrders) {
             Tab.getInstance().payOrder(orderedOrder);
         }
+        this.loadAllOrderSets();
+    }
 
-        Tab.getInstance().loadOrderedOrders();
+    private void loadAllOrderSets() {
+        Tab.getInstance().loadOrderSet(Tab.Collection.ORDERED);
+        Tab.getInstance().loadOrderSet(Tab.Collection.ORDERED);
+        Tab.getInstance().loadOrderSet(Tab.Collection.ORDERED);
     }
 
     private void payConfirmation(int i) {
@@ -74,7 +79,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
         Tab.getInstance().addListener(this);
-        Tab.getInstance().loadOrderedOrders();
+        this.loadAllOrderSets();
 
         return view;
     }

@@ -37,7 +37,6 @@ public class Tab extends Model implements Serializable {
     private List<Order> payedOrders = new ArrayList<>();
     private List<Order> orderedOrders = new ArrayList<>();
     private List<Order> receivedOrders = new ArrayList<>();
-    private int amountOfOrders = 0;
 
     private Restaurant restaurant;
     private Table table;
@@ -46,7 +45,15 @@ public class Tab extends Model implements Serializable {
         this.orderedOrders = orderedOrders;
     }
 
-    private enum Collection {
+    public void setReceivedOrders(List<Order> receivedOrders) {
+        this.receivedOrders = receivedOrders;
+    }
+
+    public void setPayedOrders(List<Order> payedOrders) {
+        this.payedOrders = payedOrders;
+    }
+
+    public enum Collection {
         ORDERED("ordered"),
         PAYED("payed"),
         RECEIVED("ordered");
@@ -67,9 +74,9 @@ public class Tab extends Model implements Serializable {
         return orderedOrders;
     }
 
-    public void loadOrderedOrders() {
-        final CollectionReference ordered = getTableCollection(Collection.ORDERED);
-        List<Order> orderedOrders = new ArrayList<>();
+    public void loadOrderSet(Collection collection) {
+        final CollectionReference ordered = getTableCollection(collection);
+        List<Order> newOrders = new ArrayList<>();
         ordered.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -82,9 +89,19 @@ public class Tab extends Model implements Serializable {
                         ));
                         order.addOrderItem(orderItem);
                     }
-                    orderedOrders.add(order);
+                    newOrders.add(order);
                 }
-                Tab.getInstance().setOrderedOrders(orderedOrders);
+                switch (collection) {
+                    case ORDERED:
+                        Tab.getInstance().setOrderedOrders(newOrders);
+                        break;
+                    case RECEIVED:
+                        Tab.getInstance().setReceivedOrders(newOrders);
+                        break;
+                    case PAYED:
+                        Tab.getInstance().setPayedOrders(newOrders);
+                        break;
+                }
                 fireInvalidationEvent();
             }
         });
@@ -181,9 +198,8 @@ public class Tab extends Model implements Serializable {
                         menuInfo.orderCommitted();
 
                         menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
-                        orderedOrders.add(order);
-                        order.setOrderNumber(amountOfOrders);
-                        amountOfOrders++;
+
+                        orderedOrders.add(order); //zo lijkt het alsof er niks moet laden
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
