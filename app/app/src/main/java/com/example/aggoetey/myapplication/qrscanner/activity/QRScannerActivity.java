@@ -29,7 +29,7 @@ public class QRScannerActivity extends AppCompatActivity {
 
 
     private static final int PERMISSION_REQUEST_CAMERA = 50;
-    private CameraSource cameraSource;
+    private transient CameraSource cameraSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class QRScannerActivity extends AppCompatActivity {
     }
 
 
+
     private void setupManualCodeInput (EditText editText,  AppCompatButton confirmBtn, MenuBarcodeProcessor processor){
         confirmBtn.setOnClickListener((view) -> {
 
@@ -68,6 +69,8 @@ public class QRScannerActivity extends AppCompatActivity {
                     Toast.makeText(this, "Exiting QR Scanner",  Toast.LENGTH_SHORT).show();
                     AsyncTask.execute(() -> cameraSource.release());
                 }
+                this.onBackPressed();
+
             default:
                 return super.onOptionsItemSelected(item);
         }
