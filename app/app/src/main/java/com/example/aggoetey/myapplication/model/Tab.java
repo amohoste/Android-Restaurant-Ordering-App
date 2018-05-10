@@ -223,7 +223,7 @@ public class Tab extends Model implements Serializable {
     private void deleteOrdersFromServer(CollectionReference collectionReference) {
         collectionReference.get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                queryDocumentSnapshot.getReference().delete().addOnSuccessListener(l -> fireInvalidationEvent());
+                queryDocumentSnapshot.getReference().delete().addOnSuccessListener(l -> loadAllCollections());
             }
         });
     }
@@ -233,7 +233,7 @@ public class Tab extends Model implements Serializable {
             DocumentReference document = getTableCollection(collection).document();
             document.set(new HashMap<>());
             document.update("orders", orderCollectionToFireBase(orders))
-                    .addOnSuccessListener(l -> fireInvalidationEvent());
+                    .addOnSuccessListener(l -> loadAllCollections());
         }
     }
 
@@ -245,11 +245,6 @@ public class Tab extends Model implements Serializable {
         // plaatsen in de nieuwe
         putOrdersOnServer(Collection.PAYED, orderedOrders);
         putOrdersOnServer(Collection.PAYED, receivedOrders);
-
-        //herladen
-        this.loadAllCollections();
-
-        fireInvalidationEvent();
     }
 
     public void receiveOrder(Order order) {
@@ -263,6 +258,7 @@ public class Tab extends Model implements Serializable {
         this.loadOrderSet(Collection.RECEIVED);
         this.loadOrderSet(Collection.PAYED);
         this.loadOrderSet(Collection.ORDERED);
+        fireInvalidationEvent();
     }
 
     private static List<HashMap<String, Object>> orderCollectionToFireBase(List<Order> orders) {
