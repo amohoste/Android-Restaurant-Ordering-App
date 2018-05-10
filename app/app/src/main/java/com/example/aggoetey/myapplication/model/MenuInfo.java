@@ -96,7 +96,9 @@ public class MenuInfo extends Model implements Serializable {
     public void clearAdapters(){
 
         Log.e("Menuinfo", "Cleared Adapters!");
-        this.mAdapters.clear();
+        if(this.mAdapters != null) {
+            this.mAdapters.clear();
+        }
     }
 
     public void addAdapter(RecyclerView.Adapter adapter){

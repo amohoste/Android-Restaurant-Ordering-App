@@ -16,20 +16,46 @@ import com.example.aggoetey.myapplication.note.adapters.NotesFragmentPagerAdapte
 public class NotesActivity extends AppCompatActivity {
 
     public static  final String ARG_MENU_INFO = "ARG_MENU_INFO";
-
+    public static final int RESULT_MENU_INFO_SET = 200;
+    private MenuInfo menuInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(getSupportActionBar() != null)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
-        MenuInfo menuInfo =  (MenuInfo) intent.getSerializableExtra(ARG_MENU_INFO);
+        menuInfo =  (MenuInfo) intent.getSerializableExtra(ARG_MENU_INFO);
         Log.d("NotesActivity", "" +  menuInfo.getCurrentOrder().getOrderItems().size());
         setContentView(R.layout.activity_notes);
-
         setupViewPager(menuInfo);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                saveMenuInfo();
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public void onBackPressed() {
+        saveMenuInfo();
+        super.onBackPressed();
+    }
+
+    private void saveMenuInfo() {
+        Intent mIntent = new Intent();
+        mIntent.putExtra(ARG_MENU_INFO, menuInfo);
+        setResult(RESULT_OK, mIntent);
+    }
 
     private void setupViewPager(MenuInfo menuInfo) {
         // Get the ViewPager and set it's PagerAdapter so that it can display items

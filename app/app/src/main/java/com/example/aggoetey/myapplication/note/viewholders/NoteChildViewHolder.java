@@ -35,7 +35,7 @@ public class NoteChildViewHolder extends ChildViewHolder {
         this.number.setText(String.format("%d", number));
         this.noteDescription.setText(orderItem.getNote());
         editBtn.setOnClickListener(v -> listener.onEditBtnClick(orderItem));
-
+        Log.e("ChildViewHolder",  orderItem.toString());
         if (!isPending) {
             this.editBtn.setVisibility(View.GONE);
         }

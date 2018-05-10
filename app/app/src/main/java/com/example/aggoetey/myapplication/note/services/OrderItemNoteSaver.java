@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.note.services;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Adapter;
 
 import com.example.aggoetey.myapplication.model.Tab;
@@ -20,6 +21,7 @@ public class OrderItemNoteSaver implements NoteSaver {
 
     @Override
     public void saveNote(String note) {
+        Log.e("NoteSaver",  orderItem.toString());
         orderItem.setNote(note);
     }
 

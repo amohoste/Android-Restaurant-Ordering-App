@@ -1,5 +1,6 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,7 +52,7 @@ public class MenuFragment extends Fragment implements Listener {
     private static final int CANCEL_WINDOW = 5000;
     private static final String VIEW_TYPE_PREFERENCE = "VIEW_TYPE_PREFERENCE";
     private static final String VIEW_TYPE_PREFERENCE_FILE = "VIEW_TYPE_PREFERENCE_FILE";
-
+    private static final int REQUEST_MENU_INFO = 200;
     private MenuInfo menuInfo;
 
     private ViewPager viewPager;
@@ -233,9 +234,20 @@ public class MenuFragment extends Fragment implements Listener {
             public void onClick(View v) {
                 Intent intent =  new Intent(getContext(), NotesActivity.class);
                 intent.putExtra(NotesActivity.ARG_MENU_INFO, menuInfo);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_MENU_INFO);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_MENU_INFO){
+            if(resultCode == AppCompatActivity.RESULT_OK){
+                this.menuInfo = (MenuInfo) data.getSerializableExtra(NotesActivity.ARG_MENU_INFO);
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void setOrderButtonProperties() {
@@ -270,7 +282,9 @@ public class MenuFragment extends Fragment implements Listener {
     public void onDestroyView() {
         super.onDestroyView();
         Log.e("MenuFragment:", "Destroyed");
-        menuInfo.clearAdapters();
+        if(menuInfo != null) {
+            menuInfo.clearAdapters();
+        }
     }
 
     @Override
