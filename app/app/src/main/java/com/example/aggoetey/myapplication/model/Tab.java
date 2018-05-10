@@ -1,7 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Model;
@@ -15,7 +14,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,11 +80,10 @@ public class Tab extends Model implements Serializable {
     public void loadOrderSet(Collection collection) {
         final CollectionReference ordered = getTableCollection(collection);
         List<Order> newOrders = new ArrayList<>();
-        ordered.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot fireBaseOrderDocument : queryDocumentSnapshots) {
-                    List<HashMap<String, String>> firebaseOrder = (List<HashMap<String, String>>) fireBaseOrderDocument.getData().get("orders");
+        ordered.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot fireBaseOrderDocument : queryDocumentSnapshots) {
+                List<HashMap<String, String>> firebaseOrder = (List<HashMap<String, String>>) fireBaseOrderDocument.getData().get("orders");
+                if (firebaseOrder != null) {
                     Order order = new Order(1000 * Long.parseLong(String.valueOf(firebaseOrder.get(0).get("time"))));
                     for (HashMap<String, String> orderMap : firebaseOrder) {
                         Order.OrderItem orderItem = new Order.OrderItem(orderMap.get("note"), new MenuItem(
@@ -96,19 +93,19 @@ public class Tab extends Model implements Serializable {
                     }
                     newOrders.add(order);
                 }
-                switch (collection) {
-                    case ORDERED:
-                        Tab.getInstance().setOrderedOrders(newOrders);
-                        break;
-                    case RECEIVED:
-                        Tab.getInstance().setReceivedOrders(newOrders);
-                        break;
-                    case PAYED:
-                        Tab.getInstance().setPayedOrders(newOrders);
-                        break;
-                }
-                fireInvalidationEvent();
             }
+            switch (collection) {
+                case ORDERED:
+                    Tab.getInstance().setOrderedOrders(newOrders);
+                    break;
+                case RECEIVED:
+                    Tab.getInstance().setReceivedOrders(newOrders);
+                    break;
+                case PAYED:
+                    Tab.getInstance().setPayedOrders(newOrders);
+                    break;
+            }
+            fireInvalidationEvent();
         });
     }
 
@@ -220,38 +217,49 @@ public class Tab extends Model implements Serializable {
         orderedOrders.remove(order);
         receivedOrders.remove(order);
         payedOrders.add(order);
-        updateToServer();
         fireInvalidationEvent();
     }
 
-    public void payAllOrders() {
-        List<Tab.Order> orders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
-        orders.addAll(Tab.getInstance().getReceivedOrders());
-        for (Tab.Order order : orders) {
-            Tab.getInstance().payOrder(order);
+    private void deleteOrdersFromServer(CollectionReference collectionReference) {
+        collectionReference.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                queryDocumentSnapshot.getReference().delete().addOnSuccessListener(l -> fireInvalidationEvent());
+            }
+        });
+    }
+
+    private void putOrdersOnServer(Collection collection, List<Order> orders) {
+        if(orders.size() != 0) {
+            DocumentReference document = getTableCollection(collection).document();
+            document.set(new HashMap<>());
+            document.update("orders", orderCollectionToFireBase(orders))
+                    .addOnSuccessListener(l -> fireInvalidationEvent());
         }
+    }
+
+    public void payAllOrders() {
+        // verwijderen vanuit de bestaande
+        deleteOrdersFromServer(getTableCollection(Collection.ORDERED));
+        deleteOrdersFromServer(getTableCollection(Collection.RECEIVED));
+
+        // plaatsen in de nieuwe
+        putOrdersOnServer(Collection.PAYED, orderedOrders);
+        putOrdersOnServer(Collection.PAYED, receivedOrders);
+
+        //herladen
+        this.loadAllCollections();
+
+        fireInvalidationEvent();
     }
 
     public void receiveOrder(Order order) {
         orderedOrders.remove(order);
         receivedOrders.add(order);
-        updateToServer();
         fireInvalidationEvent();
     }
 
-    /**
-     * Update alles van de tab naar de server
-     */
-    private void updateToServer() {
-        this.getTableCollection(Collection.ORDERED).document().update("orders", orderCollectionToFireBase(this.orderedOrders));
-        this.getTableCollection(Collection.PAYED).document().update("orders", orderCollectionToFireBase(this.payedOrders));
-        this.getTableCollection(Collection.RECEIVED).document().update("orders", orderCollectionToFireBase(this.receivedOrders));
-        Log.d(DEBUG_TAG, "updateToServer: " + Collection.PAYED.collection);
 
-        fireInvalidationEvent();
-    }
-
-    public void loadAllCollections(){
+    public void loadAllCollections() {
         this.loadOrderSet(Collection.RECEIVED);
         this.loadOrderSet(Collection.PAYED);
         this.loadOrderSet(Collection.ORDERED);
