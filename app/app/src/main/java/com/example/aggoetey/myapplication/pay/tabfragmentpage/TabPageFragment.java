@@ -15,7 +15,6 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.TabAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TabPageFragment extends Fragment implements TabAdapter.OnOrderClickListener, Listener {
@@ -25,6 +24,8 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     protected TextView total;
 
     private int price;
+
+    protected List<Tab.Order> orders;
 
     private OrderSelectedListener orderSelectedListener;
     private android.view.MenuItem payAction;
@@ -66,12 +67,19 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Tab.getInstance().removeListener(this);
+    }
+
+    @Override
     public void onOrderClick(Tab.Order order) {
         orderSelectedListener.onOrderSelected(order);
     }
 
     @Override
     public void invalidated() {
+        this.orders = getOrders();
         setTabAdapter();
         calculatePrice();
     }
@@ -86,8 +94,7 @@ public abstract class TabPageFragment extends Fragment implements TabAdapter.OnO
     }
 
     private void setTabAdapter() {
-        List<Tab.Order> orders = new ArrayList<>(getOrders());
-        tabAdapter = new TabAdapter(orders);
+        tabAdapter = new TabAdapter(this.orders);
         tabAdapter.setOrderClickListener(this);
         recyclerView.setAdapter(tabAdapter);
     }

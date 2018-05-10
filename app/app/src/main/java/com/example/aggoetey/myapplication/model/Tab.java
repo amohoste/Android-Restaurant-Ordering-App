@@ -1,7 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Model;
@@ -10,9 +9,12 @@ import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.List;
 public class Tab extends Model implements Serializable {
 
     private static final Tab ourInstance = new Tab();
+    private static final String DEBUG_TAG = "TAB_DEBUG";
 
     private List<Order> payedOrders = new ArrayList<>();
     private List<Order> orderedOrders = new ArrayList<>();
@@ -39,27 +42,61 @@ public class Tab extends Model implements Serializable {
     private Restaurant restaurant;
     private Table table;
 
+    public void setOrderedOrders(List<Order> orderedOrders) {
+        this.orderedOrders = orderedOrders;
+    }
+
+    private enum Collection {
+        ORDERED("ordered"),
+        PAYED("payed"),
+        RECEIVED("ordered");
+
+        public final String collection;
+
+        Collection(String collection) {
+            this.collection = collection;
+        }
+
+    }
+
     public List<Order> getPayedOrders() {
         return payedOrders;
     }
 
     public List<Order> getOrderedOrders() {
-        final DocumentReference table = getTableDocumentReference();
-        table.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        return orderedOrders;
+    }
+
+    public void loadOrderedOrders() {
+        final CollectionReference ordered = getTableCollection(Collection.ORDERED);
+        List<Order> orderedOrders = new ArrayList<>();
+        ordered.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot fireBaseOrderDocument : queryDocumentSnapshots) {
+                    Order order = new Order();
+                    List<HashMap<String, String>> firebaseOrder = (List<HashMap<String, String>>) fireBaseOrderDocument.getData().get("orders");
+                    for (HashMap<String, String> orderMap : firebaseOrder) {
+                        Order.OrderItem orderItem = new Order.OrderItem(orderMap.get("note"), new MenuItem(
+                                orderMap.get("item"), Double.parseDouble(orderMap.get("price")), orderMap.get("description"), orderMap.get("category")
+                        ));
+                        order.addOrderItem(orderItem);
+                    }
+                    orderedOrders.add(order);
+                }
+                Tab.getInstance().setOrderedOrders(orderedOrders);
+                fireInvalidationEvent();
             }
         });
-        return orderedOrders;
     }
 
     public List<Order> getReceivedOrders() {
         return receivedOrders;
     }
 
-    private DocumentReference getTableDocumentReference() {
+    private CollectionReference getTableCollection(Collection c) {
         return FirebaseFirestore.getInstance().collection("places").document(restaurant.getGooglePlaceId())
-                .collection("tables").document(table.getTableId());
+                .collection("tables").document(table.getTableId()).collection(c.collection);
     }
 
 
@@ -122,6 +159,7 @@ public class Tab extends Model implements Serializable {
                     HashMap<String, Object> newEntry = new HashMap<>();
                     newEntry.put("itemID", item.getMenuItem().id);
                     newEntry.put("item", item.getMenuItem().title);
+                    newEntry.put("description", item.getMenuItem().description);
                     newEntry.put("price", Double.toString(item.getMenuItem().price));
                     newEntry.put("category", item.getMenuItem().category);
                     newEntry.put("note", item.getNote());
@@ -151,7 +189,6 @@ public class Tab extends Model implements Serializable {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(true);
-                        Log.e("FAIL", "onFailure: " + e.getMessage());
 
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
