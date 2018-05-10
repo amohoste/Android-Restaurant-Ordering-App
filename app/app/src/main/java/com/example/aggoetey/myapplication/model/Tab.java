@@ -1,6 +1,7 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Model;
@@ -105,33 +106,31 @@ public class Tab extends Model implements Serializable {
 
         final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
                 .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
-                .document(menuInfo.getTableID());
+                .document(menuInfo.getTableID()).collection("ordered").document();
+
+        mDocRef.set(new HashMap<>());
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Retrieve tab array
                 ArrayList<Object> currentOrders;
-                if (documentSnapshot.exists() && documentSnapshot.get("ordered") != null) {
-                    currentOrders = (ArrayList<Object>) documentSnapshot.get("ordered");
-                } else {
-                    currentOrders = new ArrayList<>();
-                }
+                currentOrders = new ArrayList<>();
 
                 // Create new order entry
-                for (Tab.Order.OrderItem item : menuInfo.getCurrentOrder().getOrderItems()) {
+                for (Order.OrderItem item : menuInfo.getCurrentOrder().getOrderItems()) {
                     HashMap<String, Object> newEntry = new HashMap<>();
                     newEntry.put("itemID", item.getMenuItem().id);
                     newEntry.put("item", item.getMenuItem().title);
                     newEntry.put("price", Double.toString(item.getMenuItem().price));
                     newEntry.put("category", item.getMenuItem().category);
                     newEntry.put("note", item.getNote());
-                    newEntry.put("time", System.currentTimeMillis()/1000);
+                    newEntry.put("time", System.currentTimeMillis() / 1000);
                     currentOrders.add(newEntry);
                 }
 
                 // Upload to FireStore
-                mDocRef.update("ordered", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDocRef.update("orders", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(true);
@@ -152,6 +151,7 @@ public class Tab extends Model implements Serializable {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         menuFragment.getActivity().findViewById(R.id.menu_view_login_order_button).setEnabled(true);
+                        Log.e("FAIL", "onFailure: " + e.getMessage());
 
                         try_toast.cancel();
                         Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
