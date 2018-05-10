@@ -81,8 +81,7 @@ public class NotesPageFragment extends Fragment {
             case PENDING_POS:
                 return  getPendingOrders();
             case ORDERED_POS:
-                //TODO: return orderd orders
-                return  getPendingOrders();
+                return  getOrderedOrders();
             default:
                 break;
         }
@@ -90,9 +89,26 @@ public class NotesPageFragment extends Fragment {
     }
 
 
+    private List<ParentObject> getOrderedOrders() {
+        List<ParentObject> result = new ArrayList<>();
+        List<Tab.Order> orders =  Tab.getInstance().getOrderedOrders();
+
+        for(int i = 0 ; i<orders.size(); i++){
+            Tab.Order orderGroup = orders.get(i);
+            List<ParentObject> parentObjects = getParentObjects(orderGroup, i+1);
+            result.addAll(parentObjects);
+        }
+        return result;
+    }
 
     private List<ParentObject> getPendingOrders() {
         Tab.Order pending = mMenuInfo.getCurrentOrder();
+        return getParentObjects(pending, 0);
+
+    }
+
+    @NonNull
+    private List<ParentObject> getParentObjects(Tab.Order pending, int groupNo) {
         List<List<Tab.Order.OrderItem>> orderGroups = Tab.Order.groupOrders(pending);
         List<ParentObject> parentObjects = new ArrayList<>();
 
@@ -102,14 +118,12 @@ public class NotesPageFragment extends Fragment {
 
                 List<Object> children = new ArrayList<>();
                 children.addAll(group);
-                NoteItemParent parent = new NoteItemParent(itemName);
+                NoteItemParent parent = new NoteItemParent(itemName, groupNo);
                 parent.setChildObjectList(children);
                 parentObjects.add(parent);
             }
         }
-
-        return  parentObjects;
-
+        return parentObjects;
     }
 
     @Override
