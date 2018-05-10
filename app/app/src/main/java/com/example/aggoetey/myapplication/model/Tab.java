@@ -1,7 +1,6 @@
 package com.example.aggoetey.myapplication.model;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Model;
@@ -42,22 +41,22 @@ public class Tab extends Model implements Serializable {
     private Restaurant restaurant;
     private Table table;
 
-    public void setOrderedOrders(List<Order> orderedOrders) {
+    private void setOrderedOrders(List<Order> orderedOrders) {
         this.orderedOrders = orderedOrders;
     }
 
-    public void setReceivedOrders(List<Order> receivedOrders) {
+    private void setReceivedOrders(List<Order> receivedOrders) {
         this.receivedOrders = receivedOrders;
     }
 
-    public void setPayedOrders(List<Order> payedOrders) {
+    private void setPayedOrders(List<Order> payedOrders) {
         this.payedOrders = payedOrders;
     }
 
     public enum Collection {
         ORDERED("ordered"),
         PAYED("payed"),
-        RECEIVED("ordered");
+        RECEIVED("received");
 
         public final String collection;
 
@@ -73,6 +72,10 @@ public class Tab extends Model implements Serializable {
 
     public List<Order> getOrderedOrders() {
         return orderedOrders;
+    }
+
+    public List<Order> getReceivedOrders() {
+        return receivedOrders;
     }
 
     public void loadOrderSet(Collection collection) {
@@ -108,9 +111,7 @@ public class Tab extends Model implements Serializable {
         });
     }
 
-    public List<Order> getReceivedOrders() {
-        return receivedOrders;
-    }
+
 
     private CollectionReference getTableCollection(Collection c) {
         return FirebaseFirestore.getInstance().collection("places").document(restaurant.getGooglePlaceId())
@@ -169,8 +170,7 @@ public class Tab extends Model implements Serializable {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Retrieve tab array
-                ArrayList<Object> currentOrders;
-                currentOrders = new ArrayList<>();
+                ArrayList<Object> currentOrders = new ArrayList<>();
 
                 // Create new order entry
                 for (Order.OrderItem item : menuInfo.getCurrentOrder().getOrderItems()) {
@@ -222,13 +222,42 @@ public class Tab extends Model implements Serializable {
         orderedOrders.remove(order);
         receivedOrders.remove(order);
         payedOrders.add(order);
+        updateToServer();
         fireInvalidationEvent();
     }
 
     public void receiveOrder(Order order) {
         orderedOrders.remove(order);
         receivedOrders.add(order);
+        updateToServer();
         fireInvalidationEvent();
+    }
+
+    /**
+     * Update alles van de tab naar de server
+     */
+    private void updateToServer(){
+        this.getTableCollection(Collection.ORDERED).document().update("orders", orderCollectionToFireBase(this.orderedOrders));
+        this.getTableCollection(Collection.PAYED).document().update("orders", orderCollectionToFireBase(this.payedOrders));
+        this.getTableCollection(Collection.RECEIVED).document().update("orders", orderCollectionToFireBase(this.receivedOrders));
+    }
+
+    private static List<HashMap<String, Object>> orderCollectionToFireBase(List<Order> orders){
+        List<HashMap<String, Object>> firebase = new ArrayList<>();
+        for (Order order : orders) {
+            for (Order.OrderItem orderItem : order.getOrderItems()) {
+                HashMap<String, Object> newEntry = new HashMap<>();
+                newEntry.put("itemID", orderItem.getMenuItem().id);
+                newEntry.put("item", orderItem.getMenuItem().title);
+                newEntry.put("description", orderItem.getMenuItem().description);
+                newEntry.put("price", Double.toString(orderItem.getMenuItem().price));
+                newEntry.put("category", orderItem.getMenuItem().category);
+                newEntry.put("note", orderItem.getNote());
+                newEntry.put("time", System.currentTimeMillis() / 1000);
+                firebase.add(newEntry);
+            }
+        }
+        return firebase;
     }
 
     public Restaurant getRestaurant() {

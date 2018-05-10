@@ -49,13 +49,14 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         for (Tab.Order orderedOrder : orderedOrders) {
             Tab.getInstance().payOrder(orderedOrder);
         }
+
         this.loadAllOrderSets();
     }
 
     private void loadAllOrderSets() {
         Tab.getInstance().loadOrderSet(Tab.Collection.ORDERED);
-        Tab.getInstance().loadOrderSet(Tab.Collection.ORDERED);
-        Tab.getInstance().loadOrderSet(Tab.Collection.ORDERED);
+        Tab.getInstance().loadOrderSet(Tab.Collection.PAYED);
+        Tab.getInstance().loadOrderSet(Tab.Collection.RECEIVED);
     }
 
     private void payConfirmation(int i) {
