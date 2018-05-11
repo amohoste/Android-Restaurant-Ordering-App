@@ -33,7 +33,7 @@
 
     <string name="price_order">Prijs order: %.2f euro.</string>
     <string name="price_order_short">€%1$.2f</string>
-    
+
     <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
     <string name="title_activity_maps">Map</string>
 
@@ -61,6 +61,7 @@
     <string name="action_pay">pay</string>
     <string name="nothing_to_pay">Je moet eerst iets bestellen voor je kan betalen</string>
     <string name="google_map_app">com.google.android.apps.maps</string>
+    <string name="no_table_selected">Gelieve in te loggen op een tafel.</string>
 
     <!-- Discover -->
     <string name="searchbar_hint">Search restaurants</string>
