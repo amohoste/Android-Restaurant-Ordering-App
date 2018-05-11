@@ -55,7 +55,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        menuInfo = (MenuInfo) getArguments().getSerializable(ARG_CARD_MENU_INFO);
+        menuInfo = MenuInfo.getInstance();
         menuItem = (MenuItem) getArguments().getSerializable(ARG_CARD_MENU_ITEM);
         listener = (CardDialogClickListener) getArguments().getSerializable(ARG_CARD_MENU_LISTENER);
         menuItemPos = getArguments().getInt(ARG_CARD_MENU_POS);

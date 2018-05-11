@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,7 +48,7 @@ import java.util.HashMap;
  * Created by Dries on 26/03/2018.
  * Fragment waarin een menu wordt getoond.
  */
-public class MenuFragment extends Fragment implements Listener {
+public class MenuFragment extends Fragment implements Listener, View.OnClickListener {
     private static final String ARG_MENUINFO = "menuinfo";
     private static final int CANCEL_WINDOW = 5000;
     private static final String VIEW_TYPE_PREFERENCE = "VIEW_TYPE_PREFERENCE";
@@ -83,7 +84,7 @@ public class MenuFragment extends Fragment implements Listener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            menuInfo = (MenuInfo) savedInstanceState.getSerializable(ARG_MENUINFO);
+            menuInfo = MenuInfo.getInstance();
             menuInfo.getCurrentOrder().addListener(this);
         }
     }
@@ -99,7 +100,7 @@ public class MenuFragment extends Fragment implements Listener {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            menuInfo = (MenuInfo) getArguments().getSerializable(ARG_MENUINFO);
+            menuInfo = MenuInfo.getInstance();
             menuInfo.getCurrentOrder().addListener(this);
         }
     }
@@ -121,10 +122,11 @@ public class MenuFragment extends Fragment implements Listener {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_menu, container, false);
 
-
+        Log.e("MenuFragment", this.menuInfo.toString());
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_login_order_button);
 
         mCheckOrderButton = (Button) v.findViewById(R.id.menu_view_check_button);
+
 
         setCheckButtonProperties();
         loggedInCheck();
@@ -204,7 +206,6 @@ public class MenuFragment extends Fragment implements Listener {
     private void setTitle() {
         if (menuInfo != null) {
             String title = menuInfo.getRestaurant().getTitle();
-            Log.e("MenuFragment", getActivity().getActionBar() + "");
 
             if (getActivity() instanceof AppCompatActivity) {
                 AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -227,23 +228,20 @@ public class MenuFragment extends Fragment implements Listener {
 
     public void setCheckButtonProperties() {
 
-        mCheckOrderButton.setEnabled(menuInfo.getCurrentOrder().getOrderItems().size() > 0 );
-
-        mCheckOrderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =  new Intent(getContext(), NotesActivity.class);
-                intent.putExtra(NotesActivity.ARG_MENU_INFO, menuInfo);
-                startActivityForResult(intent, REQUEST_MENU_INFO);
-            }
-        });
+        mCheckOrderButton.setEnabled(this.menuInfo.getCurrentOrder().getOrderItems().size() > 0 );
+        mCheckOrderButton.setOnClickListener(this::onClick);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_MENU_INFO){
             if(resultCode == AppCompatActivity.RESULT_OK){
-                this.menuInfo = (MenuInfo) data.getSerializableExtra(NotesActivity.ARG_MENU_INFO);
+                this.menuInfo = MenuInfo.getInstance();
+
+                Log.e("ActivityResult", this.menuInfo.getListeners().size() + "" );
+                FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
+                Fragment fragment = getParentFragment().getChildFragmentManager().findFragmentById(R.id.container);
+                ft.detach(fragment).attach(fragment).commit();
             }
         }
 
@@ -418,6 +416,7 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void invalidated() {
         setCheckButtonProperties();
+        setOrderButtonProperties();
     }
 
     public MenuInfo getMenuInfo() {
@@ -452,5 +451,14 @@ public class MenuFragment extends Fragment implements Listener {
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void onClick(View v) {
+        MenuInfo target = this.menuInfo;
+        Log.e("MenuFragment size:", target.getCurrentOrder().getOrderItems().size() +"");
+        Intent intent =  new Intent(getContext(), NotesActivity.class);
+        intent.putExtra(NotesActivity.ARG_MENU_INFO, target);
+        startActivityForResult(intent, REQUEST_MENU_INFO);
     }
 }

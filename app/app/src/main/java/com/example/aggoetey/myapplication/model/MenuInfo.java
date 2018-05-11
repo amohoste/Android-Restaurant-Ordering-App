@@ -45,21 +45,35 @@ public class MenuInfo extends Model implements Serializable {
     private transient HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
 
+    private static final MenuInfo instance = new MenuInfo();
+
+
     //TODO: INITIALISE THIS FIELD WHEN LOGGING IN TO THE TABLE
     private String  tableID;
 
-    public MenuInfo(Restaurant restaurant, String tableID) {
-        this(restaurant);
-        this.tableID = tableID;
-    }
-
-    public MenuInfo(Restaurant restaurant) {
-        this.restaurant = restaurant;
-
+    private MenuInfo (){
         orderCountMap = new HashMap<>();
         mAdapters = new HashSet<>();
         currentOrder = Tab.getInstance().newOrder();
     }
+    public static MenuInfo getInstance() {
+        return instance;
+    }
+    
+    public MenuInfo setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+        orderCountMap = new HashMap<>();
+        mAdapters = new HashSet<>();
+        currentOrder = Tab.getInstance().newOrder();
+        return  instance;
+    }
+
+    public MenuInfo setTableID(String tableID) {
+        this.tableID = tableID;
+        return instance;
+    }
+
+
 
     public HashMap<String, Integer> getOrderCountMap() {
         return orderCountMap;

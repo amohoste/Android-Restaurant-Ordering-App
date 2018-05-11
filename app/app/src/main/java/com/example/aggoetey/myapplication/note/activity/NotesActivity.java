@@ -27,7 +27,7 @@ public class NotesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        menuInfo =  (MenuInfo) intent.getSerializableExtra(ARG_MENU_INFO);
+        menuInfo =  MenuInfo.getInstance();
         setContentView(R.layout.activity_notes);
         setupViewPager(menuInfo);
     }
@@ -62,5 +62,8 @@ public class NotesActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = findViewById(R.id.notes_sliding_tab);
         tabLayout.setupWithViewPager(viewPager,true);
+
+        Log.e("notes", menuInfo.getCurrentOrder().getOrderItems().size() +"");
+        pagerAdapter.notifyDataSetChanged();
     }
 }
