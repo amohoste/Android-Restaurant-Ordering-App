@@ -132,12 +132,18 @@ public class Tab extends Model implements Serializable {
 
     /**
      * Boolean geeft aan of succesvol uitgelogd is
+     *
      * @return
      */
-    public boolean logout(){
-        this.table=null;
-        fireInvalidationEvent();
-        return true;
+    public void logout() {
+        if (canLogout()) {
+            this.table = null;
+            fireInvalidationEvent();
+        }
+    }
+
+    public boolean canLogout() {
+        return this.orderedOrders.size() + this.receivedOrders.size() == 0;
     }
 
     public static Tab getInstance() {

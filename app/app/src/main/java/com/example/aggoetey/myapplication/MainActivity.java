@@ -18,14 +18,13 @@ import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.PayFragment;
-import com.example.aggoetey.myapplication.pay.TabFragment;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 
 
-public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener,TabFragment.LogoutListener, DiscoverContainerFragment.RestaurantSelectListener {
+public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener {
 
 
     private static final String DISCOVER_FRAGMENT_TAG = "DISCOVER_FRAGMENT_TAG";
@@ -164,9 +163,11 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {{
-            return;
-        }}
+        if (resultCode != RESULT_OK) {
+            {
+                return;
+            }
+        }
 
         if (requestCode == QRScannerActivity.QR_CODE_REQUEST) {
             if (data == null) {
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             Log.d("QR RESULTS", code);
             String[] ids = code.split(":");
             String restaurant_id = ids[0];
-            String table_id =  ids.length == 2 ? ids[1] : null;
+            String table_id = ids.length == 2 ? ids[1] : null;
 
 
             // TODO SITT: move this validation check to QRActivity
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
 
             if (restaurant == null) {
                 Toast.makeText(this, R.string.qr_code_not_recognized, Toast.LENGTH_SHORT)
-                                                                                            .show();
+                        .show();
             } else {
                 // Load restaurant into MenuInfo
                 onRestaurantSelect(new MenuInfo(restaurant, table_id));
@@ -195,8 +196,4 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
         }
     }
 
-    @Override
-    public void onLogout() {
-        Tab.getInstance().logout();
-    }
 }
