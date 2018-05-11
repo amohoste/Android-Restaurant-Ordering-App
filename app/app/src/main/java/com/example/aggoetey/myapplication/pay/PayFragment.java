@@ -11,7 +11,7 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.orderdetail.NoOrderSelectedFragment;
 
-public class PayFragment extends Fragment {
+public class PayFragment extends Fragment{
 
     public PayFragment() {
     }
@@ -48,4 +48,5 @@ public class PayFragment extends Fragment {
     public static PayFragment newInstance() {
         return new PayFragment();
     }
+
 }

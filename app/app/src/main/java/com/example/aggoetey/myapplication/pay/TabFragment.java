@@ -1,6 +1,8 @@
 package com.example.aggoetey.myapplication.pay;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -32,11 +34,28 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     private MenuItem logout_action;
     private TabLayout mTabLayout;
 
+    private LogoutListener logoutListener;
+
     private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
     private static final String LOGOUT_CHOICE_DIALOG_FRAGMENT_TAG = "LOGOUT";
 
     public TabFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity){
+            logoutListener = (LogoutListener) getActivity();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        logoutListener = null;
     }
 
 
@@ -132,7 +151,12 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     public void onLogoutChoiceSelection(boolean choice) {
         if (choice) {
             Tab.getInstance().logout();
+            logoutListener.loggedOut();
         }
+    }
+
+    public interface LogoutListener {
+        void loggedOut();
     }
 
     public static class TabPageFragmentAdapter extends FragmentPagerAdapter {
