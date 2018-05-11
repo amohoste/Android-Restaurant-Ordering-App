@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -53,19 +56,22 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
 
         private Tab.Order order;
 
-        private TextView number;
+        private TextView time;
         private TextView price;
 
         public ViewHolder(final LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.order_item, parent, false));
             itemView.setOnClickListener(this);
-            number = (TextView) itemView.findViewById(R.id.title);
+            time = (TextView) itemView.findViewById(R.id.title);
             price = (TextView) itemView.findViewById(R.id.price);
         }
 
         public void bind(Tab.Order order) {
             this.order = order;
-            number.setText(number.getContext().getString(R.string.tab_order_position, this.order.getOrderNumber()));
+            DateFormat format = new SimpleDateFormat("hh:mm");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(order.getTime().getTime() * 1000);
+            time.setText(format.format(order.getTime()));
             price.setText(price.getContext().getString(R.string.price_order_short, this.order.getPrice()));
         }
 

@@ -12,10 +12,11 @@ public class Table implements Serializable{
 
     // bv tafel 13, tafel aan het raam, ronde tafel
     private String nickName;
-    private Tab tab;
+    private String tableId;
 
-    public Table(String nickName) {
+    public Table(String nickName, String tableId) {
         this.nickName = nickName;
+        this.tableId = tableId;
     }
 
     public String getNickName() {
@@ -26,7 +27,11 @@ public class Table implements Serializable{
         this.nickName = nickName;
     }
 
-    public Tab getTab() {
-        return tab;
+    public String getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
 }

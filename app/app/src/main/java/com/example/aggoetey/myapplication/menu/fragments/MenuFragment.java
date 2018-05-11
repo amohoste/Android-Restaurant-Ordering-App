@@ -1,7 +1,6 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,8 +27,8 @@ import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter
 import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.model.Table;
 import com.example.aggoetey.myapplication.model.ViewType;
-import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -69,6 +68,9 @@ public class MenuFragment extends Fragment implements Listener {
 
     public static MenuFragment newInstance(MenuInfo menuInfo) {
         Log.d("MENUFRAGMENT", "new");
+        if(menuInfo.getRestaurant() != null){
+            Tab.getInstance().setRestaurant(menuInfo.getRestaurant());
+        }
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_MENUINFO, menuInfo);
@@ -106,9 +108,9 @@ public class MenuFragment extends Fragment implements Listener {
                              Bundle savedInstanceState) {
 
         //Get view type from shared preferences
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
-            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE,  viewType.getViewTypeString());
+            String viewTypeString = sharedPreferences.getString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
             viewType = ViewType.get(viewTypeString);
         }
 
@@ -147,6 +149,8 @@ public class MenuFragment extends Fragment implements Listener {
         if (menuInfo.getTableID() == null) {    //user not logged in
             setLogInButton();
         } else {
+            Tab.getInstance().setRestaurant(menuInfo.getRestaurant());
+            Tab.getInstance().setTable(new Table("Tafel voor de koning", menuInfo.getTableID()));
             setOrderButton();
         }
     }
@@ -212,9 +216,9 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void onStop() {
         super.onStop();
-        if(getActivity() != null ){
-            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE );
-            if(sharedPref != null) {
+        if (getActivity() != null) {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences(VIEW_TYPE_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            if (sharedPref != null) {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(VIEW_TYPE_PREFERENCE, viewType.getViewTypeString());
                 editor.apply();
