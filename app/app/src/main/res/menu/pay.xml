@@ -9,5 +9,11 @@
         android:visible="true"
         app:showAsAction="always"/>
 
+    <item android:id="@+id/action_pay_logout"
+        android:icon="@android:drawable/sym_call_missed"
+        android:visible="true"
+        app:showAsAction="always"
+        android:title="@string/action_pay" />
+
 
 </menu>

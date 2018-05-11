@@ -127,6 +127,17 @@ public class Tab extends Model implements Serializable {
 
     public void setTable(Table table) {
         this.table = table;
+        fireInvalidationEvent();
+    }
+
+    /**
+     * Boolean geeft aan of succesvol uitgelogd is
+     * @return
+     */
+    public boolean logout(){
+        this.table=null;
+        fireInvalidationEvent();
+        return true;
     }
 
     public static Tab getInstance() {

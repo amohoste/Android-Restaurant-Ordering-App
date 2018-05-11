@@ -18,15 +18,14 @@ import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.PayFragment;
-import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
+import com.example.aggoetey.myapplication.pay.TabFragment;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
+import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 
-public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener {
+public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener,TabFragment.LogoutListener, DiscoverContainerFragment.RestaurantSelectListener {
 
 
     private static final String DISCOVER_FRAGMENT_TAG = "DISCOVER_FRAGMENT_TAG";
@@ -194,5 +193,10 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
                 onRestaurantSelect(new MenuInfo(restaurant, table_id));
             }
         }
+    }
+
+    @Override
+    public void onLogout() {
+        Tab.getInstance().logout();
     }
 }

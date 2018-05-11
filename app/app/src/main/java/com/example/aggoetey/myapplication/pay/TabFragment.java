@@ -1,6 +1,8 @@
 package com.example.aggoetey.myapplication.pay;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -24,17 +26,39 @@ import com.example.aggoetey.myapplication.pay.tabfragmentpage.PayedTabPageFragme
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.ReceivedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 
-public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener, Listener {
+public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener,Listener {
 
     private ViewPager mViewPager;
     private TabPageFragmentAdapter mTabPageFragmentAdapter;
     private MenuItem pay_action;
+    private MenuItem logout_action;
     private TabLayout mTabLayout;
 
     private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
 
+    private LogoutListener logoutListener;
+
+    public interface LogoutListener{
+        void onLogout();
+    }
+
     public TabFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity){
+            logoutListener = (LogoutListener) getActivity();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        logoutListener = null;
     }
 
 
@@ -76,14 +100,19 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         menuInflater.inflate(R.menu.pay, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
         pay_action = menu.findItem(R.id.action_pay_tab);
+        logout_action = menu.findItem(R.id.action_pay_logout);
         invalidated();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_pay_tab:
                 payOrders();
+                return true;
+            case R.id.action_pay_logout:
+                logoutListener.onLogout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
