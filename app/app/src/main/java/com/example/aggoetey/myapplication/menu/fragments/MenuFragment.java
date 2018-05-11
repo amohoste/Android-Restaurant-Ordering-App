@@ -237,14 +237,10 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         if(requestCode == REQUEST_MENU_INFO){
             if(resultCode == AppCompatActivity.RESULT_OK){
                 this.menuInfo = MenuInfo.getInstance();
-
-                Log.e("ActivityResult", this.menuInfo.getListeners().size() + "" );
-                FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
-                Fragment fragment = getParentFragment().getChildFragmentManager().findFragmentById(R.id.container);
-                ft.detach(fragment).attach(fragment).commit();
+                this.menuInfo.removeListener(this);
+                this.menuInfo.addListener(this);
             }
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 

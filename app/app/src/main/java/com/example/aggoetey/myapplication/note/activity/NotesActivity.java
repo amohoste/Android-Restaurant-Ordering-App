@@ -25,8 +25,6 @@ public class NotesActivity extends AppCompatActivity {
 
         if(getSupportActionBar() != null)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Intent intent = getIntent();
         menuInfo =  MenuInfo.getInstance();
         setContentView(R.layout.activity_notes);
         setupViewPager(menuInfo);
