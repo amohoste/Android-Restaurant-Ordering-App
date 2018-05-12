@@ -60,7 +60,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_pay">pay</string>
     <string name="nothing_to_pay">Je moet eerst iets bestellen voor je kan betalen</string>
+    <string name="check_order">Check Order</string>
+    <string name="confirm_order">Confirm Order</string>
     <string name="google_map_app">com.google.android.apps.maps</string>
+    <string name="notes_description">It sucks</string>
+    <string name="note_number_tag">#</string>
+    <string name="note_parent_amount">Amount:</string>
+    <string name="note_group_text">Order group:</string>
     <string name="no_table_selected">Gelieve in te loggen op een tafel.</string>
 
     <!-- Discover -->
