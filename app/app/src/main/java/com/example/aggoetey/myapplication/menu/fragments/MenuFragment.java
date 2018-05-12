@@ -192,7 +192,6 @@ public class MenuFragment extends Fragment implements Listener {
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
                     handler.postDelayed(sendAfterTime, CANCEL_WINDOW);
-                    handler.removeCallbacks(sendAfterTime);
                 }
             }
         });
