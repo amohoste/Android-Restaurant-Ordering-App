@@ -58,6 +58,10 @@ public class MenuFragment extends Fragment implements Listener {
     private TextView mMenuRestaurantNameView;
     private Menu optionsMenu;
     private Button mMenuOrderButton;
+
+    private Handler handler = new Handler();
+    private SendAfterTime sendAfterTime = new SendAfterTime();
+
     private View v;
 
     private static ViewType viewType = ViewType.LIST_VIEW;
@@ -173,24 +177,22 @@ public class MenuFragment extends Fragment implements Listener {
         setOrderButtonProperties();
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Toast gecancelled = Toast.makeText(getContext(), "Order is gecancelled", Toast.LENGTH_SHORT);
                 Toast confirm = Toast.makeText(getContext(), "Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen", Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
                     mMenuOrderButton.setText("Order");
+                    sendAfterTime.cancel = true;
+                    menuInfo.orderCommitted();
                     confirm.cancel();
                     gecancelled.show();
                 } else {
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendOrder();
-                        }
-                    }, CANCEL_WINDOW);
+                    handler.postDelayed(sendAfterTime, CANCEL_WINDOW);
+                    handler.removeCallbacks(sendAfterTime);
                 }
             }
         });
@@ -401,5 +403,16 @@ public class MenuFragment extends Fragment implements Listener {
                 });
             }
         }).start();
+    }
+
+    class SendAfterTime implements Runnable {
+        boolean cancel;
+
+        @Override
+        public void run() {
+            if (!cancel) {
+                sendOrder();
+            }
+        }
     }
 }
