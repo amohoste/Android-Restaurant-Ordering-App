@@ -62,6 +62,10 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     private Menu optionsMenu;
     private Button mMenuOrderButton;
     private Button mCheckOrderButton;
+
+    private Handler handler = new Handler();
+    private SendAfterTime sendAfterTime = new SendAfterTime();
+
     private View v;
 
     private static ViewType viewType = ViewType.LIST_VIEW;
@@ -184,24 +188,22 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         // MenuFragment order button action
 
         mMenuOrderButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Toast gecancelled = Toast.makeText(getContext(), "Order is gecancelled", Toast.LENGTH_SHORT);
                 Toast confirm = Toast.makeText(getContext(), "Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen", Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
                     mMenuOrderButton.setText("Order");
+                    sendAfterTime.cancel = true;
+                    menuInfo.orderCommitted();
                     confirm.cancel();
                     gecancelled.show();
                 } else {
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendOrder();
-                        }
-                    }, CANCEL_WINDOW);
+                    handler.postDelayed(sendAfterTime, CANCEL_WINDOW);
+                    handler.removeCallbacks(sendAfterTime);
                 }
             }
         });
@@ -460,5 +462,16 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         Intent intent =  new Intent(getContext(), NotesActivity.class);
         intent.putExtra(NotesActivity.ARG_MENU_INFO, target);
         startActivityForResult(intent, REQUEST_MENU_INFO);
+      
+    }
+    class SendAfterTime implements Runnable {
+        boolean cancel;
+
+        @Override
+        public void run() {
+            if (!cancel) {
+                sendOrder();
+            }
+        }
     }
 }

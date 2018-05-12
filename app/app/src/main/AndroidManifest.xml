@@ -78,7 +78,6 @@
         <activity android:name=".qrscanner.activity.QRScannerActivity"
             android:screenOrientation="portrait"
             android:label="QR Scanner"
-            android:parentActivityName=".MainActivity"
             />
     </application>
 
