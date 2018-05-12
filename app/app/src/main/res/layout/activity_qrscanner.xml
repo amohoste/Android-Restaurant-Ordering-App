@@ -2,38 +2,56 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/qr_constraint_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/qr_constraint_container"
 
     tools:context="com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity">
-        <android.support.constraint.ConstraintLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:paddingBottom="@dimen/qr_scanner_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingBottom="@dimen/qr_scanner_margin">
+
         <TextView
             android:id="@+id/qr_scanner_title"
             android:layout_width="wrap_content"
-            android:layout_height= "wrap_content"
-            android:textSize="@dimen/qr_scanner_textSize"
+            android:layout_height="wrap_content"
             android:padding="@dimen/qr_scanner_margin"
-            app:layout_constraintBottom_toTopOf="@id/qr_surface_view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/qr_hello"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/qr_scanner_textSize"
             android:textStyle="bold"
-            android:text="@string/qr_hello"/>
+            app:layout_constraintBottom_toTopOf="@id/qr_surface_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/qr_scanner_permission_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/qr_scanner_margin"
+            android:text="@string/qr_no_camera_permission"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/qr_scanner_textSize"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/qr_surface_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <SurfaceView
             android:id="@+id/qr_surface_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/qr_scanner_height"
-            android:layout_marginStart="@dimen/qr_scanner_margin"
             android:layout_marginEnd="@dimen/qr_scanner_margin"
-            app:layout_constraintTop_toBottomOf="@id/qr_scanner_title"
+            android:layout_marginStart="@dimen/qr_scanner_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qr_scanner_title"
 
             />
 
@@ -41,10 +59,11 @@
             android:id="@+id/qr_code_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/qr_code_edit_label"
             android:layout_margin="@dimen/qr_scanner_margin"
+            android:hint="@string/qr_code_edit_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/qr_surface_view" />
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/qr_code_edit_btn"
             android:layout_width="wrap_content"
@@ -54,5 +73,5 @@
             app:layout_constraintTop_toBottomOf="@+id/qr_code_edit"
 
             />
-        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>

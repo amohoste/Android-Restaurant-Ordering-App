@@ -95,7 +95,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         final ProgressBar progressBar = (ProgressBar) holder.progressbar;
 
         // Load restaurant image if existent
-        if (restaurant.getPictureReference() != null && restaurant.getPictureReference() != "") {
+        if (restaurant.getPictureReference() != null && !restaurant.getPictureReference().equals("")) {
             Glide.with(context).load(BASE_URL + restaurant.getPictureReference() + "&key=" + API_KEY)
                     .listener(new RequestListener<Drawable>() {
                         @Override
@@ -186,10 +186,10 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 if (openingHours.get(day) != null) {
                     hoursTextView.setText(openingHours.get(day).get("open") + " - " + openingHours.get(day).get("close"));
                 } else {
-                    hoursTextView.setText("Closed");
+                    hoursTextView.setText(R.string.restaurant_closed);
                 }
             } else {
-                hoursTextView.setText("Hours not known");
+                hoursTextView.setText(R.string.restaurant_hours_not_known);
             }
 
             placetype.setText(PlacetypeStringifier.stringify(restaurant.getType()));
