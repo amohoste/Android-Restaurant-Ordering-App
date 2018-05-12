@@ -139,7 +139,8 @@ public class Tab extends Model implements Serializable {
      * @return
      */
     public void logout() {
-        if (canLogout()) {
+        // als table al null is is er uitgelogd
+        if (canLogout() && table != null) {
             this.payedOrders.clear();
             deleteOrdersFromServer(getTableCollection(Collection.PAYED));
             this.table = null;

@@ -149,6 +149,13 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
 
     @Override
     public void onRestaurantSelect(MenuInfo menuInfo) {
+        if(Tab.getInstance().canLogout()){
+            Tab.getInstance().logout();
+        } else {
+            Toast.makeText(getApplicationContext(),R.string.open_bill, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         menuInfoChanged = menuInfo != this.menuInfo;
         this.menuInfo = menuInfo;
         findViewById(R.id.action_menu).performClick();
