@@ -356,6 +356,7 @@ public class MenuFragment extends Fragment implements Listener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
     }
 
     @Override
@@ -363,6 +364,7 @@ public class MenuFragment extends Fragment implements Listener {
         super.onDetach();
         pagerAdapter = null;
         menuInfo.getCurrentOrder().removeListener(this);
+        Log.d("MENUFRAGMENT", "detached");
     }
 
     @Override
@@ -413,5 +415,9 @@ public class MenuFragment extends Fragment implements Listener {
                 sendOrder();
             }
         }
+    }
+
+    public Button getmMenuOrderButton() {
+        return mMenuOrderButton;
     }
 }
