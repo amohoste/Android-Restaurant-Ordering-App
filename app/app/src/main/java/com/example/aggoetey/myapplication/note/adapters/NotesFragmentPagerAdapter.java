@@ -21,7 +21,7 @@ public class NotesFragmentPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         this.menuInfo = menuInfo;
 
-        categories = new String[]{"Pending", "Ordered"};
+        categories = new String[]{"Pending"};
 
     }
 
