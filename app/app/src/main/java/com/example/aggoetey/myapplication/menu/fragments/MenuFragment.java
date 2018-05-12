@@ -1,14 +1,13 @@
 package com.example.aggoetey.myapplication.menu.fragments;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,7 +32,6 @@ import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.Table;
 import com.example.aggoetey.myapplication.model.ViewType;
 import com.example.aggoetey.myapplication.note.activity.NotesActivity;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
