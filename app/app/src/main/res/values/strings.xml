@@ -33,7 +33,7 @@
 
     <string name="price_order">Prijs order: %.2f euro.</string>
     <string name="price_order_short">€%1$.2f</string>
-    
+
     <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
     <string name="title_activity_maps">Map</string>
 
@@ -67,5 +67,19 @@
     <string name="note_number_tag">#</string>
     <string name="note_parent_amount">Amount:</string>
     <string name="note_group_text">Order group:</string>
+    <string name="no_table_selected">Gelieve in te loggen op een tafel.</string>
+
+    <!-- Discover -->
+    <string name="searchbar_hint">Search restaurants</string>
+    <string name="filter_sort_method_title">Sort list results by</string>
+    <string name="filter_sort_method_distance">Distance</string>
+    <string name="filter_sort_method_alphabetical">Alphabetical</string>
+    <string name="filter_min_rating_title">Rating at least</string>
+    <string name="filter_filter_title">Filter</string>
+    <string name="filter_open_today">Open today</string>
+    <string name="filter_distance">Distance</string>
+    <string name="filter_confirm">CONFIRM</string>
+    <string name="restaurant_closed">Closed</string>
+    <string name="restaurant_hours_not_known">Hours not known</string>
 
 </resources>

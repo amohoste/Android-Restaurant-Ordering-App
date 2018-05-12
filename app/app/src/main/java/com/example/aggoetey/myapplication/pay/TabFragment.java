@@ -24,14 +24,12 @@ import com.example.aggoetey.myapplication.pay.tabfragmentpage.PayedTabPageFragme
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.ReceivedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener, Listener {
 
     private ViewPager mViewPager;
     private TabPageFragmentAdapter mTabPageFragmentAdapter;
     private MenuItem pay_action;
+    private TabLayout mTabLayout;
 
     private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
 
@@ -43,12 +41,8 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     @Override
     public void onPayChoiceSelection(int i) {
         payConfirmation(i);
-
-        List<Tab.Order> orderedOrders = new ArrayList<>(Tab.getInstance().getOrderedOrders());
-        orderedOrders.addAll(Tab.getInstance().getReceivedOrders());
-        for (Tab.Order orderedOrder : orderedOrders) {
-            Tab.getInstance().payOrder(orderedOrder);
-        }
+        Tab.getInstance().payAllOrders();
+        Tab.getInstance().loadAllCollections();
     }
 
     private void payConfirmation(int i) {
@@ -66,12 +60,13 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         mViewPager = view.findViewById(R.id.tab_page_viewpager);
         mViewPager.setAdapter(mTabPageFragmentAdapter);
 
-        TabLayout tabs = view.findViewById(R.id.tab_page_tabs);
-        tabs.setupWithViewPager(mViewPager);
+        mTabLayout = view.findViewById(R.id.tab_page_tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
         Tab.getInstance().addListener(this);
+        Tab.getInstance().loadAllCollections();
 
         return view;
     }
@@ -113,6 +108,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
 
     @Override
     public void invalidated() {
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     public static class TabPageFragmentAdapter extends FragmentPagerAdapter {
@@ -162,7 +158,20 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            return Division.values()[position].getTitle();
+            Division d = Division.values()[position];
+            int amount = 0;
+            switch (d){
+                case PAYED:
+                    amount = Tab.getInstance().getPayedOrders().size();
+                    break;
+                case RECEIVED:
+                    amount = Tab.getInstance().getReceivedOrders().size();
+                    break;
+                case ORDERED:
+                    amount = Tab.getInstance().getOrderedOrders().size();
+                    break;
+            }
+            return String.format("%s (%d)",Division.values()[position].getTitle(), amount);
         }
     }
 

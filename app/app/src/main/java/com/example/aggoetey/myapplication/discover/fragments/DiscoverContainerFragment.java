@@ -321,8 +321,7 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
                 helper.setLastQuery(newQuery);
-                if (!oldQuery.equals("") && newQuery.equals("")) {
-                    mSearchView.clearSuggestions();
+
                 if (!oldQuery.equals("") && newQuery.equals("") || clicksuggestion) {
                     mSearchView.clearSuggestions();
                     clicksuggestion = false;
@@ -336,7 +335,6 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
                                 }
                             });
                 }
-            }
         }});
 
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {

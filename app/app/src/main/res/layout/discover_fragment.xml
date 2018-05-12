@@ -46,7 +46,7 @@
         app:floatingSearch_searchBarMarginLeft="5dp"
         app:floatingSearch_searchBarMarginRight="5dp"
         app:floatingSearch_searchBarMarginTop="5dp"
-        app:floatingSearch_searchHint="Search restaurants"
+        app:floatingSearch_searchHint="@string/searchbar_hint"
         app:floatingSearch_suggestionsListAnimDuration="250"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
