@@ -253,7 +253,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     }
 
     public void setOrderButtonProperties() {
-        if (Tab.getInstance().getTable().getTableId() != null) {
+        if (isUserLoggedIn()) {
             if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
                 mMenuOrderButton.setText(String.format("%s (€%.2f)",
                         getResources().getString(R.string.menu_view_order_button), menuInfo.getCurrentOrder().getPrice()));
@@ -263,6 +263,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                 mMenuOrderButton.setEnabled(false);
             }
         }
+
     }
 
     @Override
@@ -348,6 +349,10 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     }
 
+    private boolean isUserLoggedIn() {
+        return Tab.getInstance().getTable() != null && Tab.getInstance().getTable().getTableId() != null;
+    }
+
     /**
      * First need to get WaiterCall-array before we can add a new WaiterCall
      * TODO: change tableID when Sitt updates the model for the "online" version
@@ -355,6 +360,11 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
      * TODO: check whether the restaurant supports this function
      */
     public void callWaiter() {
+        if (!isUserLoggedIn()) {
+            Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.need_logged_in), Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
         final Toast try_toast = Toast.makeText(getContext(), getResources()
                 .getString(R.string.waiter_call_try), Toast.LENGTH_SHORT);
         try_toast.show();
