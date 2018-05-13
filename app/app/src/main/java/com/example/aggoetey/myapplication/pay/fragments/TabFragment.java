@@ -107,6 +107,13 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         invalidated();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Tab.getInstance().removeListener(this);
+        Tab.getInstance().getTable().removeListener(this);
+    }
+
     private void logout() {
         if (Tab.getInstance().canLogout()) {
             FragmentManager fr = getChildFragmentManager();
