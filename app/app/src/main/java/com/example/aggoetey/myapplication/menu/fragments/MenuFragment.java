@@ -183,6 +183,9 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     }
 
     public void setOrderButton() {
+        // If this gets called it means that the order has been canceled or completed
+        menuInfo.setOrderSendInProgress(false);
+
         // Order button action
         setOrderButtonProperties();
 
@@ -195,11 +198,12 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                 Toast gecancelled = Toast.makeText(getContext(), R.string.cancelled_order_toast, Toast.LENGTH_SHORT);
                 Toast confirm = Toast.makeText(getContext(), R.string.order_confirm_toast, Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
-                    mMenuOrderButton.setText("Order");
+                    setOrderButton();
                     sendAfterTime.cancel = true;
                     confirm.cancel();
                     gecancelled.show();
                 } else {
+                    menuInfo.setOrderSendInProgress(true);
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
                     handler.postDelayed(sendAfterTime, CANCEL_WINDOW);
