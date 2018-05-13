@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +35,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     private MenuItem pay_action;
     private MenuItem logout_action;
     private TabLayout mTabLayout;
+    private ActionBar mActionBar;
 
     private LogoutListener logoutListener;
 
@@ -79,10 +82,12 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
 
         mTabPageFragmentAdapter = new TabPageFragmentAdapter(getChildFragmentManager());
         mViewPager = view.findViewById(R.id.tab_page_viewpager);
-        mViewPager.setAdapter(mTabPageFragmentAdapter);
-
         mTabLayout = view.findViewById(R.id.tab_page_tabs);
+        mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setAdapter(mTabPageFragmentAdapter);
+        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
 
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
