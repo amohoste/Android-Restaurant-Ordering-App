@@ -20,6 +20,7 @@ public class PayFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, Bundle savedInstanceState) {
         View v;
+        Fragment f;
         if (Tab.getInstance().getRestaurant() == null) {
             v = inflater.inflate(R.layout.fragment_no_menu_selected, parent, false);
         } else if (Tab.getInstance().getTable() == null) {
