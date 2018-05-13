@@ -1,4 +1,6 @@
 # project-1718-groep-1
+## Documentatie
+- [server](https://docs.google.com/document/d/1XegDbjeTi-B0YAV_VGuK0e_phqif3KN9gIC7FkBcPWk/edit?usp=sharing)
 ## Issue met Template
 - [task](https://github.ugent.be/SELab1/project-1718-groep-1/issues/new?template=task.md)
 - [User Story](https://github.ugent.be/SELab1/project-1718-groep-1/issues/new?template=user-story.md)
