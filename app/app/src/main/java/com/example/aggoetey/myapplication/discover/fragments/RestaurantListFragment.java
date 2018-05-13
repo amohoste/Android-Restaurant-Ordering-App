@@ -111,7 +111,7 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         DiscoverContainerFragment parent = (DiscoverContainerFragment) getParentFragment();
         DiscoverContainerFragment.RestaurantSelectListener mListener =  parent.getSelectListener();
         if (mListener != null) {
-            parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
+            parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().setRestaurant(restaurant));
         }
         // Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
     }

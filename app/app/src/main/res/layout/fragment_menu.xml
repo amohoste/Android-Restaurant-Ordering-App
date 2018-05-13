@@ -12,15 +12,13 @@
         android:layout_height="40dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/menu_restaurant_name_view"
+        <Button
+            android:id="@+id/menu_view_check_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:text="**RESTAURANT NAME**"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:enabled="false"
+            android:text="@string/check_order" />
 
         <Button
             android:id="@+id/menu_view_login_order_button"
@@ -28,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:enabled="false"
-            android:text="Order"
+            android:text="@string/confirm_order"
             android:visibility="visible" />
 
     </LinearLayout>
