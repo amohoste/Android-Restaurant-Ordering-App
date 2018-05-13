@@ -192,8 +192,8 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
             @Override
             public void onClick(View view) {
-                Toast gecancelled = Toast.makeText(getContext(), "Order is gecancelled", Toast.LENGTH_SHORT);
-                Toast confirm = Toast.makeText(getContext(), "Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen", Toast.LENGTH_SHORT);
+                Toast gecancelled = Toast.makeText(getContext(), R.string.cancelled_order_toast, Toast.LENGTH_SHORT);
+                Toast confirm = Toast.makeText(getContext(), R.string.order_confirm_toast, Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
                     mMenuOrderButton.setText("Order");
                     sendAfterTime.cancel = true;
