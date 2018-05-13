@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Menu</string>
+    <string name="text_menu_discover">Ontdek</string>
+    <string name="text_menu_pay">Betaal</string>
+    <string name="text_menu_menu">Menu</string>
+    <string name="discover_text">Hier kan je ontdekken wat er allemaal te doen is in de wereld.</string>
+    <string name="menu_text">Bekijk hier een mooi menu.</string>
+    <string name="pay_text">Bekijk hier wat je allemaal al besteld hebt.</string>
+    <string name="title_menuitem_list">MenuItems</string>
+    <string name="title_menuitem_detail">MenuItem Detail</string>
+    <string name="no_restaurant_selected">Gelieve een restaurant te selecteren in de discover tab.</string>
+    <string name="menu_loading">Menu aan\'t laden...</string>
+    <string name="qr_code_not_recognized">Onherkenbare code!</string>
+
+    <string name="menu_view_login_button">Log in</string>
+    <string name="menu_view_order_button">Order</string>
+
+    <string name="waiter_call_try">Ober op weg...</string>
+    <string name="waiter_call_success">Ober werd met succes aangekondigd!</string>
+    <string name="waiter_call_failure">Ober onbereikbaar, gelieve opnieuw te proberen!</string>
+
+    <string name="order_send_try">Order verzenden...</string>
+    <string name="order_send_success">Order succesvol verzonden!</string>
+    <string name="order_send_failure">Order kon niet verzonden worden, gelieve opnieuw te proberen!</string>
+
+    <string name="tab_order_position">Order # %1$d</string>
+    <string name="tab_view_pay">Betaal</string>
+
+    <string name="total_price_payed">Betaalde items: %1$.2f euro.</string>
+    <string name="total_price_received">Ontvangen items: %1$.2f euro.</string>
+    <string name="total_price_ordered">Bestelde items: %1$.2f euro.</string>
+
+
+    <string name="price_order">Prijs order: %.2f euro.</string>
+    <string name="price_order_short">€%1$.2f</string>
+
+    <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="grid_view">Grid view</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus a ante malesuada, laoreet quam at, cursus ligula. Sed placerat, turpis eget tincidunt egestas, ipsum nunc dignissim nulla, ac porta lacus enim id velit. Vivamus pretium ornare lorem vel lobortis. Maecenas ac purus quis enim egestas laoreet.</string>
+    <string name="menu_image_description">Image of dish</string>
+    <string name="menu_item_name">Dish Name</string>
+    <string name="card_more">more</string>
+    <string name="add_note_button">Add Note</string>
+    <string name="list_view">List View</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="paychoicedialog_title">Op welke manier wenst u te betalen?</string>
+    <string name="paychoiceconfirmation">Je hebt betaald met %1$s</string>
+    <string name="qr_hello">Scan de QR code</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="qr_code_edit_label">Restaurant code</string>
+    <string name="qr_code_edit_btn">Confirm</string>
+    <string name="qr_no_camera_permission">Camera Permissie Nodig</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_pay">pay</string>
+    <string name="nothing_to_pay">Je moet eerst iets bestellen voor je kan betalen</string>
+    <string name="check_order">Check Order</string>
+    <string name="confirm_order">Confirm Order</string>
+    <string name="google_map_app">com.google.android.apps.maps</string>
+    <string name="notes_description">It sucks</string>
+    <string name="note_number_tag">#</string>
+    <string name="note_parent_amount">Aantal:</string>
+    <string name="note_group_text">Order group:</string>
+    <string name="no_table_selected">Gelieve in te loggen op een tafel.</string>
+
+    <!-- Discover -->
+    <string name="searchbar_hint">Zoek restaurants</string>
+    <string name="filter_sort_method_title">Sorteer list results met</string>
+    <string name="filter_sort_method_distance">Afstand</string>
+    <string name="filter_sort_method_alphabetical">Alphabetisch</string>
+    <string name="filter_min_rating_title">Minimum rating</string>
+    <string name="filter_filter_title">Filtreer</string>
+    <string name="filter_open_today">Open vandaag</string>
+    <string name="filter_distance">Afstand</string>
+    <string name="filter_confirm">Bevestig</string>
+    <string name="restaurant_closed">Gesloten</string>
+    <string name="restaurant_hours_not_known">Uren onbekend</string>
+    <string name="cancelled_order_toast">Order is gecancelled</string>
+    <string name="order_confirm_toast">Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen.</string>
+    <string name="cant_logout">Kan niet uitloggen</string>
+    <string name="logout_confirmation">Bent u zeker dat u wil uitloggen?</string>
+    <string name="oke">Oke</string>
+    <string name="open_bill">Je hebt nog een rekening die je moet betalen! Je kan nog niet uitloggen.</string>
+
+</resources>

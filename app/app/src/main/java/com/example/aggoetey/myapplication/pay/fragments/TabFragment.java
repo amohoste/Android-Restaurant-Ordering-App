@@ -168,7 +168,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         public enum Division {
             ORDERED("Ordered"),
             RECEIVED("Received"),
-            PAYED("Payed");
+            PAYED("Paid");
 
             private final String title;
 
