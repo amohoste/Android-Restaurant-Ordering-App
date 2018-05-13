@@ -403,9 +403,10 @@ public class DiscoverContainerFragment extends Fragment implements DiscoverFragm
             @Override
             public void onClearSearchClicked() {
                 if (currentFragmentId != -1 && mRestaurantProvider != null) {
-                    if (currentFragmentId == MAPS_FRAGMENT_ID) {
+                    if (mapsFragment != null) {
                         mapsFragment.onSearchResult(mRestaurantProvider.getRestaurants(), true);
-                    } else {
+                    }
+                    if (listFragment != null) {
                         listFragment.onSearchResult(mRestaurantProvider.getRestaurants(), true);
                     }
                 }
