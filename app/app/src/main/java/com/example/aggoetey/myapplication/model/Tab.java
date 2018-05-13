@@ -125,7 +125,7 @@ public class Tab extends Model implements Serializable {
     }
 
     public Table getTable() {
-        return table;
+        return this.table;
     }
 
     public void setTable(Table table) {
@@ -279,7 +279,6 @@ public class Tab extends Model implements Serializable {
         receivedOrders.add(order);
         fireInvalidationEvent();
     }
-
 
     public void loadAllCollections() {
         this.loadOrderSet(Collection.RECEIVED);

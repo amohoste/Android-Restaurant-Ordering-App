@@ -92,6 +92,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
         Tab.getInstance().addListener(this);
+        Tab.getInstance().getTable().addListener(this);
         Tab.getInstance().loadAllCollections();
 
         return view;
@@ -104,6 +105,13 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         pay_action = menu.findItem(R.id.action_pay_tab);
         logout_action = menu.findItem(R.id.action_pay_logout);
         invalidated();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Tab.getInstance().removeListener(this);
+        Tab.getInstance().getTable().removeListener(this);
     }
 
     private void logout() {
@@ -150,6 +158,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     @Override
     public void invalidated() {
         mTabLayout.setupWithViewPager(mViewPager);
+        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
     }
 
     @Override

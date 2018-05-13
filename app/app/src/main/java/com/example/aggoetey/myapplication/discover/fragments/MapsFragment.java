@@ -375,8 +375,7 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
     public void onCardClick(Restaurant restaurant) {
         DiscoverContainerFragment parent = (DiscoverContainerFragment) getParentFragment();
         DiscoverContainerFragment.RestaurantSelectListener mListener = parent.getSelectListener();
-        if (mListener != null) {
-
+        if (mListener != null && Tab.getInstance().canLogout()) {
             Tab.getInstance().setRestaurant(restaurant);
             parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().reset());
         }
