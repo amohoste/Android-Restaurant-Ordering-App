@@ -218,7 +218,9 @@ public class Tab extends Model implements Serializable {
 
                         menuInfo.orderCommitted();
 
-                        menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
+                        if (menuFragment.isVisible()) {
+                            menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
+                        }
 
                         orderedOrders.add(order); //zo lijkt het alsof er niks moet laden
                     }
