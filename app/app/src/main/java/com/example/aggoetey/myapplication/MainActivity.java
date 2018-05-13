@@ -17,16 +17,15 @@ import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.pay.PayFragment;
-import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
-import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
-import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
+import com.example.aggoetey.myapplication.pay.OrderDetailActivity;
+import com.example.aggoetey.myapplication.pay.fragments.OrderDetailFragment;
+import com.example.aggoetey.myapplication.pay.fragments.PayContainerFragment;
+import com.example.aggoetey.myapplication.pay.fragments.TabFragment;
+import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.TabPageFragment;
 import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 
-public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener {
+public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener, TabFragment.LogoutListener {
 
 
     private static final String DISCOVER_FRAGMENT_TAG = "DISCOVER_FRAGMENT_TAG";
@@ -112,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
 
     private void switchToPay() {
         FragmentManager manager = getSupportFragmentManager();
-        PayFragment payFragment = (PayFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
-        if (payFragment == null) {
-            payFragment = PayFragment.newInstance();
+        PayContainerFragment payContainerFragment = (PayContainerFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
+        if (payContainerFragment == null) {
+            payContainerFragment = PayContainerFragment.newInstance();
         }
-        manager.beginTransaction().replace(R.id.fragment_place, payFragment)
+        manager.beginTransaction().replace(R.id.fragment_place, payContainerFragment)
                 .addToBackStack(PAY_FRAGMENT_TAG).commit();
     }
 
@@ -150,6 +149,13 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
 
     @Override
     public void onRestaurantSelect(MenuInfo menuInfo) {
+        if(Tab.getInstance().canLogout()){
+            Tab.getInstance().logout();
+        } else {
+            Toast.makeText(getApplicationContext(),R.string.open_bill, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         menuInfoChanged = menuInfo != this.menuInfo;
         this.menuInfo = menuInfo;
         findViewById(R.id.action_menu).performClick();
@@ -165,9 +171,11 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {{
-            return;
-        }}
+        if (resultCode != RESULT_OK) {
+            {
+                return;
+            }
+        }
 
         if (requestCode == QRScannerActivity.QR_CODE_REQUEST) {
             if (data == null) {
@@ -179,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             Log.d("QR RESULTS", code);
             String[] ids = code.split(":");
             String restaurant_id = ids[0];
-            String table_id =  ids.length == 2 ? ids[1] : null;
+            String table_id = ids.length == 2 ? ids[1] : null;
 
 
             // TODO SITT: move this validation check to QRActivity
@@ -188,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
 
             if (restaurant == null) {
                 Toast.makeText(this, R.string.qr_code_not_recognized, Toast.LENGTH_SHORT)
-                                                                                            .show();
+                        .show();
             } else {
                 // Load restaurant into MenuInfo
                 MenuInfo.getInstance().setRestaurant(restaurant);
@@ -196,5 +204,10 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
                 onRestaurantSelect(MenuInfo.getInstance());
             }
         }
+    }
+
+    @Override
+    public void loggedOut() {
+        findViewById(R.id.action_discover).performClick();
     }
 }

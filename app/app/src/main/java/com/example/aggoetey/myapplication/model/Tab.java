@@ -78,35 +78,38 @@ public class Tab extends Model implements Serializable {
     }
 
     public void loadOrderSet(Collection collection) {
-        final CollectionReference ordered = getTableCollection(collection);
-        List<Order> newOrders = new ArrayList<>();
-        ordered.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (QueryDocumentSnapshot fireBaseOrderDocument : queryDocumentSnapshots) {
-                List<HashMap<String, String>> firebaseOrder = (List<HashMap<String, String>>) fireBaseOrderDocument.getData().get("orders");
-                if (firebaseOrder != null) {
-                    Order order = new Order(1000 * Long.parseLong(String.valueOf(firebaseOrder.get(0).get("time"))));
-                    for (HashMap<String, String> orderMap : firebaseOrder) {
-                        Order.OrderItem orderItem = new Order.OrderItem(orderMap.get("note"), new MenuItem(
-                                orderMap.get("item"), Double.parseDouble(orderMap.get("price")), orderMap.get("description"), orderMap.get("category")
-                        ));
-                        order.addOrderItem(orderItem);
+        if(table != null ) {
+            // er is ergens ingelogd
+            final CollectionReference ordered = getTableCollection(collection);
+            List<Order> newOrders = new ArrayList<>();
+            ordered.get().addOnSuccessListener(queryDocumentSnapshots -> {
+                for (QueryDocumentSnapshot fireBaseOrderDocument : queryDocumentSnapshots) {
+                    List<HashMap<String, String>> firebaseOrder = (List<HashMap<String, String>>) fireBaseOrderDocument.getData().get("orders");
+                    if (firebaseOrder != null) {
+                        Order order = new Order(1000 * Long.parseLong(String.valueOf(firebaseOrder.get(0).get("time"))));
+                        for (HashMap<String, String> orderMap : firebaseOrder) {
+                            Order.OrderItem orderItem = new Order.OrderItem(orderMap.get("note"), new MenuItem(
+                                    orderMap.get("item"), Double.parseDouble(orderMap.get("price")), orderMap.get("description"), orderMap.get("category")
+                            ));
+                            order.addOrderItem(orderItem);
+                        }
+                        newOrders.add(order);
                     }
-                    newOrders.add(order);
                 }
-            }
-            switch (collection) {
-                case ORDERED:
-                    Tab.getInstance().setOrderedOrders(newOrders);
-                    break;
-                case RECEIVED:
-                    Tab.getInstance().setReceivedOrders(newOrders);
-                    break;
-                case PAYED:
-                    Tab.getInstance().setPayedOrders(newOrders);
-                    break;
-            }
-            fireInvalidationEvent();
-        });
+                switch (collection) {
+                    case ORDERED:
+                        Tab.getInstance().setOrderedOrders(newOrders);
+                        break;
+                    case RECEIVED:
+                        Tab.getInstance().setReceivedOrders(newOrders);
+                        break;
+                    case PAYED:
+                        Tab.getInstance().setPayedOrders(newOrders);
+                        break;
+                }
+                fireInvalidationEvent();
+            });
+        }
     }
 
     private CollectionReference getTableCollection(Collection c) {
@@ -127,6 +130,26 @@ public class Tab extends Model implements Serializable {
 
     public void setTable(Table table) {
         this.table = table;
+        fireInvalidationEvent();
+    }
+
+    /**
+     * Boolean geeft aan of succesvol uitgelogd is
+     *
+     * @return
+     */
+    public void logout() {
+        // als table al null is is er uitgelogd
+        if (canLogout() && table != null) {
+            this.payedOrders.clear();
+            deleteOrdersFromServer(getTableCollection(Collection.PAYED));
+            this.table = null;
+            fireInvalidationEvent();
+        }
+    }
+
+    public boolean canLogout() {
+        return this.orderedOrders.size() + this.receivedOrders.size() == 0;
     }
 
     public static Tab getInstance() {
