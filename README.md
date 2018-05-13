@@ -14,3 +14,5 @@
 - [burn down](https://docs.google.com/spreadsheets/d/1EOYr5Kmsi_bNBZB-y9g_ydjmwJpo57TikEbXiVtBrpc/edit?usp=sharing)
 - [UML](https://github.ugent.be/SELab1/project-1718-groep-1/blob/master/UML.pdf)
 - [Verslag](https://drive.google.com/open?id=1DAG8i-iRs6-cUHFxl9sglrtWu_5wp1bW)
+
+https://docs.google.com/document/d/1tfbSl1q_7PMS42bWhSziytUzPl9SmuE2M1mEYT8eF3c/edit?usp=sharing
