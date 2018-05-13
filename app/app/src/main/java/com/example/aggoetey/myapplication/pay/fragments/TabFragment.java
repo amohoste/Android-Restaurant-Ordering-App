@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.model.Table;
 import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.OrderedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.PayedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.ReceivedTabPageFragment;
@@ -111,7 +112,10 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     public void onDestroyView() {
         super.onDestroyView();
         Tab.getInstance().removeListener(this);
-        Tab.getInstance().getTable().removeListener(this);
+        Table table = Tab.getInstance().getTable();
+        if(table != null) {
+            table.removeListener(this);
+        }
     }
 
     private void logout() {
@@ -158,7 +162,10 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     @Override
     public void invalidated() {
         mTabLayout.setupWithViewPager(mViewPager);
-        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
+        Table table = Tab.getInstance().getTable();
+        if(table != null) {
+            mActionBar.setTitle(table.getNickName());
+        }
     }
 
     @Override
