@@ -83,5 +83,9 @@
     <string name="restaurant_hours_not_known">Hours not known</string>
     <string name="cancelled_order_toast">Your order has ben cancelled</string>
     <string name="order_confirm_toast">Your order will be processed in 5 seconds. Cancel the order within the time limit.</string>
+    <string name="cant_logout">Can\'t logout</string>
+    <string name="logout_confirmation">Are you sure you want to log out?</string>
+    <string name="oke">Okay</string>
+    <string name="open_bill">You still have tabs to pay! You can\'t log out yet.</string>
 
 </resources>
