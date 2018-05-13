@@ -17,11 +17,11 @@ import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.pay.PayFragment;
-import com.example.aggoetey.myapplication.pay.TabFragment;
-import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailActivity;
-import com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment;
-import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
+import com.example.aggoetey.myapplication.pay.fragments.PayFragment;
+import com.example.aggoetey.myapplication.pay.fragments.TabFragment;
+import com.example.aggoetey.myapplication.pay.OrderDetailActivity;
+import com.example.aggoetey.myapplication.pay.fragments.OrderDetailFragment;
+import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.TabPageFragment;
 import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 
 

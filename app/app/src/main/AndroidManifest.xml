@@ -45,7 +45,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.aggoetey.myapplication.Menu.MenuItemListActivity" />
         </activity>
-        <activity android:name=".pay.orderdetail.OrderDetailActivity" />
+        <activity android:name=".pay.OrderDetailActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
