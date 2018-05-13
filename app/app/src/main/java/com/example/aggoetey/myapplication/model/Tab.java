@@ -181,8 +181,8 @@ public class Tab extends Model implements Serializable {
         try_toast.show();
 
         final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
-                .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
-                .document(menuInfo.getTableID()).collection("ordered").document();
+                .document(Tab.getInstance().getRestaurant().getGooglePlaceId()).collection("tables")
+                .document(Tab.getInstance().getTable().getTableId()).collection("ordered").document();
 
         mDocRef.set(new HashMap<>());
 

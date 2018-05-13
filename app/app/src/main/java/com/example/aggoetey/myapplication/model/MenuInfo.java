@@ -1,31 +1,12 @@
 package com.example.aggoetey.myapplication.model;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.Model;
-import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.ServerConnectionFailure;
-import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
-import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
-import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
-import com.example.aggoetey.myapplication.model.Menu;
-import com.example.aggoetey.myapplication.model.MenuItem;
-import com.example.aggoetey.myapplication.model.Restaurant;
-import com.example.aggoetey.myapplication.model.Tab;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -38,7 +19,6 @@ import java.util.List;
  */
 
 public class MenuInfo extends Model implements Serializable {
-    private Restaurant restaurant;
     private HashMap<String, Integer> orderCountMap;
     // Adapters can be transient since trying to invalidate old adapters after being serialized doesn't make
     // sense and adapters here are listeners after all.
@@ -46,10 +26,6 @@ public class MenuInfo extends Model implements Serializable {
     private Tab.Order currentOrder;
 
     private static final MenuInfo instance = new MenuInfo();
-
-
-    //TODO: INITIALISE THIS FIELD WHEN LOGGING IN TO THE TABLE
-    private String  tableID;
 
     private MenuInfo (){
         orderCountMap = new HashMap<>();
@@ -60,19 +36,12 @@ public class MenuInfo extends Model implements Serializable {
         return instance;
     }
     
-    public MenuInfo setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
+    public MenuInfo reset() {
         orderCountMap = new HashMap<>();
         mAdapters = new HashSet<>();
         currentOrder = Tab.getInstance().newOrder();
-        return  instance;
-    }
-
-    public MenuInfo setTableID(String tableID) {
-        this.tableID = tableID;
         return instance;
     }
-
 
 
     public HashMap<String, Integer> getOrderCountMap() {
@@ -81,10 +50,6 @@ public class MenuInfo extends Model implements Serializable {
 
     public HashSet<RecyclerView.Adapter> getmAdapters() {
         return mAdapters;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
     }
 
     public Tab.Order getCurrentOrder() {
@@ -152,10 +117,6 @@ public class MenuInfo extends Model implements Serializable {
         } else {
             return "0";
         }
-    }
-
-    public String getTableID() {
-        return tableID;
     }
 
     public void setCurrentOrder(Tab.Order currentOrder) {

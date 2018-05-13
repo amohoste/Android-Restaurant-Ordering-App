@@ -10,14 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
 import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
+import com.example.aggoetey.myapplication.model.Tab;
+
+import java.util.ArrayList;
 
 /**
  * Fragment that displays a list of restaurants
@@ -40,7 +41,7 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof Activity){
+        if (context instanceof Activity) {
             mCallbacks = (Callbacks) getParentFragment();
         }
     }
@@ -107,13 +108,12 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
 
     @Override
     public void onRestaurantClick(Restaurant restaurant) {
-        // Todo open restaurant
         DiscoverContainerFragment parent = (DiscoverContainerFragment) getParentFragment();
-        DiscoverContainerFragment.RestaurantSelectListener mListener =  parent.getSelectListener();
+        DiscoverContainerFragment.RestaurantSelectListener mListener = parent.getSelectListener();
         if (mListener != null) {
-            parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().setRestaurant(restaurant));
+            Tab.getInstance().setRestaurant(restaurant);
+            parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().reset());
         }
-        // Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
     }
 
     @Override

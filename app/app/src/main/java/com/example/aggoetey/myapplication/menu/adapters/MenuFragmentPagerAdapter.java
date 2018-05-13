@@ -5,9 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import com.example.aggoetey.myapplication.Listener;
-import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.menu.fragments.MenuPageFragment;
+import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
 
 /**
@@ -22,10 +22,10 @@ public class MenuFragmentPagerAdapter extends FragmentPagerAdapter implements Me
     private static ViewType viewType;
     public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, ViewType viewType) {
         super(fm);
-        tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
-                new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
+        tabTitles = Tab.getInstance().getRestaurant().getMenu().getCategories().toArray(
+                new String[Tab.getInstance().getRestaurant().getMenu().getCategories().size()]);
         this.menuInfo = menuInfo;
-        Log.d("MENU_LOAD", menuInfo.getRestaurant().getMenu().toString() + "lol");
+        Log.d("MENU_LOAD", Tab.getInstance().getRestaurant().getMenu().toString() + "lol");
         MenuFragmentPagerAdapter.viewType = viewType;
     }
 

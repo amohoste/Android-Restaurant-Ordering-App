@@ -13,6 +13,7 @@ import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.model.Tab;
 
 /**
  * Created by sitt on 05/04/18.
@@ -54,7 +55,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
     @Override
     public void onBindViewHolder(final MenuCardHolder holder, final int position) {
         final boolean isExpanded = position == mExpandedPosition;
-        MenuItem menuItem = menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position);
+        MenuItem menuItem = Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).get(position);
 
 
         if(isExpanded) {
@@ -84,7 +85,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
 
     @Override
     public int getItemCount() {
-        return menuInfo.getRestaurant().getMenu().getMenuItemList(category).size();
+        return Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).size();
     }
 
 

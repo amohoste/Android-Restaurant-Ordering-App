@@ -7,6 +7,7 @@ import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
 import com.example.aggoetey.myapplication.model.Menu;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +30,7 @@ public class RestaurantMenuLoader {
         this.menuFragment = menuFragment;
         this.menuInfo = menuInfo;
         mColRef = FirebaseFirestore.getInstance().collection("places")
-                        .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("menus");
+                        .document(Tab.getInstance().getRestaurant().getGooglePlaceId()).collection("menus");
         loadMenu();
     }
 
@@ -48,7 +49,7 @@ public class RestaurantMenuLoader {
                                 (String) item.get("category")
                         ));
                     }
-                    menuInfo.getRestaurant().setMenu(menu);
+                    Tab.getInstance().getRestaurant().setMenu(menu);
                     Log.d(MENU_LOAD, MENU_LOAD_SUCCESS);
                     menuFragment.setupViewPager();
                 }
