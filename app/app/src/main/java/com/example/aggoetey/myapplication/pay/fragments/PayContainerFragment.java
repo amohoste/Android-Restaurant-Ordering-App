@@ -33,6 +33,7 @@ public class PayContainerFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_pay_container, container, false);
         Fragment f;
         String tag;
+        Tab t = Tab.getInstance();
 
         if(Tab.getInstance().getRestaurant() == null){
             // er is nog geen restaurant geselecteerd

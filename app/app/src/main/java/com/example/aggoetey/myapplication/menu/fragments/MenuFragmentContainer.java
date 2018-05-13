@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.error_screen.ErrorScreenFragment;
-import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Tab;
 
 /**
  * Created by Dries on 26/03/2018.
@@ -22,7 +22,6 @@ public class MenuFragmentContainer extends Fragment {
     private static final String MENU_FRAGMENT_TAG = "MENU_FRAGMENT_TAG";
     private static final String NO_MENU_SELECTED_FRAGMENT_TAG = "NO_MENU_SELECTED_FRAGMENT_TAG";
     private static final String MENU_NOT_LOADED_FRAGMENT_TAG = "MENU_NOT_LOADED_FRAGMENT_TAG";
-    private MenuInfo menuInfo;
 
     public MenuFragmentContainer() {
     }
@@ -33,9 +32,8 @@ public class MenuFragmentContainer extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_menu_container, parent, false);
 
-        readBundle(getArguments());
 
-        if (menuInfo == null) {
+        if (Tab.getInstance().getRestaurant() == null) {
             // er is nog geen restaurant geselecteerd
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.container, ErrorScreenFragment.newInstance(getString(R.string.no_restaurant_selected)))
@@ -44,7 +42,7 @@ public class MenuFragmentContainer extends Fragment {
         } else {
             // er is wel een restaurant geselecteerd
             getChildFragmentManager().beginTransaction()
-                    .replace(R.id.container, MenuFragment.newInstance(menuInfo))
+                    .replace(R.id.container, MenuFragment.newInstance())
                     .addToBackStack(MENU_FRAGMENT_TAG)
                     .commit();
         }
@@ -57,18 +55,12 @@ public class MenuFragmentContainer extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public static MenuFragmentContainer newInstance(MenuInfo menuInfo) {
+    public static MenuFragmentContainer newInstance() {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(MENU_INFO_KEY, menuInfo);
-
         MenuFragmentContainer menuFragmentContainer = new MenuFragmentContainer();
         menuFragmentContainer.setArguments(bundle);
         return menuFragmentContainer;
     }
 
-    private void readBundle(Bundle arguments) {
-        if (arguments != null) {
-            this.menuInfo = (MenuInfo) arguments.getSerializable(MENU_INFO_KEY);
-        }
-    }
+
 }

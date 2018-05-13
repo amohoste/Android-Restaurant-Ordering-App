@@ -74,14 +74,15 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         // Required empty public constructor
     }
 
-    public static MenuFragment newInstance(MenuInfo menuInfo) {
-        Log.d("MENUFRAGMENT", "new");
+    public static MenuFragment newInstance() {
         if (Tab.getInstance().getRestaurant() != null) {
             Tab.getInstance().setRestaurant(Tab.getInstance().getRestaurant());
         }
+        if (Tab.getInstance().getTable() != null) {
+            Tab.getInstance().loadAllCollections();
+        }
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_MENUINFO, menuInfo);
         fragment.setArguments(args);
         return fragment;
     }
@@ -163,8 +164,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
             setLogInButton();
         } else {
             Tab.getInstance().setRestaurant(Tab.getInstance().getRestaurant());
-            Tab.getInstance().setTable(new Table("Tafel voor de koning"
-                    , Tab.getInstance().getTable().getTableId()));
+            Tab.getInstance().setTable(new Table(null, Tab.getInstance().getTable().getTableId()));
             setOrderButton();
         }
     }
@@ -192,8 +192,8 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
             @Override
             public void onClick(View view) {
-                Toast gecancelled = Toast.makeText(getContext(), "Order is gecancelled", Toast.LENGTH_SHORT);
-                Toast confirm = Toast.makeText(getContext(), "Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen", Toast.LENGTH_SHORT);
+                Toast gecancelled = Toast.makeText(getContext(), R.string.cancelled_order_toast, Toast.LENGTH_SHORT);
+                Toast confirm = Toast.makeText(getContext(), R.string.order_confirm_toast, Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
                     mMenuOrderButton.setText("Order");
                     sendAfterTime.cancel = true;

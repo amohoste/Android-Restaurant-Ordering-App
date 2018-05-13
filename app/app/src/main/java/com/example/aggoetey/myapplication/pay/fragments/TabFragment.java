@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.model.Table;
 import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.OrderedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.PayedTabPageFragment;
 import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.ReceivedTabPageFragment;
@@ -92,6 +93,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
         Tab.getInstance().addListener(this);
+        Tab.getInstance().getTable().addListener(this);
         Tab.getInstance().loadAllCollections();
 
         return view;
@@ -104,6 +106,16 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         pay_action = menu.findItem(R.id.action_pay_tab);
         logout_action = menu.findItem(R.id.action_pay_logout);
         invalidated();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Tab.getInstance().removeListener(this);
+        Table table = Tab.getInstance().getTable();
+        if(table != null) {
+            table.removeListener(this);
+        }
     }
 
     private void logout() {
@@ -150,6 +162,10 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     @Override
     public void invalidated() {
         mTabLayout.setupWithViewPager(mViewPager);
+        Table table = Tab.getInstance().getTable();
+        if(table != null) {
+            mActionBar.setTitle(table.getNickName());
+        }
     }
 
     @Override
@@ -168,7 +184,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         public enum Division {
             ORDERED("Ordered"),
             RECEIVED("Received"),
-            PAYED("Payed");
+            PAYED("Paid");
 
             private final String title;
 
