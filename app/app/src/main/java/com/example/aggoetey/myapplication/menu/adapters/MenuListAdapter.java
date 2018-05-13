@@ -12,6 +12,7 @@ import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.model.Tab;
 
 import java.io.Serializable;
 
@@ -53,13 +54,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     @Override
     public void onBindViewHolder(MenuItemHolder holder, int position) {
-        holder.bind(menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position), position);
+        holder.bind(Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).get(position), position);
     }
 
 
     @Override
     public int getItemCount() {
-        return menuInfo.getRestaurant().getMenu().getMenuItemList(category).size();
+        return Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).size();
     }
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {

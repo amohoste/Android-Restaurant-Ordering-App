@@ -17,6 +17,7 @@ import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.model.Table;
 import com.example.aggoetey.myapplication.pay.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.fragments.OrderDetailFragment;
 import com.example.aggoetey.myapplication.pay.fragments.PayContainerFragment;
@@ -199,8 +200,8 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
                         .show();
             } else {
                 // Load restaurant into MenuInfo
-                MenuInfo.getInstance().setRestaurant(restaurant);
-                MenuInfo.getInstance().setTableID(table_id);
+                Tab.getInstance().setRestaurant(restaurant);
+                Tab.getInstance().setTable(new Table("TOF", table_id));
                 onRestaurantSelect(MenuInfo.getInstance());
             }
         }

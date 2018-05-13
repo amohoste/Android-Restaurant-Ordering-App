@@ -76,8 +76,8 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     public static MenuFragment newInstance(MenuInfo menuInfo) {
         Log.d("MENUFRAGMENT", "new");
-        if(menuInfo.getRestaurant() != null){
-            Tab.getInstance().setRestaurant(menuInfo.getRestaurant());
+        if (Tab.getInstance().getRestaurant() != null) {
+            Tab.getInstance().setRestaurant(Tab.getInstance().getRestaurant());
         }
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
@@ -138,7 +138,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         loggedInCheck();
 
         // Load the restaurant's menu from the FireStore backend if not loaded already
-        if (menuInfo.getRestaurant().getMenu() == null) {
+        if (Tab.getInstance().getRestaurant().getMenu() == null) {
             new RestaurantMenuLoader(menuInfo, this);
         } else {
             setupViewPager();
@@ -159,11 +159,12 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     // TODO: Call this after logging in
     public void loggedInCheck() {
-        if (menuInfo.getTableID() == null) {    //user not logged in
+        if (Tab.getInstance().getTable() == null) {    //user not logged in
             setLogInButton();
         } else {
-            Tab.getInstance().setRestaurant(menuInfo.getRestaurant());
-            Tab.getInstance().setTable(new Table("Tafel voor de koning", menuInfo.getTableID()));
+            Tab.getInstance().setRestaurant(Tab.getInstance().getRestaurant());
+            Tab.getInstance().setTable(new Table("Tafel voor de koning"
+                    , Tab.getInstance().getTable().getTableId()));
             setOrderButton();
         }
     }
@@ -210,15 +211,15 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     private void setTitle() {
         if (menuInfo != null) {
-            String title = menuInfo.getRestaurant().getTitle();
+            String title = Tab.getInstance().getRestaurant().getTitle();
 
             if (getActivity() instanceof AppCompatActivity) {
                 AppCompatActivity activity = (AppCompatActivity) getActivity();
                 if (activity.getSupportActionBar() != null) {
                     activity.getSupportActionBar().setTitle(title);
                 }
-            }else{
-                if(getActivity().getActionBar() != null) {
+            } else {
+                if (getActivity().getActionBar() != null) {
                     getActivity().getActionBar().setTitle(title);
                 }
             }
@@ -233,14 +234,14 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     public void setCheckButtonProperties() {
 
-        mCheckOrderButton.setEnabled(this.menuInfo.getCurrentOrder().getOrderItems().size() > 0 );
+        mCheckOrderButton.setEnabled(this.menuInfo.getCurrentOrder().getOrderItems().size() > 0);
         mCheckOrderButton.setOnClickListener(this::onClick);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_MENU_INFO){
-            if(resultCode == AppCompatActivity.RESULT_OK){
+        if (requestCode == REQUEST_MENU_INFO) {
+            if (resultCode == AppCompatActivity.RESULT_OK) {
                 this.menuInfo = MenuInfo.getInstance();
                 this.menuInfo.getCurrentOrder().removeListener(this);
                 this.menuInfo.getCurrentOrder().addListener(this);
@@ -250,7 +251,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     }
 
     public void setOrderButtonProperties() {
-        if (menuInfo.getTableID() != null) {
+        if (Tab.getInstance().getTable().getTableId() != null) {
             if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
                 mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
                 mMenuOrderButton.setEnabled(true);
@@ -281,7 +282,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     public void onDestroyView() {
         super.onDestroyView();
         Log.e("MenuFragment:", "Destroyed");
-        if(menuInfo != null) {
+        if (menuInfo != null) {
             menuInfo.clearAdapters();
         }
     }
@@ -359,8 +360,8 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         final View waiter_button = getActivity().findViewById(R.id.call_waiter_button);
         waiter_button.setEnabled(false);
         final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
-                .document(menuInfo.getRestaurant().getGooglePlaceId()).collection("tables")
-                .document(menuInfo.getTableID());
+                .document(Tab.getInstance().getRestaurant().getGooglePlaceId()).collection("tables")
+                .document(Tab.getInstance().getTable().getTableId());
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -459,12 +460,13 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     @Override
     public void onClick(View v) {
         MenuInfo target = this.menuInfo;
-        Log.e("MenuFragment size:", target.getCurrentOrder().getOrderItems().size() +"");
-        Intent intent =  new Intent(getContext(), NotesActivity.class);
+        Log.e("MenuFragment size:", target.getCurrentOrder().getOrderItems().size() + "");
+        Intent intent = new Intent(getContext(), NotesActivity.class);
         intent.putExtra(NotesActivity.ARG_MENU_INFO, target);
         startActivityForResult(intent, REQUEST_MENU_INFO);
-      
+
     }
+
     class SendAfterTime implements Runnable {
         boolean cancel;
 

@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,15 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
-
+import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
+import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
+import com.example.aggoetey.myapplication.discover.views.MapIconsRenderer;
 import com.example.aggoetey.myapplication.discover.views.RestaurantInfoCardView;
+import com.example.aggoetey.myapplication.discover.wrappers.RestaurantMapItem;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,12 +42,6 @@ import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
-
-
-import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.discover.wrappers.RestaurantMapItem;
-import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
-import com.example.aggoetey.myapplication.discover.views.MapIconsRenderer;
 
 import java.util.ArrayList;
 
@@ -380,7 +377,8 @@ public class MapsFragment extends DiscoverFragment implements OnMapReadyCallback
         DiscoverContainerFragment.RestaurantSelectListener mListener = parent.getSelectListener();
         if (mListener != null) {
 
-            parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().setRestaurant(restaurant));
+            Tab.getInstance().setRestaurant(restaurant);
+            parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().reset());
         }
         //Toast.makeText(getContext(), "Menu", Toast.LENGTH_SHORT).show();
     }
