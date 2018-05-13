@@ -17,10 +17,10 @@ import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.pay.fragments.PayFragment;
-import com.example.aggoetey.myapplication.pay.fragments.TabFragment;
 import com.example.aggoetey.myapplication.pay.OrderDetailActivity;
 import com.example.aggoetey.myapplication.pay.fragments.OrderDetailFragment;
+import com.example.aggoetey.myapplication.pay.fragments.PayContainerFragment;
+import com.example.aggoetey.myapplication.pay.fragments.TabFragment;
 import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.TabPageFragment;
 import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 
@@ -111,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
 
     private void switchToPay() {
         FragmentManager manager = getSupportFragmentManager();
-        PayFragment payFragment = (PayFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
-        if (payFragment == null) {
-            payFragment = PayFragment.newInstance();
+        PayContainerFragment payContainerFragment = (PayContainerFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
+        if (payContainerFragment == null) {
+            payContainerFragment = PayContainerFragment.newInstance();
         }
-        manager.beginTransaction().replace(R.id.fragment_place, payFragment)
+        manager.beginTransaction().replace(R.id.fragment_place, payContainerFragment)
                 .addToBackStack(PAY_FRAGMENT_TAG).commit();
     }
 
