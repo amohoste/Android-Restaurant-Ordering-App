@@ -108,13 +108,20 @@ public class RestaurantProvider extends Fragment {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()) {
-                    ArrayList<String> ids = new ArrayList<>();
+                    ArrayList<Restaurant> res = new ArrayList<>();
+
 
                     for (DocumentSnapshot document: queryDocumentSnapshots.getDocuments()) {
-                        ids.add(document.getId());
+                        String id = document.getId();
+                        String title = document.getString("name");
+                        if (title != null && title != "") {
+                            res.add(new Restaurant(id, title));
+                        } else {
+                            res.add(new Restaurant(id));
+                        }
                     }
 
-                    restaurantTask.execute(ids);
+                    restaurantTask.execute(res);
                 }
             }
         });
@@ -133,7 +140,7 @@ public class RestaurantProvider extends Fragment {
         listener = null;
     }
 
-    private class GetRestaurantsTask extends AsyncTask<ArrayList<String>, Integer, ArrayList<Restaurant>> {
+    private class GetRestaurantsTask extends AsyncTask<ArrayList<Restaurant>, Integer, ArrayList<Restaurant>> {
 
         private int amount = 0;
 
@@ -145,11 +152,12 @@ public class RestaurantProvider extends Fragment {
         }
 
         @Override
-        protected ArrayList<Restaurant> doInBackground(ArrayList<String>... ids) {
+        protected ArrayList<Restaurant> doInBackground(ArrayList<Restaurant>... ids) {
 
             amount = ids[0].size();
             for (int i = 0; i < ids[0].size(); i++) {
-                final String id = ids[0].get(i);
+                final String id = ids[0].get(i).getGooglePlaceId();
+                final String title = ids[0].get(i).getTitle();
                 final String url = BASE_URL + id + "&key=" + API_KEY;
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -158,6 +166,9 @@ public class RestaurantProvider extends Fragment {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Restaurant res = parseRestaurant(response);
+                                if (title != null) {
+                                    res.setTitle(title);
+                                }
                                 if (res != null && res.getTitle() != null) {
                                     res.setGooglePlaceId(id);
                                     addRestaurant(res);
