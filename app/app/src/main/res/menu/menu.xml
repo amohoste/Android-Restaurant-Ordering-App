@@ -9,7 +9,6 @@
         android:visible="true"
         tools:visible="true"
         app:showAsAction="always" />
-    <item android:id="@+id/add_note_button" />
     <item
         android:id="@+id/to_grid_view"
         android:title="@string/grid_view"
