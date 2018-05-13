@@ -129,7 +129,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        Log.e("MenuFragment", this.menuInfo.toString());
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_login_order_button);
 
         mCheckOrderButton = (Button) v.findViewById(R.id.menu_view_check_button);
@@ -285,7 +284,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e("MenuFragment:", "Destroyed");
         if (menuInfo != null) {
             menuInfo.clearAdapters();
         }
@@ -465,7 +463,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     @Override
     public void onClick(View v) {
         MenuInfo target = this.menuInfo;
-        Log.e("MenuFragment size:", target.getCurrentOrder().getOrderItems().size() + "");
         Intent intent = new Intent(getContext(), NotesActivity.class);
         intent.putExtra(NotesActivity.ARG_MENU_INFO, target);
         startActivityForResult(intent, REQUEST_MENU_INFO);
