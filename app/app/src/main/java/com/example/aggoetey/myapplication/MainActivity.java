@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
     private static final String DEBUG = "DEBUG";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
         FragmentManager manager = getSupportFragmentManager();
         MenuFragmentContainer menuFragmentContainer = (MenuFragmentContainer) manager.findFragmentByTag(MENU_FRAGMENT_CONTAINER_TAG);
 
-        if ( menuFragmentContainer == null) {
+        if (menuFragmentContainer == null) {
             menuFragmentContainer = MenuFragmentContainer.newInstance();
         }
 
@@ -146,10 +145,10 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
 
     @Override
     public void onRestaurantSelect(MenuInfo menuInfo) {
-        if(Tab.getInstance().canLogout()){
+        if (Tab.getInstance().canLogout()) {
             Tab.getInstance().logout();
         } else {
-            Toast.makeText(getApplicationContext(),R.string.open_bill, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.open_bill, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -192,11 +191,13 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             if (restaurant == null) {
                 Toast.makeText(this, R.string.qr_code_not_recognized, Toast.LENGTH_SHORT)
                         .show();
-            } else {
+            } else if (Tab.getInstance().canLogout()) {
                 // Load restaurant into MenuInfo
                 Tab.getInstance().setRestaurant(restaurant);
                 Tab.getInstance().setTable(new Table(null, table_id));
                 findViewById(R.id.action_menu).performClick();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.open_bill, Toast.LENGTH_SHORT).show();
             }
         }
     }

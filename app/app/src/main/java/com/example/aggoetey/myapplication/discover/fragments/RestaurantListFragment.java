@@ -110,7 +110,7 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
     public void onRestaurantClick(Restaurant restaurant) {
         DiscoverContainerFragment parent = (DiscoverContainerFragment) getParentFragment();
         DiscoverContainerFragment.RestaurantSelectListener mListener = parent.getSelectListener();
-        if (mListener != null) {
+        if (mListener != null && Tab.getInstance().canLogout()) {
             Tab.getInstance().setRestaurant(restaurant);
             parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().reset());
         }
