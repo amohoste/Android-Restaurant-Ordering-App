@@ -80,7 +80,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         public void bind(final MenuItem menuItem, final int position) {
-            mTitleTextView.setText(menuItem.title + " (€" + Double.toString(menuItem.price) +")");
+            mTitleTextView.setText(String.format("%s (€%.2f)", menuItem.title, menuItem.price));
             setNewOrderCount(menuItem.id);
 
 

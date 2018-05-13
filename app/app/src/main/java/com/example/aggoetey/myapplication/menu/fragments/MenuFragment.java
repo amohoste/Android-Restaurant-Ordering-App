@@ -183,6 +183,9 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     }
 
     public void setOrderButton() {
+        // If this gets called it means that the order has been canceled or completed
+        menuInfo.setOrderSendInProgress(false);
+
         // Order button action
         setOrderButtonProperties();
 
@@ -195,12 +198,12 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                 Toast gecancelled = Toast.makeText(getContext(), R.string.cancelled_order_toast, Toast.LENGTH_SHORT);
                 Toast confirm = Toast.makeText(getContext(), R.string.order_confirm_toast, Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
-                    mMenuOrderButton.setText("Order");
+                    setOrderButton();
                     sendAfterTime.cancel = true;
-                    menuInfo.orderCommitted();
                     confirm.cancel();
                     gecancelled.show();
                 } else {
+                    menuInfo.setOrderSendInProgress(true);
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
                     handler.postDelayed(sendAfterTime, CANCEL_WINDOW);
@@ -253,7 +256,8 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     public void setOrderButtonProperties() {
         if (Tab.getInstance().getTable().getTableId() != null) {
             if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
-                mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
+                mMenuOrderButton.setText(String.format("%s (€%.2f)",
+                        getResources().getString(R.string.menu_view_order_button), menuInfo.getCurrentOrder().getPrice()));
                 mMenuOrderButton.setEnabled(true);
             } else {
                 mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
@@ -416,6 +420,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         menuInfo.getCurrentOrder().removeListener(this);
         Log.d("MENUFRAGMENT", "detached");
     }
+
 
     @Override
     public void invalidated() {

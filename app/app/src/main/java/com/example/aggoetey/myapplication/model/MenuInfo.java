@@ -24,6 +24,8 @@ public class MenuInfo extends Model implements Serializable {
     // sense and adapters here are listeners after all.
     private transient HashSet<RecyclerView.Adapter> mAdapters;
     private Tab.Order currentOrder;
+    private boolean orderSendInProgress = false;
+
 
     private static final MenuInfo instance = new MenuInfo();
 
@@ -57,7 +59,6 @@ public class MenuInfo extends Model implements Serializable {
     }
 
     public void orderCommitted() {
-
         List<Listener> listenerList = currentOrder.getListeners();
         currentOrder = Tab.getInstance().newOrder();
         currentOrder.setListeners(listenerList);
@@ -73,7 +74,6 @@ public class MenuInfo extends Model implements Serializable {
         }
     }
     public void clearAdapters(){
-
         Log.e("Menuinfo", "Cleared Adapters!");
         if(this.mAdapters != null) {
             this.mAdapters.clear();
@@ -81,7 +81,6 @@ public class MenuInfo extends Model implements Serializable {
     }
 
     public void addAdapter(RecyclerView.Adapter adapter){
-
         mAdapters.add(adapter);
     }
 
@@ -99,8 +98,10 @@ public class MenuInfo extends Model implements Serializable {
     }
 
     public void addOrderItem(MenuItem menuItem) {
-        currentOrder.addOrderItem("", menuItem);
-        changeOrderCount(1, menuItem.id);
+        if (!orderSendInProgress) {
+            currentOrder.addOrderItem("", menuItem);
+            changeOrderCount(1, menuItem.id);
+        }
     }
 
     public boolean removeOrderItem(MenuItem menuItem) {
@@ -126,5 +127,13 @@ public class MenuInfo extends Model implements Serializable {
     @Override
     public void fireInvalidationEvent() {
         super.fireInvalidationEvent();
+    }
+
+    public boolean isOrderSendInProgress() {
+        return orderSendInProgress;
+    }
+
+    public void setOrderSendInProgress(boolean orderSendInProgress) {
+        this.orderSendInProgress = orderSendInProgress;
     }
 }
