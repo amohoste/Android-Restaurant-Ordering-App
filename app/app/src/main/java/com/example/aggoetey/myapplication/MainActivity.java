@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             return;
         }
 
-        switchToMenu();
+        findViewById(R.id.action_menu).performClick();
     }
 
     public void startQRScannerActivity() {
@@ -195,9 +195,8 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             } else {
                 // Load restaurant into MenuInfo
                 Tab.getInstance().setRestaurant(restaurant);
-                Tab t = Tab.getInstance();
                 Tab.getInstance().setTable(new Table("TOF", table_id));
-                switchToMenu();
+                findViewById(R.id.action_menu).performClick();
             }
         }
     }
