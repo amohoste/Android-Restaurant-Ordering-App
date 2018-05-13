@@ -197,7 +197,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                 if (mMenuOrderButton.getText().equals("Cancel")) {
                     mMenuOrderButton.setText("Order");
                     sendAfterTime.cancel = true;
-                    menuInfo.orderCommitted();
                     confirm.cancel();
                     gecancelled.show();
                 } else {
@@ -416,6 +415,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         menuInfo.getCurrentOrder().removeListener(this);
         Log.d("MENUFRAGMENT", "detached");
     }
+
 
     @Override
     public void invalidated() {
