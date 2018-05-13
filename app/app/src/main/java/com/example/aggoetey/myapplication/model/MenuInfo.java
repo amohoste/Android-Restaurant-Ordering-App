@@ -74,7 +74,6 @@ public class MenuInfo extends Model implements Serializable {
         }
     }
     public void clearAdapters(){
-        Log.e("Menuinfo", "Cleared Adapters!");
         if(this.mAdapters != null) {
             this.mAdapters.clear();
         }
