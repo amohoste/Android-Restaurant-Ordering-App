@@ -87,7 +87,8 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
 
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(mTabPageFragmentAdapter);
-        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
+//        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
+        mActionBar.setTitle("HALLOOOOOO");
 
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 

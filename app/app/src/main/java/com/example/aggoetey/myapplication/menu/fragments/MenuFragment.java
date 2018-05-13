@@ -74,14 +74,13 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         // Required empty public constructor
     }
 
-    public static MenuFragment newInstance(MenuInfo menuInfo) {
+    public static MenuFragment newInstance() {
         Log.d("MENUFRAGMENT", "new");
         if (Tab.getInstance().getRestaurant() != null) {
             Tab.getInstance().setRestaurant(Tab.getInstance().getRestaurant());
         }
         MenuFragment fragment = new MenuFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_MENUINFO, menuInfo);
         fragment.setArguments(args);
         return fragment;
     }

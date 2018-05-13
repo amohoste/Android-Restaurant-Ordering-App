@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
     private static final String DEBUG = "DEBUG";
 
 
-    private MenuInfo menuInfo;
-    private boolean menuInfoChanged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +88,8 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
         FragmentManager manager = getSupportFragmentManager();
         MenuFragmentContainer menuFragmentContainer = (MenuFragmentContainer) manager.findFragmentByTag(MENU_FRAGMENT_CONTAINER_TAG);
 
-        if (this.menuInfoChanged || menuFragmentContainer == null) {
-            // als we een niewue menu hebben ingegeven, of als er nog geen fragment is
-            // dan moeten we een nieuw fragment maken
-            menuFragmentContainer = MenuFragmentContainer.newInstance(menuInfo);
+        if ( menuFragmentContainer == null) {
+            menuFragmentContainer = MenuFragmentContainer.newInstance();
         }
 
         manager.beginTransaction().replace(R.id.fragment_place, menuFragmentContainer, MENU_FRAGMENT_CONTAINER_TAG)
@@ -157,9 +153,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             return;
         }
 
-        menuInfoChanged = menuInfo != this.menuInfo;
-        this.menuInfo = menuInfo;
-        findViewById(R.id.action_menu).performClick();
+        switchToMenu();
     }
 
     public void startQRScannerActivity() {
@@ -201,8 +195,9 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             } else {
                 // Load restaurant into MenuInfo
                 Tab.getInstance().setRestaurant(restaurant);
+                Tab t = Tab.getInstance();
                 Tab.getInstance().setTable(new Table("TOF", table_id));
-                onRestaurantSelect(MenuInfo.getInstance());
+                switchToMenu();
             }
         }
     }
