@@ -87,12 +87,12 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
 
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(mTabPageFragmentAdapter);
-//        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
-        mActionBar.setTitle("HALLOOOOOO");
+        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
 
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
         Tab.getInstance().addListener(this);
+        Tab.getInstance().getTable().addListener(this);
         Tab.getInstance().loadAllCollections();
 
         return view;
@@ -151,6 +151,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     @Override
     public void invalidated() {
         mTabLayout.setupWithViewPager(mViewPager);
+        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
     }
 
     @Override

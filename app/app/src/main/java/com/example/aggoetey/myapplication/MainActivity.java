@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             } else {
                 // Load restaurant into MenuInfo
                 Tab.getInstance().setRestaurant(restaurant);
-                Tab.getInstance().setTable(new Table("TOF", table_id));
+                Tab.getInstance().setTable(new Table(null, table_id));
                 findViewById(R.id.action_menu).performClick();
             }
         }

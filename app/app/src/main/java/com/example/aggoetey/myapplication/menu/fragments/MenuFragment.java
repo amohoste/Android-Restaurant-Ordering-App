@@ -162,8 +162,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
             setLogInButton();
         } else {
             Tab.getInstance().setRestaurant(Tab.getInstance().getRestaurant());
-            Tab.getInstance().setTable(new Table("Tafel voor de koning"
-                    , Tab.getInstance().getTable().getTableId()));
+            Tab.getInstance().setTable(new Table(null, Tab.getInstance().getTable().getTableId()));
             setOrderButton();
         }
     }
