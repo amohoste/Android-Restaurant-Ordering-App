@@ -97,15 +97,17 @@ public class MenuInfo extends Model implements Serializable {
         return c;
     }
 
-    public void addOrderItem(MenuItem menuItem) {
+    public boolean addOrderItem(MenuItem menuItem) {
         if (!orderSendInProgress) {
             currentOrder.addOrderItem("", menuItem);
             changeOrderCount(1, menuItem.id);
+            return true;
         }
+        return false;
     }
 
     public boolean removeOrderItem(MenuItem menuItem) {
-        if (changeOrderCount(-1, menuItem.id) >= 0) {
+        if (!orderSendInProgress && changeOrderCount(-1, menuItem.id) >= 0) {
             currentOrder.removeOrderItem(menuItem);
             return true;
         }

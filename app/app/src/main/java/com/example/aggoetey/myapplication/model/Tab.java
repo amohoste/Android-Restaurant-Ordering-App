@@ -85,7 +85,7 @@ public class Tab extends Model implements Serializable {
             ordered.get().addOnSuccessListener(queryDocumentSnapshots -> {
                 for (QueryDocumentSnapshot fireBaseOrderDocument : queryDocumentSnapshots) {
                     List<HashMap<String, String>> firebaseOrder = (List<HashMap<String, String>>) fireBaseOrderDocument.getData().get("orders");
-                    if (firebaseOrder != null) {
+                    if (firebaseOrder != null &&  firebaseOrder.size() != 0) {
                         Order order = new Order(1000 * Long.parseLong(String.valueOf(firebaseOrder.get(0).get("time"))));
                         for (HashMap<String, String> orderMap : firebaseOrder) {
                             Order.OrderItem orderItem = new Order.OrderItem(orderMap.get("note"), new MenuItem(

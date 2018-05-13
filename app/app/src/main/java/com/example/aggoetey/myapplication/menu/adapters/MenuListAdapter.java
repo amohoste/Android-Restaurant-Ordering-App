@@ -95,8 +95,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
             mOrderIncrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    menuInfo.addOrderItem(menuItem);
-                    setNewOrderCount(menuItem.id);
+                    if (menuInfo.addOrderItem(menuItem)) {
+                        setNewOrderCount(menuItem.id);
+                    }
             }
             });
 
