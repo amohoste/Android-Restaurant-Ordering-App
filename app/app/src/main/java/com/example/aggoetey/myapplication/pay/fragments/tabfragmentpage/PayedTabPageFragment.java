@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.pay.tabfragmentpage;
+package com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;

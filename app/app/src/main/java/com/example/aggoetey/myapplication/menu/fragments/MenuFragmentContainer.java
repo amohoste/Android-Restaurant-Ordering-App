@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aggoetey.myapplication.R;
+import com.example.aggoetey.myapplication.error_screen.ErrorScreenFragment;
 import com.example.aggoetey.myapplication.model.MenuInfo;
 
 /**
@@ -37,7 +38,7 @@ public class MenuFragmentContainer extends Fragment {
         if (menuInfo == null) {
             // er is nog geen restaurant geselecteerd
             getChildFragmentManager().beginTransaction()
-                    .replace(R.id.container, NoMenuSelectedFragment.newInstance())
+                    .replace(R.id.container, ErrorScreenFragment.newInstance(getString(R.string.no_restaurant_selected)))
                     .addToBackStack(NO_MENU_SELECTED_FRAGMENT_TAG)
                     .commit();
         } else {

@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.pay.orderdetail;
+package com.example.aggoetey.myapplication.pay;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -6,8 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.pay.fragments.OrderDetailFragment;
 
-import static com.example.aggoetey.myapplication.pay.orderdetail.OrderDetailFragment.ORDER_KEY;
+import static com.example.aggoetey.myapplication.pay.fragments.OrderDetailFragment.ORDER_KEY;
 
 public class OrderDetailActivity extends AppCompatActivity {
 

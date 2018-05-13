@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.pay;
+package com.example.aggoetey.myapplication.pay.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.pay.tabfragmentpage;
+package com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.pay.TabAdapter;
+import com.example.aggoetey.myapplication.pay.adapters.TabAdapter;
 
 import java.util.Collections;
 import java.util.List;

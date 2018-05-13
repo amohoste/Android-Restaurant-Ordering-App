@@ -1,6 +1,8 @@
-package com.example.aggoetey.myapplication.pay;
+package com.example.aggoetey.myapplication.pay.fragments;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -8,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,22 +23,42 @@ import android.widget.Toast;
 import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.pay.tabfragmentpage.OrderedTabPageFragment;
-import com.example.aggoetey.myapplication.pay.tabfragmentpage.PayedTabPageFragment;
-import com.example.aggoetey.myapplication.pay.tabfragmentpage.ReceivedTabPageFragment;
-import com.example.aggoetey.myapplication.pay.tabfragmentpage.TabPageFragment;
+import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.OrderedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.PayedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.ReceivedTabPageFragment;
+import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.TabPageFragment;
 
-public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener, Listener {
+public class TabFragment extends Fragment implements PayChoiceDialogFragment.PayChoiceListener, LogoutDialogFragment.LogoutChoiceListener, Listener {
 
     private ViewPager mViewPager;
     private TabPageFragmentAdapter mTabPageFragmentAdapter;
     private MenuItem pay_action;
+    private MenuItem logout_action;
     private TabLayout mTabLayout;
+    private ActionBar mActionBar;
+
+    private LogoutListener logoutListener;
 
     private static final String PAY_CHOICE_DIALOG_FRAGMENT_TAG = "PayChoiceDialogFragmentTag";
+    private static final String LOGOUT_CHOICE_DIALOG_FRAGMENT_TAG = "LOGOUT";
 
     public TabFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity){
+            logoutListener = (LogoutListener) getActivity();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        logoutListener = null;
     }
 
 
@@ -58,10 +82,12 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
 
         mTabPageFragmentAdapter = new TabPageFragmentAdapter(getChildFragmentManager());
         mViewPager = view.findViewById(R.id.tab_page_viewpager);
-        mViewPager.setAdapter(mTabPageFragmentAdapter);
-
         mTabLayout = view.findViewById(R.id.tab_page_tabs);
+        mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setAdapter(mTabPageFragmentAdapter);
+        mActionBar.setTitle(Tab.getInstance().getTable().getNickName());
 
         setHasOptionsMenu(true); // anders denkt android dat hij de standaard opties moet gebruiken
 
@@ -76,14 +102,29 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         menuInflater.inflate(R.menu.pay, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
         pay_action = menu.findItem(R.id.action_pay_tab);
+        logout_action = menu.findItem(R.id.action_pay_logout);
         invalidated();
     }
+
+    private void logout() {
+        if (Tab.getInstance().canLogout()) {
+            FragmentManager fr = getChildFragmentManager();
+            LogoutDialogFragment logoutDialogFragment = LogoutDialogFragment.newInstance();
+            logoutDialogFragment.show(fr, LOGOUT_CHOICE_DIALOG_FRAGMENT_TAG);
+        } else {
+            Toast.makeText(getContext(), R.string.open_bill, Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_pay_tab:
                 payOrders();
+                return true;
+            case R.id.action_pay_logout:
+                this.logout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -109,6 +150,18 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
     @Override
     public void invalidated() {
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onLogoutChoiceSelection(boolean choice) {
+        if (choice) {
+            Tab.getInstance().logout();
+            logoutListener.loggedOut();
+        }
+    }
+
+    public interface LogoutListener {
+        void loggedOut();
     }
 
     public static class TabPageFragmentAdapter extends FragmentPagerAdapter {
@@ -160,7 +213,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
         public CharSequence getPageTitle(int position) {
             Division d = Division.values()[position];
             int amount = 0;
-            switch (d){
+            switch (d) {
                 case PAYED:
                     amount = Tab.getInstance().getPayedOrders().size();
                     break;
@@ -171,7 +224,7 @@ public class TabFragment extends Fragment implements PayChoiceDialogFragment.Pay
                     amount = Tab.getInstance().getOrderedOrders().size();
                     break;
             }
-            return String.format("%s (%d)",Division.values()[position].getTitle(), amount);
+            return String.format("%s (%d)", Division.values()[position].getTitle(), amount);
         }
     }
 

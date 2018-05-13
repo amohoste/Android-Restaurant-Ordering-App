@@ -85,5 +85,9 @@
     <string name="restaurant_hours_not_known">Uren onbekend</string>
     <string name="cancelled_order_toast">Order is gecancelled</string>
     <string name="order_confirm_toast">Je order wordt over 5 seconden verstuurd, ondertussen kan je het cancellen.</string>
+    <string name="cant_logout">Kan niet uitloggen</string>
+    <string name="logout_confirmation">Bent u zeker dat u wil uitloggen?</string>
+    <string name="oke">Oke</string>
+    <string name="open_bill">Je hebt nog een rekening die je moet betalen! Je kan nog niet uitloggen.</string>
 
 </resources>

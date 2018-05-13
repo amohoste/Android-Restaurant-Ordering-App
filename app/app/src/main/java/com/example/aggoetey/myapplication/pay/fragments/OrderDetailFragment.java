@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.pay.orderdetail;
+package com.example.aggoetey.myapplication.pay.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
+import com.example.aggoetey.myapplication.pay.adapters.OrderItemAdapter;
 
 public class OrderDetailFragment extends Fragment {
     public static final String ORDER_KEY = "order";

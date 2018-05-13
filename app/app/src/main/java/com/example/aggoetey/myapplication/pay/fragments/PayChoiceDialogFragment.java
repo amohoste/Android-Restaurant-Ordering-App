@@ -1,4 +1,4 @@
-package com.example.aggoetey.myapplication.pay;
+package com.example.aggoetey.myapplication.pay.fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
