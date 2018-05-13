@@ -57,7 +57,6 @@ public class MenuFragmentContainer extends Fragment {
 
     public static MenuFragmentContainer newInstance() {
         Bundle bundle = new Bundle();
-
         MenuFragmentContainer menuFragmentContainer = new MenuFragmentContainer();
         menuFragmentContainer.setArguments(bundle);
         return menuFragmentContainer;
