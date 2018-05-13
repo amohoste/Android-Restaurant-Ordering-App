@@ -14,10 +14,14 @@ import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.pay.adapters.OrderItemAdapter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class OrderDetailFragment extends Fragment {
     public static final String ORDER_KEY = "order";
 
-    private TextView mOrderNr;
+    private TextView mTitle;
     private TextView mPrice;
     private RecyclerView mOrderItems;
 
@@ -29,7 +33,7 @@ public class OrderDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.order_detail_fragment, parent, false);
 
 
-        mOrderNr = view.findViewById(R.id.title);
+        mTitle = view.findViewById(R.id.title);
         mPrice = view.findViewById(R.id.price);
         mOrderItems = view.findViewById(R.id.orderItems);
 
@@ -40,7 +44,10 @@ public class OrderDetailFragment extends Fragment {
             Tab.Order order = (Tab.Order) (arguments.getSerializable(ORDER_KEY));
 
             if (order != null) {
-                mOrderNr.setText(mOrderNr.getContext().getString(R.string.tab_order_position, order.getOrderNumber()));
+                DateFormat format = new SimpleDateFormat("hh:mm");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(order.getTime().getTime() * 1000);
+                mTitle.setText(format.format(order.getTime()));
                 mPrice.setText(mPrice.getContext().getString(R.string.price_order, order.getPrice()));
                 mOrderItems.setAdapter(new OrderItemAdapter(order));
                 mOrderItems.setLayoutManager(new LinearLayoutManager(getContext()));
