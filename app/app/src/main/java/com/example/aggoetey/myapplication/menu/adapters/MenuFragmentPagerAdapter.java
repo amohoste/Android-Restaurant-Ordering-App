@@ -3,11 +3,11 @@ package com.example.aggoetey.myapplication.menu.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
 import com.example.aggoetey.myapplication.menu.fragments.MenuPageFragment;
+import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.ViewType;
 
 /**
@@ -15,16 +15,17 @@ import com.example.aggoetey.myapplication.model.ViewType;
  * Adapter voor de menu tabs (drinks, food...).
  */
 
-public class MenuFragmentPagerAdapter extends FragmentPagerAdapter implements MenuPageFragment.MenuViewStateListener{
+public class MenuFragmentPagerAdapter extends FragmentPagerAdapter implements MenuPageFragment.MenuViewStateListener {
 
     private String tabTitles[];
     private MenuInfo menuInfo;
     private static ViewType viewType;
     public MenuFragmentPagerAdapter(FragmentManager fm, MenuInfo menuInfo, ViewType viewType) {
         super(fm);
-        tabTitles = menuInfo.getRestaurant().getMenu().getCategories().toArray(
-                new String[menuInfo.getRestaurant().getMenu().getCategories().size()]);
+        tabTitles = Tab.getInstance().getRestaurant().getMenu().getCategories().toArray(
+                new String[Tab.getInstance().getRestaurant().getMenu().getCategories().size()]);
         this.menuInfo = menuInfo;
+        Log.d("MENU_LOAD", Tab.getInstance().getRestaurant().getMenu().toString() + "lol");
         MenuFragmentPagerAdapter.viewType = viewType;
     }
 

@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.model.Tab;
 
 import java.io.Serializable;
 
@@ -20,7 +22,7 @@ import java.io.Serializable;
  * Adapter voor de recyclerview voor menuitems.
  */
 
-public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> implements Serializable {
+public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> implements Serializable, Listener {
 
     public interface MenuListClickListener {
         void onMenuListLongClick(MenuItem menuItem, MenuInfo menuInfo, int position);
@@ -35,8 +37,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         this.menuInfo = menuInfo;
         this.category = category;
         this.listClickListener = listClickListener;
+
     }
 
+    @Override
+    public void invalidated() {
+        notifyDataSetChanged();
+    }
 
     @Override
     public MenuItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,13 +54,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     @Override
     public void onBindViewHolder(MenuItemHolder holder, int position) {
-        holder.bind(menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position), position);
+        holder.bind(Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).get(position), position);
     }
 
 
     @Override
     public int getItemCount() {
-        return menuInfo.getRestaurant().getMenu().getMenuItemList(category).size();
+        return Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).size();
     }
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {
@@ -73,7 +80,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         public void bind(final MenuItem menuItem, final int position) {
-            mTitleTextView.setText(menuItem.title + " (€" + Integer.toString(menuItem.price) +")");
+            mTitleTextView.setText(menuItem.title + " (€" + Double.toString(menuItem.price) +")");
             setNewOrderCount(menuItem.id);
 
 
@@ -105,7 +112,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
         }
 
         private void setNewOrderCount(String itemID) {
-
             mOrderCountTextView.setText(menuInfo.getOrderCount(itemID));
         }
     }

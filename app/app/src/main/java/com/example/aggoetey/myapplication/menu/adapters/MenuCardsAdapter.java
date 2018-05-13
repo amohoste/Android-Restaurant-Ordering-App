@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aggoetey.myapplication.Listener;
 import com.example.aggoetey.myapplication.R;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.model.Tab;
 
 /**
  * Created by sitt on 05/04/18.
@@ -19,7 +21,7 @@ import com.example.aggoetey.myapplication.model.MenuItem;
  * Adapter to show menu in cards form.
  */
 
-public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> {
+public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.MenuCardHolder> implements Listener {
 
     public interface OnAddNoteButtonClickListener {
          void onAddNoteButtonClick(MenuItem menuItem);
@@ -34,7 +36,11 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
         this.menuInfo = menuInfo;
         this.category = category;
         this.listener = listener;
+    }
 
+    @Override
+    public void invalidated() {
+        notifyDataSetChanged();
     }
 
     @Override
@@ -49,7 +55,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
     @Override
     public void onBindViewHolder(final MenuCardHolder holder, final int position) {
         final boolean isExpanded = position == mExpandedPosition;
-        MenuItem menuItem = menuInfo.getRestaurant().getMenu().getMenuItemList(category).get(position);
+        MenuItem menuItem = Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).get(position);
 
 
         if(isExpanded) {
@@ -79,7 +85,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
 
     @Override
     public int getItemCount() {
-        return menuInfo.getRestaurant().getMenu().getMenuItemList(category).size();
+        return Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).size();
     }
 
 
@@ -160,7 +166,7 @@ public class MenuCardsAdapter extends RecyclerView.Adapter<MenuCardsAdapter.Menu
 
             mDescriptionTextView.setText(item.description);
             mNameTextView.setText(item.title);
-            mPriceTextView.setText(String.format("€ %d", item.price));
+            mPriceTextView.setText(String.format("€ %.2f", item.price));
 
             // TEMPORARY IMAGE
             mDishImageView.setImageResource(R.drawable.kimchi1);

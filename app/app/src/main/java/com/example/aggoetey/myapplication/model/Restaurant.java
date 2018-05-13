@@ -1,12 +1,15 @@
 package com.example.aggoetey.myapplication.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,23 +21,38 @@ import java.util.List;
 //TODO: Make restaurant parcelable to be able to save restaurant in bundles without transient
 //TODO: since LatLng is only parcelable not serializable.
 
-public class Restaurant implements Serializable {
+@SuppressLint("ParcelCreator")
+public class Restaurant implements Serializable, SearchSuggestion {
 
-    private String title;
     //TODO: Remove transient once parcelable is achieved
-    private transient LatLng position;
-    private String address;
-    private String phone;
-    private double rating;
-    private String googlePlaceId;
+
+    // Menu
     private Menu menu;
     private List<Table> tables = new ArrayList<>();
 
-    public Restaurant(String title, Menu menu) {
-        this.title = title;
-        this.menu = menu;
+    // Info
+    private String title;
+    private String address;
+    private String phone;
+    private double rating;
+    private transient LatLng position;
+    private String googlePlaceId;
+    private HashMap<Integer,HashMap<String,String>> openingHours;
+    private String pictureReference;
+    private String type;
+
+
+    public Restaurant() {
+
     }
 
+    public Restaurant(String title, String phone, String googlePlaceId) {
+        this.title = title;
+        this.phone = phone;
+        this.googlePlaceId = googlePlaceId;
+    }
+
+    // TODO: remove this
     public Restaurant(String title, Menu menu, double lat, double lng, String address, String phone, double rating, String googlePlaceId) {
         this.title = title;
         this.menu = menu;
@@ -93,5 +111,65 @@ public class Restaurant implements Serializable {
         return googlePlaceId;
     }
 
+    public void setGooglePlaceId(String googlePlaceId) {
+        this.googlePlaceId = googlePlaceId;
+    }
 
+    public HashMap<Integer, HashMap<String, String>> getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(HashMap<Integer, HashMap<String, String>> openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public String getPictureReference() {
+        return pictureReference;
+    }
+
+    public void setPictureReference(String pictureReference) {
+        this.pictureReference = pictureReference;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setPosition(LatLng position) {
+        this.position = position;
+    }
+
+    // Enables autocompletion
+    // Search suggestions
+    @Override
+    public String getBody() {
+        return title;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeInt(0);
+    }
 }

@@ -3,22 +3,38 @@
     <string name="text_menu_discover">Discover</string>
     <string name="text_menu_pay">Pay</string>
     <string name="text_menu_menu">Menu</string>
-    <string name="discover_text">Hier kan je ontdekken wat er allemaal te doen is in de wereld.</string>
-    <string name="menu_text">Bekijk hier een mooi menu.</string>
-    <string name="pay_text">Bekijk hier wat je allemaal al besteld hebt.</string>
+    <string name="discover_text">Discover the world around you.</string>
+    <string name="menu_text">Checkout our state of the art menu</string>
+    <string name="pay_text">Check your ordered items.</string>
     <string name="title_menuitem_list">MenuItems</string>
     <string name="title_menuitem_detail">MenuItem Detail</string>
-    <string name="no_restaurant_selected">Gelieve een restaurant te selecteren in de discover tab.</string>
+    <string name="no_restaurant_selected">Please select a restaurant in de discover tab.</string>
+    <string name="menu_loading">Loading menu...</string>
+    <string name="qr_code_not_recognized">Didn\'t recognize that code!</string>
 
+    <string name="menu_view_login_button">Log in</string>
     <string name="menu_view_order_button">Order</string>
+
+    <string name="waiter_call_try">Calling a waiter...</string>
+    <string name="waiter_call_success">Waiter successfully notified!</string>
+    <string name="waiter_call_failure">Couldn\'t reach a waiter, please try again later!</string>
+
+    <string name="order_send_try">Sending order...</string>
+    <string name="order_send_success">Order successfully sent!</string>
+    <string name="order_send_failure">Couldn\'t send the order, please try again later!</string>
 
     <string name="tab_order_position">Order # %1$d</string>
     <string name="tab_view_pay">Pay</string>
-    <string name="total_price">Totale prijs: %1$d euro.</string>
 
-    <string name="price_order">Prijs order: %1$d euro.</string>
-    <string name="price_order_short">€%1$d</string>
-    <string name="no_order_selected">Je hebt geen order geselecteerd!</string>
+    <string name="total_price_payed">Paid items: %1$.2f euro.</string>
+    <string name="total_price_received">Received items: %1$.2f euro.</string>
+    <string name="total_price_ordered">Ordered items: %1$.2f euro.</string>
+
+
+    <string name="price_order">Price order: %.2f euro.</string>
+    <string name="price_order_short">€%1$.2f</string>
+
+    <string name="no_order_selected">No orders are selected!</string>
     <string name="title_activity_maps">Map</string>
 
 
@@ -32,7 +48,44 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
 
+    <string name="paychoicedialog_title">Please choose the method of payment</string>
+    <string name="paychoiceconfirmation">You\'ve chosen to pay with %1$s</string>
+    <string name="qr_hello">Scan the QR code</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="qr_code_edit_label">Restaurant code</string>
+    <string name="qr_code_edit_btn">Confirm</string>
+    <string name="qr_no_camera_permission">Camera Permission Needed</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_pay">pay</string>
+    <string name="nothing_to_pay">Please order something before choosing to pay</string>
+    <string name="check_order">Check Order</string>
+    <string name="confirm_order">Confirm Order</string>
+    <string name="google_map_app">com.google.android.apps.maps</string>
+    <string name="notes_description">It sucks</string>
+    <string name="note_number_tag">#</string>
+    <string name="note_parent_amount">Amount:</string>
+    <string name="note_group_text">Order group:</string>
+    <string name="no_table_selected">Please log in with the table code.</string>
+
+    <!-- Discover -->
+    <string name="searchbar_hint">Search restaurants</string>
+    <string name="filter_sort_method_title">Sort list results by</string>
+    <string name="filter_sort_method_distance">Distance</string>
+    <string name="filter_sort_method_alphabetical">Alphabetical</string>
+    <string name="filter_min_rating_title">Rating at least</string>
+    <string name="filter_filter_title">Filter</string>
+    <string name="filter_open_today">Open today</string>
+    <string name="filter_distance">Distance</string>
+    <string name="filter_confirm">CONFIRM</string>
+    <string name="restaurant_closed">Closed</string>
+    <string name="restaurant_hours_not_known">Hours not known</string>
+    <string name="cancelled_order_toast">Your order has ben cancelled</string>
+    <string name="order_confirm_toast">Your order will be processed in 5 seconds. Cancel the order within the time limit.</string>
+    <string name="cant_logout">Can\'t logout</string>
+    <string name="logout_confirmation">Are you sure you want to log out?</string>
+    <string name="oke">Okay</string>
+    <string name="open_bill">You still have tabs to pay! You can\'t log out yet.</string>
 
 </resources>

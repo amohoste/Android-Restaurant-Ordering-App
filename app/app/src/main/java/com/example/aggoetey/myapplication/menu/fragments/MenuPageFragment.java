@@ -13,8 +13,9 @@ import android.view.ViewGroup;
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.menu.adapters.MenuCardsAdapter;
 import com.example.aggoetey.myapplication.menu.adapters.MenuListAdapter;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.ViewType;
+import com.example.aggoetey.myapplication.note.fragments.OrderNoteDialogFragment;
 import com.example.aggoetey.myapplication.utils.UIUtility;
 
 import java.io.Serializable;
@@ -53,15 +54,15 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
         mPage = getArguments().getInt(ARG_PAGE);
         menuViewStateListener = (MenuViewStateListener) getArguments().getSerializable(ARG_MENU_VIEW_LISTENER);
         category = getArguments().getString(ARG_MENU_CATEGORY);
-        menuInfo = (MenuInfo) getArguments().getSerializable(ARG_MENU_INFO);
+        menuInfo = MenuInfo.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu_page, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler_view);
-        initViewType(recyclerView);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler_view);
+        initViewType(mRecyclerView);
 
         return view;
     }
@@ -86,6 +87,7 @@ public class MenuPageFragment extends Fragment implements Serializable, MenuCard
         recyclerView.setAdapter(adapter);
         mMenuRecyclerAdapter = adapter;
     }
+
 
 
     @Override

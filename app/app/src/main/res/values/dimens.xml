@@ -7,4 +7,9 @@
     <dimen name="card_padding">8dp</dimen>
     <dimen name="price_padding">2dp</dimen>
     <dimen name="card_width">250dp</dimen>
+    <dimen name="qr_scanner_width">300dp</dimen>
+    <dimen name="qr_scanner_height">300dp</dimen>
+    <dimen name="qr_scanner_textSize">30sp</dimen>
+    <dimen name="qr_scanner_margin">40dp</dimen>
+    <dimen name="note_expand_arrow">20dp</dimen>
 </resources>

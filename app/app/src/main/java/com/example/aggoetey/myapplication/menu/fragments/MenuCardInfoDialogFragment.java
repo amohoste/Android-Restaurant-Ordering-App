@@ -5,11 +5,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 
 import com.example.aggoetey.myapplication.menu.views.MenuCardView;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.MenuItem;
+import com.example.aggoetey.myapplication.note.fragments.OrderNoteDialogFragment;
 
 import java.io.Serializable;
 
@@ -55,7 +55,7 @@ public class MenuCardInfoDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        menuInfo = (MenuInfo) getArguments().getSerializable(ARG_CARD_MENU_INFO);
+        menuInfo = MenuInfo.getInstance();
         menuItem = (MenuItem) getArguments().getSerializable(ARG_CARD_MENU_ITEM);
         listener = (CardDialogClickListener) getArguments().getSerializable(ARG_CARD_MENU_LISTENER);
         menuItemPos = getArguments().getInt(ARG_CARD_MENU_POS);

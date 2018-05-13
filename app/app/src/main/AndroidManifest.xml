@@ -8,6 +8,10 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
     <application
         android:allowBackup="true"
@@ -16,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +29,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
         <activity
             android:name=".Menu.MenuItemListActivity"
             android:label="@string/title_menuitem_list"
@@ -37,7 +45,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.aggoetey.myapplication.Menu.MenuItemListActivity" />
         </activity>
-        <activity android:name=".orderdetail.OrderDetailActivity" />
+        <activity android:name=".pay.OrderDetailActivity" />
+
+        <activity android:name=".note.activity.NotesActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="Notes"
+
+            />
+        <activity android:name=".pay.orderdetail.OrderDetailActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -55,11 +70,16 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode"/>
         <activity
             android:name=".discover.activities.FilterActivity"
             android:label="Filters" />
-
+        <activity android:name=".qrscanner.activity.QRScannerActivity"
+            android:screenOrientation="portrait"
+            android:label="QR Scanner"
+            />
     </application>
 
 </manifest>

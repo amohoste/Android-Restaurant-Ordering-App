@@ -9,15 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import com.example.aggoetey.myapplication.R;
 import com.example.aggoetey.myapplication.discover.adapters.RestaurantListAdapter;
+import com.example.aggoetey.myapplication.discover.helpers.SearchRestaurantHelper;
 import com.example.aggoetey.myapplication.discover.views.ClickableImageView;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
+import com.example.aggoetey.myapplication.model.Tab;
+
+import java.util.ArrayList;
 
 /**
  * Fragment that displays a list of restaurants
@@ -40,7 +41,7 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof Activity){
+        if (context instanceof Activity) {
             mCallbacks = (Callbacks) getParentFragment();
         }
     }
@@ -76,9 +77,12 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
         mRecyclerView.setAdapter(mAdapter);
 
         restaurantProvider = mCallbacks.getRestaurantProvider();
+        restaurantProvider.addRestaurantListener(this);
         ArrayList<Restaurant> restaurants = restaurantProvider.getRestaurants();
         if (restaurants != null) {
-            mAdapter.setRestaurants(restaurants);
+            restaurants = SearchRestaurantHelper.sortResults(restaurants);
+            this.searchedRestaurants = restaurants;
+            filterResults();
         }
 
         locationProvider = mCallbacks.getLocationProvider();
@@ -104,14 +108,48 @@ public class RestaurantListFragment extends DiscoverFragment implements View.OnC
 
     @Override
     public void onRestaurantClick(Restaurant restaurant) {
-        // Todo open restaurant
         DiscoverContainerFragment parent = (DiscoverContainerFragment) getParentFragment();
-        DiscoverContainerFragment.RestaurantSelectListener mListener =  parent.getSelectListener();
-        if (mListener != null) {
-            parent.getSelectListener().onRestaurantSelect(new MenuInfo(restaurant));
+        DiscoverContainerFragment.RestaurantSelectListener mListener = parent.getSelectListener();
+        if (mListener != null && Tab.getInstance().canLogout()) {
+            Tab.getInstance().setRestaurant(restaurant);
+            parent.getSelectListener().onRestaurantSelect(MenuInfo.getInstance().reset());
         }
-        // Toast.makeText(getContext(), restaurant.getGooglePlaceId() + " clicked!" + " open menu...", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onRestaurantUpdate(ArrayList<Restaurant> restaurants) {
+        if (mAdapter != null && restaurants != null) {
+            mAdapter.setRestaurants(restaurants);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (restaurantProvider != null) {
+            restaurantProvider.removeRestaurantListener(this);
+        }
+        super.onStop();
+    }
+
+    @Override
+    void onSearchResult(ArrayList<Restaurant> result, boolean clear) {
+        this.searchedRestaurants = result;
+        filterResults();
+    }
+
+    @Override
+    void filterResults() {
+        if (mAdapter != null && searchedRestaurants != null) {
+            ArrayList<Restaurant> result = new ArrayList<>();
+
+            for (Restaurant restaurant : searchedRestaurants) {
+                if (SearchRestaurantHelper.satisfiesFilter(restaurant)) {
+                    result.add(restaurant);
+                }
+            }
+            result = SearchRestaurantHelper.sortResults(result);
+            mAdapter.setRestaurants(result);
+        }
+    }
 
 }

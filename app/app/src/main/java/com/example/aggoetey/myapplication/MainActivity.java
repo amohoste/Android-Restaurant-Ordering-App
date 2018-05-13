@@ -1,57 +1,56 @@
 package com.example.aggoetey.myapplication;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.aggoetey.myapplication.discover.fragments.DiscoverContainerFragment;
-import com.example.aggoetey.myapplication.discover.fragments.DiscoverFragment;
 import com.example.aggoetey.myapplication.discover.services.RestaurantProvider;
-
-import com.example.aggoetey.myapplication.menu.fragments.MenuFragment;
-import com.example.aggoetey.myapplication.menu.fragments.NoMenuSelectedFragment;
-import com.example.aggoetey.myapplication.menu.model.MenuInfo;
-import com.example.aggoetey.myapplication.model.Menu;
+import com.example.aggoetey.myapplication.menu.fragments.MenuFragmentContainer;
+import com.example.aggoetey.myapplication.model.MenuInfo;
 import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
-import com.example.aggoetey.myapplication.orderdetail.OrderDetailActivity;
-import com.example.aggoetey.myapplication.orderdetail.OrderDetailFragment;
-import com.example.aggoetey.myapplication.tab.TabFragment;
+import com.example.aggoetey.myapplication.model.Table;
+import com.example.aggoetey.myapplication.pay.OrderDetailActivity;
+import com.example.aggoetey.myapplication.pay.fragments.OrderDetailFragment;
+import com.example.aggoetey.myapplication.pay.fragments.PayContainerFragment;
+import com.example.aggoetey.myapplication.pay.fragments.TabFragment;
+import com.example.aggoetey.myapplication.pay.fragments.tabfragmentpage.TabPageFragment;
+import com.example.aggoetey.myapplication.qrscanner.activity.QRScannerActivity;
 
 
-public class MainActivity extends AppCompatActivity implements TabFragment.Callbacks, DiscoverContainerFragment.RestaurantSelectListener {
+public class MainActivity extends AppCompatActivity implements TabPageFragment.OrderSelectedListener, DiscoverContainerFragment.RestaurantSelectListener, TabFragment.LogoutListener {
 
-    private boolean first = false;
-    private static final String FIRST_KEY = "VISIBLE_FRAGMEN";
-    private static final String MENU_OBJECT_KEY = "MENU_OBJECT_KEY";
-    private MenuInfo menuInfo;
+
+    private static final String DISCOVER_FRAGMENT_TAG = "DISCOVER_FRAGMENT_TAG";
+    private static final String MENU_FRAGMENT_CONTAINER_TAG = "MENU_FRAGMENT_CONTAINER_TAG";
+    private static final String PAY_FRAGMENT_TAG = "PAY_FRAGMENT_TAG";
+
+    private static final String DEBUG = "DEBUG";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            first = savedInstanceState.getBoolean(FIRST_KEY);
-
-            menuInfo = (MenuInfo) savedInstanceState.getSerializable(MENU_OBJECT_KEY);
-        }
-
-        // Todo Little hacky, do better in second sprint
-        Fragment cur = getSupportFragmentManager().findFragmentById(R.id.fragment_place);
-        if (cur instanceof DiscoverContainerFragment) {
-            ((DiscoverContainerFragment) cur).setRestaurantSelectListener(this);
-        }
-
         setContentView(R.layout.activity_main);
 
         enableBottomNavigation();
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        if (getSupportFragmentManager().getFragments().size() == 0) {
+            // als er nog geen fragments zijn dan gaan we naar discover
+            // dit is het geval als we de app voor de eerste keer opstarten
+            switchToDiscover();
+        }
     }
 
     /**
@@ -59,38 +58,21 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
      */
     private void enableBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        // Set discovery as visible fragment when app starts
-        if (!first) {
-            FragmentManager manager = getSupportFragmentManager();
-            DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
-            discoverContainerFragment.setRestaurantSelectListener(this);
-            manager.beginTransaction().add(R.id.fragment_place, discoverContainerFragment).commit();
-            first = true;
-        }
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        FragmentManager manager = getSupportFragmentManager();
-
                         switch (item.getItemId()) {
                             case R.id.action_discover:
-                                DiscoverContainerFragment discoverContainerFragment = new DiscoverContainerFragment();
-                                discoverContainerFragment.setRestaurantSelectListener(MainActivity.this);
-                                manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment).commit();
+                                switchToDiscover();
                                 break;
                             case R.id.action_menu:
-                                switchToMenu(menuInfo);
+                                switchToMenu();
                                 break;
                             case R.id.action_pay:
-                                manager.beginTransaction().replace(R.id.fragment_place, PayFragment.newInstance()).commit();
+                                switchToPay();
                                 break;
                         }
-
-
                         return true;
                     }
                 }
@@ -101,21 +83,38 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
      * Als er geen menu is dat ingeladen moet worden kan je hier null aan meegeven
      * Dan zal het menuFragment zelf kijken of hij al weet welk menu er is en anders een ander menuutje inladen
      */
-    private void switchToMenu(MenuInfo menuInfo) {
+    private void switchToMenu() {
         FragmentManager manager = getSupportFragmentManager();
-        this.menuInfo = menuInfo;
+        MenuFragmentContainer menuFragmentContainer = (MenuFragmentContainer) manager.findFragmentByTag(MENU_FRAGMENT_CONTAINER_TAG);
 
-        if (menuInfo == null) {
-            manager.beginTransaction().replace(R.id.fragment_place, NoMenuSelectedFragment.newInstance()).commit();
-        } else {
-
-            manager.beginTransaction().replace(R.id.fragment_place, MenuFragment.newInstance(menuInfo)).commit();
-
-            // Selects the correct item in the view
-            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-            bottomNavigationView.getMenu().findItem(R.id.action_menu).setChecked(true);
+        if (menuFragmentContainer == null) {
+            menuFragmentContainer = MenuFragmentContainer.newInstance();
         }
+
+        manager.beginTransaction().replace(R.id.fragment_place, menuFragmentContainer, MENU_FRAGMENT_CONTAINER_TAG)
+                .addToBackStack(MENU_FRAGMENT_CONTAINER_TAG).commit();
     }
+
+    private void switchToDiscover() {
+        FragmentManager manager = getSupportFragmentManager();
+        DiscoverContainerFragment discoverContainerFragment = (DiscoverContainerFragment) manager.findFragmentByTag(DISCOVER_FRAGMENT_TAG);
+        if (discoverContainerFragment == null) {
+            discoverContainerFragment = DiscoverContainerFragment.newInstance();
+        }
+        manager.beginTransaction().replace(R.id.fragment_place, discoverContainerFragment, DISCOVER_FRAGMENT_TAG)
+                .addToBackStack(DISCOVER_FRAGMENT_TAG).commit();
+    }
+
+    private void switchToPay() {
+        FragmentManager manager = getSupportFragmentManager();
+        PayContainerFragment payContainerFragment = (PayContainerFragment) manager.findFragmentByTag(PAY_FRAGMENT_TAG);
+        if (payContainerFragment == null) {
+            payContainerFragment = PayContainerFragment.newInstance();
+        }
+        manager.beginTransaction().replace(R.id.fragment_place, payContainerFragment)
+                .addToBackStack(PAY_FRAGMENT_TAG).commit();
+    }
+
 
     /**
      * Bij het selecteren van een order de juiste actie doen
@@ -140,19 +139,71 @@ public class MainActivity extends AppCompatActivity implements TabFragment.Callb
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // Save MenuFragment instance
         super.onSaveInstanceState(outState);
-        outState.putBoolean(FIRST_KEY, first);
-
-        // Save MenuFragment instance
-        if (menuInfo != null) {
-            outState.putSerializable(MENU_OBJECT_KEY, menuInfo);
-        }
     }
 
 
     @Override
     public void onRestaurantSelect(MenuInfo menuInfo) {
-        switchToMenu(menuInfo);
+        if (Tab.getInstance().canLogout()) {
+            Tab.getInstance().logout();
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.open_bill, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        findViewById(R.id.action_menu).performClick();
+    }
+
+    public void startQRScannerActivity() {
+        Intent qrIntent = new Intent(this, QRScannerActivity.class);
+        startActivityForResult(qrIntent, QRScannerActivity.QR_CODE_REQUEST);
+        Toast.makeText(getApplicationContext(), "Open QR-scanner",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            {
+                return;
+            }
+        }
+
+        if (requestCode == QRScannerActivity.QR_CODE_REQUEST) {
+            if (data == null) {
+                return;
+            }
+            String code = data.getStringExtra(QRScannerActivity.EXTRA_ANSWER_SHOWN);
+
+            // Split scanned code into restaurant_id and table_id
+            Log.d("QR RESULTS", code);
+            String[] ids = code.split(":");
+            String restaurant_id = ids[0];
+            String table_id = ids.length == 2 ? ids[1] : null;
+
+
+            // TODO SITT: move this validation check to QRActivity
+            // TODO: add table validation check (+ make it possible to only scan table once restaurant is filled)
+            Restaurant restaurant = RestaurantProvider.getInstance().getRestaurant(restaurant_id);
+
+            if (restaurant == null) {
+                Toast.makeText(this, R.string.qr_code_not_recognized, Toast.LENGTH_SHORT)
+                        .show();
+            } else if (Tab.getInstance().canLogout()) {
+                // Load restaurant into MenuInfo
+                Tab.getInstance().setRestaurant(restaurant);
+                Tab.getInstance().setTable(new Table(null, table_id));
+                findViewById(R.id.action_menu).performClick();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.open_bill, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void loggedOut() {
+        findViewById(R.id.action_discover).performClick();
     }
 }
