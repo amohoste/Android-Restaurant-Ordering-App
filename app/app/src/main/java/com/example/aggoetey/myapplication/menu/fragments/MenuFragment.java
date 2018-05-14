@@ -235,7 +235,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
 
     public void setCheckButtonProperties() {
-
         mCheckOrderButton.setEnabled(this.menuInfo.getCurrentOrder().getOrderItems().size() > 0);
         mCheckOrderButton.setOnClickListener(this::onClick);
     }
@@ -253,7 +252,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     }
 
     public void setOrderButtonProperties() {
-        if (isUserLoggedIn()) {
+        if (Tab.getInstance().isUserLoggedIn()) {
             if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
                 mMenuOrderButton.setText(String.format("%s (€%.2f)",
                         getResources().getString(R.string.menu_view_order_button), menuInfo.getCurrentOrder().getPrice()));
@@ -277,7 +276,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                 editor.apply();
             }
         }
-
 
         toggleViewTypeMenu(this.optionsMenu);
     }
@@ -349,15 +347,11 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     }
 
-    private boolean isUserLoggedIn() {
-        return Tab.getInstance().getTable() != null && Tab.getInstance().getTable().getTableId() != null;
-    }
-
     /**
      * First need to get WaiterCall-array before we can add a new WaiterCall
      */
     public void callWaiter() {
-        if (!isUserLoggedIn()) {
+        if (!Tab.getInstance().isUserLoggedIn()) {
             Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.need_logged_in), Toast.LENGTH_SHORT);
             toast.show();
             return;
@@ -428,7 +422,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     @Override
     public void invalidated() {
         setCheckButtonProperties();
-        setOrderButtonProperties();
+        setOrderButton();
         if (this.restaurant == null || this.restaurant != Tab.getInstance().getRestaurant()) {
             this.restaurant = Tab.getInstance().getRestaurant();
             loadMenu();
