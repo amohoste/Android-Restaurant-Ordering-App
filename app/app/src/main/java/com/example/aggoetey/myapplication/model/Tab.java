@@ -214,19 +214,20 @@ public class Tab extends Model implements Serializable {
                     mDocRef.update("orders", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            menuFragment.getmMenuOrderButton().setEnabled(true);
+                            if (menuFragment.isAdded()) {
+                                menuFragment.getmMenuOrderButton().setEnabled(true);
 
-                            try_toast.cancel();
-                            Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
-                                    .getString(R.string.order_send_success), Toast.LENGTH_SHORT)
-                                    .show();
+                                try_toast.cancel();
+                                Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
+                                        .getString(R.string.order_send_success), Toast.LENGTH_SHORT)
+                                        .show();
 
-                            menuInfo.orderCommitted();
+                                menuInfo.orderCommitted();
 
-                            if (menuFragment.isVisible()) {
-                                menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
+                                if (menuFragment.isVisible()) {
+                                    menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
+                                }
                             }
-
                             orderedOrders.add(order); //zo lijkt het alsof er niks moet laden
                         }
                     }).addOnFailureListener(new OnFailureListener() {

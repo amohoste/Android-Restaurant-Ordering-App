@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,10 +42,21 @@ public class MenuFragmentContainer extends Fragment {
                     .commit();
         } else {
             // er is wel een restaurant geselecteerd
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.container, MenuFragment.newInstance())
-                    .addToBackStack(MENU_FRAGMENT_TAG)
-                    .commit();
+
+            FragmentManager manager = getActivity().getSupportFragmentManager();
+            MenuFragment menuFragment = (MenuFragment) manager.findFragmentByTag(MENU_FRAGMENT_TAG);
+
+            if (menuFragment != null) {
+                getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container, menuFragment)
+                        .addToBackStack(MENU_FRAGMENT_TAG)
+                        .commit();
+            } else {
+                getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container, MenuFragment.newInstance())
+                        .addToBackStack(MENU_FRAGMENT_TAG)
+                        .commit();
+            }
         }
 
         return v;
