@@ -28,6 +28,7 @@ import com.example.aggoetey.myapplication.ServerConnectionFailure;
 import com.example.aggoetey.myapplication.menu.adapters.MenuFragmentPagerAdapter;
 import com.example.aggoetey.myapplication.menu.services.RestaurantMenuLoader;
 import com.example.aggoetey.myapplication.model.MenuInfo;
+import com.example.aggoetey.myapplication.model.Restaurant;
 import com.example.aggoetey.myapplication.model.Tab;
 import com.example.aggoetey.myapplication.model.Table;
 import com.example.aggoetey.myapplication.model.ViewType;
@@ -54,6 +55,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     private static final String VIEW_TYPE_PREFERENCE_FILE = "VIEW_TYPE_PREFERENCE_FILE";
     private static final int REQUEST_MENU_INFO = 200;
     private MenuInfo menuInfo;
+    private Restaurant restaurant;
 
     private ViewPager viewPager;
     private MenuFragmentPagerAdapter pagerAdapter;
@@ -140,7 +142,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         Tab.getInstance().addListener(this);
 
         loadMenu();
-
 
 
         return v;
@@ -432,12 +433,15 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     @Override
     public void invalidated() {
-        setCheckButtonProperties();
-        setOrderButtonProperties();
-        loadMenu();
+        if (this.restaurant == null || this.restaurant != Tab.getInstance().getRestaurant()) {
+            this.restaurant = Tab.getInstance().getRestaurant();
+            setCheckButtonProperties();
+            setOrderButtonProperties();
+            loadMenu();
+        }
     }
 
-    public void loadMenu(){
+    public void loadMenu() {
         // Load the restaurant's menu from the FireStore backend if not loaded already
         if (Tab.getInstance().getRestaurant().getMenu() == null) {
             new RestaurantMenuLoader(menuInfo, this);
