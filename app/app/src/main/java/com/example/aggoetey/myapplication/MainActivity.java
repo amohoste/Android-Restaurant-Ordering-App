@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -183,6 +182,8 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             String table_id = ids.length == 2 ? ids[1] : null;
 
 
+            // TODO SITT: move this validation check to QRActivity
+            // TODO: add table validation check (+ make it possible to only scan table once restaurant is filled)
             Restaurant restaurant = RestaurantProvider.getInstance().getRestaurant(restaurant_id);
 
             if (restaurant == null) {
@@ -192,18 +193,7 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
                 // Load restaurant into MenuInfo
                 Tab.getInstance().setRestaurant(restaurant);
                 Tab.getInstance().setTable(new Table(null, table_id));
-
-                FragmentManager manager = getSupportFragmentManager();
-                MenuFragmentContainer menuFragmentContainer = (MenuFragmentContainer) manager.findFragmentByTag(MENU_FRAGMENT_CONTAINER_TAG);
-
-                if (menuFragmentContainer != null) {
-                    final FragmentTransaction ft = manager.beginTransaction();
-                    ft.detach(menuFragmentContainer);
-                    ft.attach(menuFragmentContainer);
-                    ft.commit();
-                } else {
-                    findViewById(R.id.action_menu).performClick();
-                }
+                findViewById(R.id.action_menu).performClick();
             } else {
                 Toast.makeText(getApplicationContext(), R.string.open_bill, Toast.LENGTH_SHORT).show();
             }
