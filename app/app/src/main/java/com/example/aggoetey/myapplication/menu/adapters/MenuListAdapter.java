@@ -60,7 +60,11 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuIt
 
     @Override
     public int getItemCount() {
-        return Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).size();
+        if (Tab.getInstance().getRestaurant().getMenu() != null) {
+            return Tab.getInstance().getRestaurant().getMenu().getMenuItemList(category).size();
+        } else {
+            return 0;
+        }
     }
 
     public class MenuItemHolder extends RecyclerView.ViewHolder {
