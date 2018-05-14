@@ -1,4 +1,6 @@
 # project-1718-groep-1
+## Documentatie
+- [server](https://docs.google.com/document/d/1XegDbjeTi-B0YAV_VGuK0e_phqif3KN9gIC7FkBcPWk/edit?usp=sharing)
 ## Issue met Template
 - [task](https://github.ugent.be/SELab1/project-1718-groep-1/issues/new?template=task.md)
 - [User Story](https://github.ugent.be/SELab1/project-1718-groep-1/issues/new?template=user-story.md)
@@ -16,3 +18,4 @@
 - [Verslag](https://drive.google.com/open?id=1DAG8i-iRs6-cUHFxl9sglrtWu_5wp1bW)
 
 https://docs.google.com/document/d/1tfbSl1q_7PMS42bWhSziytUzPl9SmuE2M1mEYT8eF3c/edit?usp=sharing
+[Feedback na sprint 1](https://docs.google.com/document/d/1tfbSl1q_7PMS42bWhSziytUzPl9SmuE2M1mEYT8eF3c/edit?usp=sharing)
