@@ -24,7 +24,6 @@ public class MenuNotLoadedFragment extends Fragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment MenuNotLoadedFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MenuNotLoadedFragment newInstance() {
         MenuNotLoadedFragment fragment = new MenuNotLoadedFragment();
         return fragment;

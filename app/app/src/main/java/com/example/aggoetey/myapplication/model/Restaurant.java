@@ -18,14 +18,8 @@ import java.util.List;
  * Een restaurant model.
  */
 
-//TODO: Make restaurant parcelable to be able to save restaurant in bundles without transient
-//TODO: since LatLng is only parcelable not serializable.
-
 @SuppressLint("ParcelCreator")
 public class Restaurant implements Serializable, SearchSuggestion {
-
-    //TODO: Remove transient once parcelable is achieved
-
     // Menu
     private Menu menu;
     private List<Table> tables = new ArrayList<>();
@@ -62,7 +56,6 @@ public class Restaurant implements Serializable, SearchSuggestion {
         this.googlePlaceId = googlePlaceId;
     }
 
-    // TODO: remove this
     public Restaurant(String title, Menu menu, double lat, double lng, String address, String phone, double rating, String googlePlaceId) {
         this.title = title;
         this.menu = menu;
