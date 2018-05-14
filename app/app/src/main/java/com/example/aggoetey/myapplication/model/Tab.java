@@ -175,74 +175,75 @@ public class Tab extends Model implements Serializable {
     public void commitOrder(final Order order, final MenuFragment menuFragment) {
         final MenuInfo menuInfo = menuFragment.getMenuInfo();
 
-
-        // Disable order button
-        if (menuFragment.isVisible()) {
-            menuFragment.getmMenuOrderButton().setEnabled(false);
-        }
-
-        final Toast try_toast = Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
-                .getString(R.string.order_send_try), Toast.LENGTH_LONG);
-        try_toast.show();
-
-        final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
-                .document(Tab.getInstance().getRestaurant().getGooglePlaceId()).collection("tables")
-                .document(Tab.getInstance().getTable().getTableId()).collection("ordered").document();
-
-        mDocRef.set(new HashMap<>());
-
-        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                // Retrieve tab array
-                ArrayList<Object> currentOrders = new ArrayList<>();
-
-                // Create new order entry
-                for (Order.OrderItem item : menuInfo.getCurrentOrder().getOrderItems()) {
-                    HashMap<String, Object> newEntry = new HashMap<>();
-                    newEntry.put("itemID", item.getMenuItem().id);
-                    newEntry.put("item", item.getMenuItem().title);
-                    newEntry.put("description", item.getMenuItem().description);
-                    newEntry.put("price", Double.toString(item.getMenuItem().price));
-                    newEntry.put("category", item.getMenuItem().category);
-                    newEntry.put("note", item.getNote());
-                    newEntry.put("time", System.currentTimeMillis() / 1000);
-                    currentOrders.add(newEntry);
-                }
-
-                // Upload to FireStore
-                mDocRef.update("orders", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        menuFragment.getmMenuOrderButton().setEnabled(true);
-
-                        try_toast.cancel();
-                        Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
-                                .getString(R.string.order_send_success), Toast.LENGTH_SHORT)
-                                .show();
-
-                        menuInfo.orderCommitted();
-
-                        if (menuFragment.isVisible()) {
-                            menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
-                        }
-
-                        orderedOrders.add(order); //zo lijkt het alsof er niks moet laden
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        menuFragment.getmMenuOrderButton().setEnabled(true);
-
-                        try_toast.cancel();
-                        Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
-                                .getString(R.string.order_send_failure), Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                });
+        if(menuFragment.isAdded()) {
+            // Disable order button
+            if (menuFragment.isVisible()) {
+                menuFragment.getmMenuOrderButton().setEnabled(false);
             }
-        }).addOnFailureListener(new ServerConnectionFailure(menuFragment, try_toast));
 
+            final Toast try_toast = Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
+                    .getString(R.string.order_send_try), Toast.LENGTH_LONG);
+            try_toast.show();
+
+            final DocumentReference mDocRef = FirebaseFirestore.getInstance().collection("places")
+                    .document(Tab.getInstance().getRestaurant().getGooglePlaceId()).collection("tables")
+                    .document(Tab.getInstance().getTable().getTableId()).collection("ordered").document();
+
+            mDocRef.set(new HashMap<>());
+
+            mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    // Retrieve tab array
+                    ArrayList<Object> currentOrders = new ArrayList<>();
+
+                    // Create new order entry
+                    for (Order.OrderItem item : menuInfo.getCurrentOrder().getOrderItems()) {
+                        HashMap<String, Object> newEntry = new HashMap<>();
+                        newEntry.put("itemID", item.getMenuItem().id);
+                        newEntry.put("item", item.getMenuItem().title);
+                        newEntry.put("description", item.getMenuItem().description);
+                        newEntry.put("price", Double.toString(item.getMenuItem().price));
+                        newEntry.put("category", item.getMenuItem().category);
+                        newEntry.put("note", item.getNote());
+                        newEntry.put("time", System.currentTimeMillis() / 1000);
+                        currentOrders.add(newEntry);
+                    }
+
+                    // Upload to FireStore
+                    mDocRef.update("orders", currentOrders).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            if (menuFragment.isAdded()) {
+                                menuFragment.getmMenuOrderButton().setEnabled(true);
+
+                                try_toast.cancel();
+                                Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
+                                        .getString(R.string.order_send_success), Toast.LENGTH_SHORT)
+                                        .show();
+
+                                menuInfo.orderCommitted();
+
+                                if (menuFragment.isVisible()) {
+                                    menuFragment.getActivity().findViewById(R.id.action_pay).performClick();
+                                }
+                            }
+                            orderedOrders.add(order); //zo lijkt het alsof er niks moet laden
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            menuFragment.getmMenuOrderButton().setEnabled(true);
+
+                            try_toast.cancel();
+                            Toast.makeText(menuFragment.getContext(), menuFragment.getResources()
+                                    .getString(R.string.order_send_failure), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+                }
+            }).addOnFailureListener(new ServerConnectionFailure(menuFragment, try_toast));
+        }
     }
 
     public void payOrder(Order order) {
