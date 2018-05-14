@@ -129,7 +129,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        Log.e("MenuFragment", this.menuInfo.toString());
         mMenuOrderButton = (Button) v.findViewById(R.id.menu_view_login_order_button);
 
         mCheckOrderButton = (Button) v.findViewById(R.id.menu_view_check_button);
@@ -138,12 +137,11 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         setCheckButtonProperties();
         loggedInCheck();
 
-        // Load the restaurant's menu from the FireStore backend if not loaded already
-        if (Tab.getInstance().getRestaurant().getMenu() == null) {
-            new RestaurantMenuLoader(menuInfo, this);
-        } else {
-            setupViewPager();
-        }
+        Tab.getInstance().addListener(this);
+
+        loadMenu();
+
+
 
         return v;
     }
@@ -183,6 +181,9 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     }
 
     public void setOrderButton() {
+        // If this gets called it means that the order has been canceled or completed
+        menuInfo.setOrderSendInProgress(false);
+
         // Order button action
         setOrderButtonProperties();
 
@@ -195,12 +196,13 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                 Toast gecancelled = Toast.makeText(getContext(), R.string.cancelled_order_toast, Toast.LENGTH_SHORT);
                 Toast confirm = Toast.makeText(getContext(), R.string.order_confirm_toast, Toast.LENGTH_SHORT);
                 if (mMenuOrderButton.getText().equals("Cancel")) {
-                    mMenuOrderButton.setText("Order");
+                    setOrderButton();
                     sendAfterTime.cancel = true;
-                    menuInfo.orderCommitted();
                     confirm.cancel();
                     gecancelled.show();
                 } else {
+                    sendAfterTime.cancel = false;
+                    menuInfo.setOrderSendInProgress(true);
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
                     handler.postDelayed(sendAfterTime, CANCEL_WINDOW);
@@ -251,15 +253,17 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     }
 
     public void setOrderButtonProperties() {
-        if (Tab.getInstance().getTable().getTableId() != null) {
+        if (isUserLoggedIn()) {
             if (menuInfo.getCurrentOrder().getOrderItems().size() > 0) {
-                mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button) + " (€" + menuInfo.getCurrentOrder().getPrice() + ")");
+                mMenuOrderButton.setText(String.format("%s (€%.2f)",
+                        getResources().getString(R.string.menu_view_order_button), menuInfo.getCurrentOrder().getPrice()));
                 mMenuOrderButton.setEnabled(true);
             } else {
                 mMenuOrderButton.setText(getResources().getString(R.string.menu_view_order_button));
                 mMenuOrderButton.setEnabled(false);
             }
         }
+
     }
 
     @Override
@@ -281,7 +285,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e("MenuFragment:", "Destroyed");
         if (menuInfo != null) {
             menuInfo.clearAdapters();
         }
@@ -346,6 +349,10 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     }
 
+    private boolean isUserLoggedIn() {
+        return Tab.getInstance().getTable() != null && Tab.getInstance().getTable().getTableId() != null;
+    }
+
     /**
      * First need to get WaiterCall-array before we can add a new WaiterCall
      * TODO: change tableID when Sitt updates the model for the "online" version
@@ -353,6 +360,11 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
      * TODO: check whether the restaurant supports this function
      */
     public void callWaiter() {
+        if (!isUserLoggedIn()) {
+            Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.need_logged_in), Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
         final Toast try_toast = Toast.makeText(getContext(), getResources()
                 .getString(R.string.waiter_call_try), Toast.LENGTH_SHORT);
         try_toast.show();
@@ -417,10 +429,23 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         Log.d("MENUFRAGMENT", "detached");
     }
 
+
     @Override
     public void invalidated() {
         setCheckButtonProperties();
         setOrderButtonProperties();
+        loadMenu();
+    }
+
+    public void loadMenu(){
+        // Load the restaurant's menu from the FireStore backend if not loaded already
+        if (Tab.getInstance().getRestaurant().getMenu() == null) {
+            new RestaurantMenuLoader(menuInfo, this);
+        } else {
+            setupViewPager();
+        }
+
+        setTitle();
     }
 
     public MenuInfo getMenuInfo() {
@@ -460,7 +485,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     @Override
     public void onClick(View v) {
         MenuInfo target = this.menuInfo;
-        Log.e("MenuFragment size:", target.getCurrentOrder().getOrderItems().size() + "");
         Intent intent = new Intent(getContext(), NotesActivity.class);
         intent.putExtra(NotesActivity.ARG_MENU_INFO, target);
         startActivityForResult(intent, REQUEST_MENU_INFO);

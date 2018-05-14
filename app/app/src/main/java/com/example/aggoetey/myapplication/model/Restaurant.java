@@ -46,6 +46,16 @@ public class Restaurant implements Serializable, SearchSuggestion {
 
     }
 
+    public Restaurant(String googlePlaceId) {
+        this.title = title;
+        this.googlePlaceId = googlePlaceId;
+    }
+
+    public Restaurant(String googlePlaceId, String title) {
+        this.title = title;
+        this.googlePlaceId = googlePlaceId;
+    }
+
     public Restaurant(String title, String phone, String googlePlaceId) {
         this.title = title;
         this.phone = phone;

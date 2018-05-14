@@ -87,5 +87,6 @@
     <string name="logout_confirmation">Are you sure you want to log out?</string>
     <string name="oke">Okay</string>
     <string name="open_bill">You still have tabs to pay! You can\'t log out yet.</string>
+    <string name="need_logged_in">Please log in first by scanning QR code...</string>
 
 </resources>

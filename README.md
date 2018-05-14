@@ -17,4 +17,5 @@
 - [UML](https://github.ugent.be/SELab1/project-1718-groep-1/blob/master/UML.pdf)
 - [Verslag](https://drive.google.com/open?id=1DAG8i-iRs6-cUHFxl9sglrtWu_5wp1bW)
 
+https://docs.google.com/document/d/1tfbSl1q_7PMS42bWhSziytUzPl9SmuE2M1mEYT8eF3c/edit?usp=sharing
 [Feedback na sprint 1](https://docs.google.com/document/d/1tfbSl1q_7PMS42bWhSziytUzPl9SmuE2M1mEYT8eF3c/edit?usp=sharing)
