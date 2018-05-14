@@ -137,12 +137,11 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         setCheckButtonProperties();
         loggedInCheck();
 
-        // Load the restaurant's menu from the FireStore backend if not loaded already
-        if (Tab.getInstance().getRestaurant().getMenu() == null) {
-            new RestaurantMenuLoader(menuInfo, this);
-        } else {
-            setupViewPager();
-        }
+        Tab.getInstance().addListener(this);
+
+        loadMenu();
+
+
 
         return v;
     }
@@ -435,6 +434,18 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
     public void invalidated() {
         setCheckButtonProperties();
         setOrderButtonProperties();
+        loadMenu();
+    }
+
+    public void loadMenu(){
+        // Load the restaurant's menu from the FireStore backend if not loaded already
+        if (Tab.getInstance().getRestaurant().getMenu() == null) {
+            new RestaurantMenuLoader(menuInfo, this);
+        } else {
+            setupViewPager();
+        }
+
+        setTitle();
     }
 
     public MenuInfo getMenuInfo() {
