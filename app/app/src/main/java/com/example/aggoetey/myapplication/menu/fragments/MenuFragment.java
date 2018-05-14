@@ -433,10 +433,10 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     @Override
     public void invalidated() {
+        setCheckButtonProperties();
+        setOrderButtonProperties();
         if (this.restaurant == null || this.restaurant != Tab.getInstance().getRestaurant()) {
             this.restaurant = Tab.getInstance().getRestaurant();
-            setCheckButtonProperties();
-            setOrderButtonProperties();
             loadMenu();
         }
     }
