@@ -19,3 +19,4 @@
 
 https://docs.google.com/document/d/1tfbSl1q_7PMS42bWhSziytUzPl9SmuE2M1mEYT8eF3c/edit?usp=sharing
 [Feedback na sprint 1](https://docs.google.com/document/d/1tfbSl1q_7PMS42bWhSziytUzPl9SmuE2M1mEYT8eF3c/edit?usp=sharing)
+[tekstje poster](https://docs.google.com/document/d/1lzD6rYqhID_spOdS47OAzohSezq8u7zT5SECpSbIV0g/edit#heading=h.1yd82tmqeu6y)
