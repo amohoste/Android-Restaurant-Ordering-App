@@ -202,6 +202,7 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                     confirm.cancel();
                     gecancelled.show();
                 } else {
+                    sendAfterTime.cancel = false;
                     menuInfo.setOrderSendInProgress(true);
                     confirm.show();
                     mMenuOrderButton.setText("Cancel");
