@@ -122,6 +122,7 @@ public class Tab extends Model implements Serializable {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+        fireInvalidationEvent();
     }
 
     public Table getTable() {
