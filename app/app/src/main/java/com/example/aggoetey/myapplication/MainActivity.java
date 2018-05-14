@@ -159,8 +159,6 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
     public void startQRScannerActivity() {
         Intent qrIntent = new Intent(this, QRScannerActivity.class);
         startActivityForResult(qrIntent, QRScannerActivity.QR_CODE_REQUEST);
-        Toast.makeText(getApplicationContext(), "Open QR-scanner",
-                Toast.LENGTH_SHORT).show();
     }
 
     @Override
