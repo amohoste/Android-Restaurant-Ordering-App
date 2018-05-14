@@ -157,7 +157,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    // TODO: Call this after logging in
     public void loggedInCheck() {
         if (Tab.getInstance().getTable() == null) {    //user not logged in
             setLogInButton();
@@ -356,9 +355,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
 
     /**
      * First need to get WaiterCall-array before we can add a new WaiterCall
-     * TODO: change tableID when Sitt updates the model for the "online" version
-     * TODO: check whether the user is logged in to a table/has "permission" to call a waiter
-     * TODO: check whether the restaurant supports this function
      */
     public void callWaiter() {
         if (!isUserLoggedIn()) {
@@ -412,14 +408,12 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
                 });
             }
         }).addOnFailureListener(new ServerConnectionFailure(this, try_toast));
-        ;
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
@@ -460,7 +454,6 @@ public class MenuFragment extends Fragment implements Listener, View.OnClickList
         this.menuInfo = menuInfo;
     }
 
-    // TODO: use this later for waiter call control
     public void button_sleeper(final View btn, final int time) {
         btn.setEnabled(false);
 

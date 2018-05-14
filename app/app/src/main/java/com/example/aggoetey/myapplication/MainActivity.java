@@ -181,9 +181,6 @@ public class MainActivity extends AppCompatActivity implements TabPageFragment.O
             String restaurant_id = ids[0];
             String table_id = ids.length == 2 ? ids[1] : null;
 
-
-            // TODO SITT: move this validation check to QRActivity
-            // TODO: add table validation check (+ make it possible to only scan table once restaurant is filled)
             Restaurant restaurant = RestaurantProvider.getInstance().getRestaurant(restaurant_id);
 
             if (restaurant == null) {

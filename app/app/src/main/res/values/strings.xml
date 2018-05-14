@@ -56,7 +56,6 @@
     <string name="qr_code_edit_btn">Confirm</string>
     <string name="qr_no_camera_permission">Camera Permission Needed</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_pay">pay</string>
     <string name="nothing_to_pay">Please order something before choosing to pay</string>

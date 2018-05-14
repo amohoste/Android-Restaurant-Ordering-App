@@ -93,7 +93,6 @@ public class MenuBarcodeProcessor implements Detector.Processor<Barcode> {
         }
     }
 
-    //TODO: SITT implement the function to do something when the given code is invalid
     public void onInvalidCode (Barcode code) {
 
     }
