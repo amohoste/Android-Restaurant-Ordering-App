@@ -97,7 +97,7 @@ public class MenuInfo extends Model implements Serializable {
     }
 
     public boolean addOrderItem(MenuItem menuItem) {
-        if (!orderSendInProgress) {
+        if (!orderSendInProgress && Tab.getInstance().isUserLoggedIn()) {
             currentOrder.addOrderItem("", menuItem);
             changeOrderCount(1, menuItem.id);
             return true;
@@ -106,7 +106,7 @@ public class MenuInfo extends Model implements Serializable {
     }
 
     public boolean removeOrderItem(MenuItem menuItem) {
-        if (!orderSendInProgress && changeOrderCount(-1, menuItem.id) >= 0) {
+        if (!orderSendInProgress && Tab.getInstance().isUserLoggedIn() && changeOrderCount(-1, menuItem.id) >= 0) {
             currentOrder.removeOrderItem(menuItem);
             return true;
         }

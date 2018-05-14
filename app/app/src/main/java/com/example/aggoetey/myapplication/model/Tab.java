@@ -153,6 +153,10 @@ public class Tab extends Model implements Serializable {
         return this.orderedOrders.size() + this.receivedOrders.size() == 0;
     }
 
+    public boolean isUserLoggedIn() {
+        return table != null && table.getTableId() != null;
+    }
+
     public static Tab getInstance() {
         return ourInstance;
     }
