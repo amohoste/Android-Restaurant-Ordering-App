@@ -5,6 +5,8 @@ Group Project for the course Software Engineering Lab 1 (C003780) | 2nd sem 2017
 This is an android app that allows you to discover restaurants, make an order, call the waiter if you need to and pay your table bill.
 
 ## Some Screenshots
+<img src="screens/screenshot_1.jpg" width="200" height="400"/>
+
 ![Screenshot_1](screens/screenshot_1.jpg)
 
 ![Screenshot_2](screens/screenshot_2.jpg)
