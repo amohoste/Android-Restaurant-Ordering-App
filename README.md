@@ -7,13 +7,11 @@ This is an android app that allows you to discover restaurants, make an order, c
 ## Some Screenshots
 <img src="screens/screenshot_1.jpg" width="270" height="555"/>
 
-![Screenshot_1](screens/screenshot_1.jpg)
+<img src="screens/screenshot_2.jpg" width="270" height="555"/>
 
-![Screenshot_2](screens/screenshot_2.jpg)
+<img src="screens/screenshot_3.jpg" width="270" height="555"/>
 
-![Screenshot_3](screens/screenshot_3.jpg)
-
-![Screenshot_4](screens/screenshot_4.jpg)
+<img src="screens/screenshot_4.jpg" width="270" height="555"/>
 
 ## Project members
 - Amory Hoste
